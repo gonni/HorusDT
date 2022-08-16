@@ -37,7 +37,7 @@ object Main {
   def main(args: Array[String]): Unit = {
 
     val conf = new SparkConf()
-      .setAppName("SuperHell")
+      .setAppName("SuperHell5")
       .setMaster("spark://spark:7077")
 
     val spark = SparkSession.builder.config(conf).getOrCreate()
@@ -70,8 +70,8 @@ object Main {
 
     // 2. print test data and analyzed result as list
     analyzedDataset.select("sentence", "token_list").show()
+    analyzedDataset.select("sentence", "plain_text").write.csv("/usr/local/spark/resources/datacsv_" + System.currentTimeMillis())
 
     spark.close()
-
   }
 }
