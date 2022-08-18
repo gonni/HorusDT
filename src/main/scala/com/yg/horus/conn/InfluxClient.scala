@@ -6,6 +6,7 @@ import com.influxdb.annotations.{Column, Measurement}
 import com.influxdb.client.domain.WritePrecision
 import com.influxdb.client.scala.InfluxDBClientScalaFactory
 import com.influxdb.client.write.Point
+import com.yg.horus.RuntimeConfig
 
 import java.time.Instant
 import scala.concurrent.Await
@@ -16,29 +17,24 @@ object InfluxClient extends Serializable {
 
 //  val token = "5nWBmnhyUFbfF3q3F_yAfr4Wklis0HQT0UFKU2qf3z29bbsGMjPxYBeP34oz__byN8aSmS4hYud2zlR8tewDrA=="
 //  val org = "NA"
-  val token = "CwgQWYIZKOcSpdlxwpfZfvDWQXpsfTlt7o2GD5hFAs4rTvHDF-7cfwmIQnmdocqL__5uoabCFGuf_GYzFQfxIA=="
-  val org = "xwaves"
+//  val token = "CwgQWYIZKOcSpdlxwpfZfvDWQXpsfTlt7o2GD5hFAs4rTvHDF-7cfwmIQnmdocqL__5uoabCFGuf_GYzFQfxIA=="
+//  val org = "xwaves"
+
+  val conf = RuntimeConfig.getRuntimeConfig()
+  val url = conf.getString("influx.url")
+  val token = conf.getString("influx.authToken")
+  val org = conf.getString("influx.org")
   val bucket = "tfStudySample"
 
-  val client = InfluxDBClientScalaFactory.create("http://localhost:8086", token.toCharArray, org, bucket)
+  val client = InfluxDBClientScalaFactory.create(url, token.toCharArray, org, bucket)
 
   def fluxQuery(fluxQuery : String) = {
     val result = client.getQueryScalaApi().query(fluxQuery)
-//    val res = result.map(raw => TermCount(raw.getValueByKey("term").toString, raw.getValue.toString.toLong))
 
-//    val converted = Seq[TermCount]()
-//    Await.result(result.runForeach(raw => {
-//      converted :+ TermCount(raw.getValueByKey("term").toString, raw.getValue.toString.toLong)
-//    }), Duration.Inf)
-//
-//    converted.foreach(println)
     var conv = Seq[TermCount]()
     Await.result(result.runForeach(f => {
       conv = conv :+ TermCount(f.getValueByKey("term").toString, f.getValue.toString.toLong)
-//      println("value =>" + f.getValueByKey("term") + "--" + f.getValue)
     }), Duration.Inf)
-
-//    conv.foreach(println)
 
     conv.sortBy(-_.count).take(10).foreach(println)
 

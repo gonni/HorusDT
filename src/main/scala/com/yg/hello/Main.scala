@@ -70,8 +70,9 @@ object Main {
 
     // 2. print test data and analyzed result as list
     analyzedDataset.select("sentence", "token_list").show()
-    analyzedDataset.select("sentence", "plain_text").write.csv("/usr/local/spark/resources/datacsv_" + System.currentTimeMillis())
+    analyzedDataset.select("sentence", "plain_text").write.csv("/usr/local/spark/resources/temp/datacsv_" + System.currentTimeMillis())
 
     spark.close()
+
   }
 }

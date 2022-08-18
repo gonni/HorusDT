@@ -21,7 +21,8 @@ lazy val root = (project in file("."))
       "com.typesafe.slick" %% "slick" % "3.3.2",
       "org.slf4j" % "slf4j-nop" % "1.6.4",
       "com.typesafe.slick" %% "slick-hikaricp" % "3.3.2",
-      "com.mchange" % "c3p0" % "0.9.5.2"
+      "com.mchange" % "c3p0" % "0.9.5.2",
+      "com.typesafe" % "config" % "1.4.2"
     )
   )
 

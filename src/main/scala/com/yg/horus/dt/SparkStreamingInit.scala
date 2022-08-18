@@ -1,9 +1,11 @@
 package com.yg.horus.dt
 
+import com.yg.horus.RuntimeConfig
 import org.apache.spark._
 import org.apache.spark.streaming._
 
 trait SparkStreamingInit {
-  val conf = new SparkConf().setMaster("local[8]").setAppName("SparkTemplate")
+  val runtimeConf = RuntimeConfig.getRuntimeConfig()
+  val conf = new SparkConf().setMaster(runtimeConf.getString("spark.master")).setAppName("DEP_TEST_APP")
   val ssc = new StreamingContext(conf, Seconds(10))
 }

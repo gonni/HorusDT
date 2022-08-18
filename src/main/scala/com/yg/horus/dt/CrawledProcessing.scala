@@ -1,5 +1,7 @@
 package com.yg.horus.dt
 
+import com.yg.horus.RuntimeConfig
+import com.yg.horus.conn.InfluxClient
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
 import kr.co.shineware.nlp.komoran.core.Komoran
 
@@ -7,7 +9,9 @@ import scala.collection.JavaConverters._
 
 class HangleTokenizer extends Serializable {
   val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
-  komoran.setUserDic("./myDic.txt")
+//  komoran.setUserDic("./myDic.txt")
+  komoran.setUserDic(getClass.getClassLoader.getResource("myDic.txt").getPath);
+
   def arrayTokens(sentence : String) = {
     val tokens = komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
     tokens
@@ -45,8 +49,18 @@ object CrawledProcessing extends SparkStreamingInit {
 
   def main(args: Array[String]): Unit = {
     println("Active System ..")
+    if(args.length > 0) {
+      System.setProperty("active.profile", args(0))
+    } else {
+      println("NoArgs .. set on localDevEnv")
+      System.setProperty("active.profile", "office_local")
+    }
 
-    processCrawled(9L)
+    println("------------------------------------------------")
+    println("Active Profile" + RuntimeConfig.getRuntimeConfig().getString("profile.name"))
+    println("------------------------------------------------")
+
+    processCrawled(1L)
 
 //    val anchors = ssc.receiverStream(new MySqlSourceReceiver(Seq(9L)))
 //    val words = anchors.flatMap(anchor => {

@@ -1,5 +1,6 @@
 package com.yg.horus.dt
 
+import com.yg.horus.RuntimeConfig
 import org.apache.spark.internal.Logging
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.receiver.Receiver
@@ -10,9 +11,17 @@ import scala.concurrent.duration.DurationInt
 
 object DbUtil {
   protected implicit def executor = scala.concurrent.ExecutionContext.Implicits.global
+
+  val conf = RuntimeConfig.getRuntimeConfig()
 //  val db : Database = Database.forURL(url ="jdbc:mysql://192.168.35.123:3306/horus?useSSL=false",
-  val db : Database = Database.forURL(url ="jdbc:mysql://localhost:3306/horus?useSSL=false",
-    user="root", password="18651865", driver = "com.mysql.jdbc.Driver")
+//  val db : Database = Database.forURL(url ="jdbc:mysql://localhost:3306/horus?useSSL=false",
+//    user="root", password="18651865", driver = "com.mysql.jdbc.Driver")
+
+  val db : Database = Database.forURL(
+    url = conf.getString("mysql.url"),
+    user = conf.getString("mysql.user"),
+    password = conf.getString("mysql.password"),
+    driver = "com.mysql.jdbc.Driver")
 
   val getLatestAnchorWithLimit = (seedNo: Long, startCrawlNo: Long, limit : Int) =>
     Await.result(db.run(CrawledRepo.findLatestAnchor(seedNo, startCrawlNo, limit).result), 10.seconds)
