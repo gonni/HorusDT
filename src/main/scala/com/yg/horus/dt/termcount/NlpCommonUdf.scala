@@ -1,10 +1,9 @@
-package com.yg.horus.dt
+package com.yg.horus.dt.termcount
 
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
 import kr.co.shineware.nlp.komoran.core.Komoran
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.udf
-
 import scala.jdk.CollectionConverters.asScalaBufferConverter
 
 trait NlpCommonUdf extends Serializable {

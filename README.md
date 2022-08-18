@@ -16,7 +16,7 @@ scp target/scala-2.12/HorusDT-assembly-0.1.0-SNAPSHOT.jar yg@10.202.66.123:/home
 docker exec -it docker_spark_1 spark-submit --master spark://spark:7077 <spark_app_path> [optional]<list_of_app_args>
 
 sudo docker exec -it docker_spark_1 spark-submit \
---class com.yg.horus.dt.CrawledProcessing \
+--class com.yg.horus.dt.termcount.CrawledProcessing \
 --master spark://spark:7077 \
 /usr/local/spark/resources/horus/HorusDT-assembly-0.1.0-SNAPSHOT.jar
 

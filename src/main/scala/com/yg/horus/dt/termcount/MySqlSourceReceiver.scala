@@ -1,4 +1,4 @@
-package com.yg.horus.dt
+package com.yg.horus.dt.termcount
 
 import com.yg.horus.RuntimeConfig
 import org.apache.spark.internal.Logging

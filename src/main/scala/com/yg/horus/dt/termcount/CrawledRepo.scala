@@ -1,7 +1,6 @@
-package com.yg.horus.dt
+package com.yg.horus.dt.termcount
 
 import slick.jdbc.MySQLProfile.api._
-
 import java.sql.Timestamp
 
 object CrawledRepo {

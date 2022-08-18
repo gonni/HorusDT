@@ -1,7 +1,8 @@
-package com.yg.horus.dt
+package com.yg.horus.dt.termcount
 
 import com.yg.horus.RuntimeConfig
 import com.yg.horus.conn.InfluxClient
+import com.yg.horus.dt.SparkStreamingInit
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
 import kr.co.shineware.nlp.komoran.core.Komoran
 

@@ -6,9 +6,13 @@ object RuntimeConfig {
 
   def getRuntimeConfig() = {
     val profile = System.getProperty("active.profile")
-    println("active profile :" + profile)
+//    println("active profile :" + profile)
     if(profile != null) conf.getConfig(profile) else conf.getConfig("office_local")
 //    conf.getConfig("office_desk")
+  }
+
+  def getActiveProfile() = {
+    conf.getString("profile.active")
   }
 
   def main(args: Array[String]): Unit = {

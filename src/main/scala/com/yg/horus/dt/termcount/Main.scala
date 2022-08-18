@@ -1,4 +1,4 @@
-package com.yg.horus.dt
+package com.yg.horus.dt.termcount
 
 import com.yg.horus.RuntimeConfig
 import org.apache.spark.SparkConf
@@ -11,8 +11,8 @@ object Main {
       println("Input detected profile :", args(0))
       System.setProperty("active.profile", args(0))
     } else {
-      println("No Args .. set on office_local")
-      System.setProperty("active.profile", "office_local")
+      println("No Args .. set on " + RuntimeConfig.getActiveProfile())
+      System.setProperty("active.profile", RuntimeConfig.getActiveProfile())
     }
 
     println("------------------------------------------------")
@@ -25,7 +25,7 @@ object Main {
     val ssc = new StreamingContext(conf, Seconds(10))
 
     val jobProc = new TermCountProcessing(ssc)
-    jobProc.processCrawled(1L)
+    jobProc.processCrawled(21L)
 
     ssc.start()
     ssc.awaitTermination()
