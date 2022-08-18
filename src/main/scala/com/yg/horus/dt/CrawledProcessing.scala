@@ -10,7 +10,8 @@ import scala.collection.JavaConverters._
 class HangleTokenizer extends Serializable {
   val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
 //  komoran.setUserDic("./myDic.txt")
-  komoran.setUserDic(getClass.getClassLoader.getResource("myDic.txt").getPath);
+//  komoran.setUserDic(getClass.getClassLoader.getResource("myDic.txt").getPath);
+  komoran.setUserDic(RuntimeConfig.getRuntimeConfig().getString("komoran.dic"))
 
   def arrayTokens(sentence : String) = {
     val tokens = komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
@@ -57,7 +58,7 @@ object CrawledProcessing extends SparkStreamingInit {
     }
 
     println("------------------------------------------------")
-    println("Active Profile" + RuntimeConfig.getRuntimeConfig().getString("profile.name"))
+    println("Active Profile : " + RuntimeConfig.getRuntimeConfig().getString("profile.name"))
     println("------------------------------------------------")
 
     processCrawled(1L)

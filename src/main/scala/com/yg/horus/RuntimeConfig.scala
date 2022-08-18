@@ -6,12 +6,14 @@ object RuntimeConfig {
 
   def getRuntimeConfig() = {
     val profile = System.getProperty("active.profile")
+    println("active profile :" + profile)
     if(profile != null) conf.getConfig(profile) else conf.getConfig("office_local")
+//    conf.getConfig("office_desk")
   }
 
   def main(args: Array[String]): Unit = {
     println("Active System ..")
-    println("=>" + getClass.getClassLoader.getResource("myDic.txt").getPath)
+//    println("=>" + getClass.getClassLoader.getResource("myDic.txt").getPath)
     val rConf = conf.getConfig("office_desk")
 
     println("Active Profile =>" + rConf.getString("profile.name"))

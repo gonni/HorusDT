@@ -13,7 +13,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 object InfluxClient extends Serializable {
-  implicit val system: ActorSystem = ActorSystem("examples")
+  implicit val system: ActorSystem = ActorSystem("InfluxActor")
 
 //  val token = "5nWBmnhyUFbfF3q3F_yAfr4Wklis0HQT0UFKU2qf3z29bbsGMjPxYBeP34oz__byN8aSmS4hYud2zlR8tewDrA=="
 //  val org = "NA"
@@ -25,6 +25,11 @@ object InfluxClient extends Serializable {
   val token = conf.getString("influx.authToken")
   val org = conf.getString("influx.org")
   val bucket = "tfStudySample"
+
+  println("url -> " + url)
+  println("token -> " + token)
+  println("org -> " + org)
+
 
   val client = InfluxDBClientScalaFactory.create(url, token.toCharArray, org, bucket)
 
