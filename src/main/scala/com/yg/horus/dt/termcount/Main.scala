@@ -9,7 +9,7 @@ object Main {
     println("Active System ..")
     if(args.length > 0) {
       println("Input detected profile :", args(0))
-      System.setProperty("active.profile", args(0))
+      System.setProperty("profile.active", args(0))
     } else {
       println("No Args .. set on " + RuntimeConfig.getActiveProfile())
       System.setProperty("active.profile", RuntimeConfig.getActiveProfile())
@@ -25,7 +25,7 @@ object Main {
     val ssc = new StreamingContext(conf, Seconds(10))
 
     val jobProc = new TermCountProcessing(ssc)
-    jobProc.processCrawled(21L)
+    jobProc.processCrawled(1L)
 
     ssc.start()
     ssc.awaitTermination()
