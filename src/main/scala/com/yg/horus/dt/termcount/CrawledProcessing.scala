@@ -28,8 +28,8 @@ object HangleTokenizer {
   def apply() : HangleTokenizer = new HangleTokenizer
 }
 
-object CrawledProcessing extends SparkStreamingInit {
-  override val sparkAppName: String = "SparkStreaming_CrawledTermCount"
+object CrawledProcessing extends SparkStreamingInit("SPP") {
+//  override val sparkAppName: String = "SparkStreaming_CrawledTermCount"
   def processCrawled(seedId : Long) = {
     val anchors = ssc.receiverStream(new MySqlSourceReceiver(seedId))
     val words = anchors.flatMap(anchor => {
@@ -62,7 +62,7 @@ object CrawledProcessing extends SparkStreamingInit {
     println("Active Profile : " + RuntimeConfig.getRuntimeConfig().getString("profile.name"))
     println("------------------------------------------------")
 
-    processCrawled(1L)
+    processCrawled(21L)
 
 //    val anchors = ssc.receiverStream(new MySqlSourceReceiver(Seq(9L)))
 //    val words = anchors.flatMap(anchor => {

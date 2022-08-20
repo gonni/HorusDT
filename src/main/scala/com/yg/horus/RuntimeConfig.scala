@@ -13,6 +13,10 @@ object RuntimeConfig {
     conf.getString("profile.active")
   }
 
+  def apply() = getRuntimeConfig()
+
+  def apply(key: String) = getRuntimeConfig().getString(key)
+
   def main(args: Array[String]): Unit = {
     println("Active System ..")
 //    println("=>" + getClass.getClassLoader.getResource("myDic.txt").getPath)

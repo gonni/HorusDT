@@ -49,20 +49,23 @@ class TdmMaker(val spark: SparkSession, val terms: Seq[String], val model: Word2
 
 }
 
-object TdmMaker {
+object TdmMaker extends SparkJobInit("TDM") {
 
   def test(): Unit = {
+    val model = Word2VecModel.load("data/w2vNews2Cont_v200_m8_w7_it8")
+
+    val tt = new TdmMaker(spark, Seq("대통령"), model)
+    tt.highTermDistances("김") show
   }
 
   def main(args: Array[String]): Unit = {
-    val spark = SparkSession.builder()
-      .appName("W2vTopicCls")
-      .master("local")
-      .getOrCreate()
+//    val spark = SparkSession.builder()
+//      .appName("W2vTopicCls")
+//      .master("local")
+//      .getOrCreate()
+    test
 
-    val model = Word2VecModel.load("data/w2vNews2Cont_v200_m8_w7_it8")
-
-    val tt = new TdmMaker(spark , Seq("대통령"), model)
-    tt.highTermDistances("김") show
   }
+
+
 }
