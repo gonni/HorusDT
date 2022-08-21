@@ -9,3 +9,4 @@ project/target/
 /project/target/scala-2.12/
 /project/target/streams/
 /project/target/.sbt-compilation-infos/
+/project/
