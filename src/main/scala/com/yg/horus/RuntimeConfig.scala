@@ -5,8 +5,9 @@ object RuntimeConfig {
   val conf = ConfigFactory.load()
 
   def getRuntimeConfig() = {
-    val profile = System.getProperty("profile.active")
-    if(profile != null) conf.getConfig(profile) else conf.getConfig(conf.getString("profile.active"))
+//    val profile = System.getProperty("profile.active")
+//    if(profile != null) conf.getConfig(profile) else conf.getConfig(conf.getString("profile.active"))
+    conf.getConfig(conf.getString("profile.active"))
   }
 
   def getActiveProfile() = {

@@ -19,12 +19,6 @@ import scala.jdk.CollectionConverters.asScalaBufferConverter
 class Word2vecModeler(val spark: SparkSession) {
   import spark.implicits._
 
-//  val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
-//  komoran.setUserDic(RuntimeConfig.getRuntimeConfig().getString("komoran.dic"))
-
-  // source schema must be like : ANCHOR_TEST | PAGE_TEXT | tokenized
-
-
   def createModel(df : DataFrame) = {
     Word2vecModeler.createW2vModel(df)
   }
@@ -44,8 +38,6 @@ class Word2vecModeler(val spark: SparkSession) {
   }
 
   def loadSource(seedNo: Long, fromTime: java.sql.Timestamp) = {
-
-
     val getTokenListUdf2: UserDefinedFunction = udf[Seq[String], String] { sentence =>
       try {
         Word2vecModeler.komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
@@ -61,7 +53,7 @@ class Word2vecModeler(val spark: SparkSession) {
     prop.put("user", RuntimeConfig().getString("mysql.user"))
     prop.put("password", RuntimeConfig().getString("mysql.password"))
 
-    val tableDf = spark.read.jdbc(RuntimeConfig().getString("mysql.url"), "crawl_unit1", prop)
+    val tableDf = spark.read.jdbc(RuntimeConfig("mysql.url"), "crawl_unit1", prop)
     tableDf.filter($"SEED_NO" === seedNo && $"REG_DATE" > fromTime)
       .orderBy(desc("CRAWL_NO"))
       .select($"ANCHOR_TEXT", $"PAGE_TEXT")
@@ -75,29 +67,49 @@ object Word2vecModeler extends SparkJobInit("W2VM") {
   komoran.setUserDic(RuntimeConfig.getRuntimeConfig().getString("komoran.dic"))
 
   def createW2vModel(df: DataFrame) = {
-
     new Word2Vec()
       .setInputCol("tokenized")
       .setOutputCol("vector")
       .setVectorSize(200)
       .setMinCount(8)
       .setWindowSize(7)
-      .setMaxIter(8).fit(df)
-
-      //      word2Vec.fit(source)
+//      .setMaxIter(8)
+      .fit(df)
   }
 
   def main(args: Array[String]): Unit = {
     println("Active ..")
-    val test = new Word2vecModeler(spark)
-//    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(3))
-//    test.loadSource(25L, fromTime) show
-//    println("count of data =>" + test.loadSourceFromDaysAgo(21L, 20).count())
+//    val test = new Word2vecModeler(spark)
+////    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(3))
+////    test.loadSource(25L, fromTime) show
+////    println("count of data =>" + test.loadSourceFromDaysAgo(21L, 20).count())
+//
+//    val data = test.loadSourceFromMinsAgo(21L, 60)
+////    data.show()
+//    val model = test.createModel(data)
+//    println("Result ..")
+//    model.findSynonyms("김",30).show(100)
+//
+//    test.saveModelToFile(model, "data/short_w2v_1h_2022082112b")
+//    println("fit completed ..")
 
-    val data = test.loadSourceFromDaysAgo(21L, 5)
-//    data.show()
+    println("------------------------------------------------")
+    println("Active Profile : " + RuntimeConfig.getRuntimeConfig().getString("profile.name"))
+    println("------------------------------------------------")
+    println("Profile ALl => " + RuntimeConfig())
+
+    val test = new Word2vecModeler(spark)
+    //    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(3))
+    //    test.loadSource(25L, fromTime) show
+    //    println("count of data =>" + test.loadSourceFromDaysAgo(21L, 20).count())
+
+    val data = test.loadSourceFromDaysAgo(21L, 1)
+    //    data.show()
     val model = test.createModel(data)
     println("Result ..")
-    model.findSynonyms("김",30).show(100)
+    model.findSynonyms("김", 30).show(100)
+
+    test.saveModelToFile(model, "/usr/local/spark/resources/horus/w2v_d1_2022082112")
+    println("fit completed ..")
   }
 }
