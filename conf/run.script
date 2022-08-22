@@ -1,0 +1,19 @@
+[yg@localhost command]$ ll
+합계 8
+-rwxr-xr-x. 1 yg yg 375  8월 22 18:23 horus_rt_term_count.sh
+-rwxr-xr-x. 1 yg yg 390  8월 22 18:24 horus_w2v_modeling.sh
+[yg@localhost command]$ cat *
+sudo docker exec -it docker_spark_1 spark-submit \
+--driver-class-path /usr/local/spark/resources/horus/mysql-connector-java-5.1.44.jar \
+--class com.yg.horus.dt.termcount.Main \
+--master spark://spark:7077 \
+--executor-memory 512m --total-executor-cores 2 \
+--conf spark.dynamicAllocation.enabled=false \
+/usr/local/spark/resources/horus/HorusDT-assembly-0.1.0-SNAPSHOT.jar
+sudo docker exec -it docker_spark_1 spark-submit \
+--driver-class-path /usr/local/spark/resources/horus/mysql-connector-java-5.1.44.jar \
+--class com.yg.horus.dt.tdm.W2vMain \
+--master spark://spark:7077 \
+--num-executors 2 --executor-memory 512m --total-executor-cores 3 \
+--conf spark.dynamicAllocation.enabled=false \
+/usr/local/spark/resources/horus/HorusDT-assembly-0.1.0-SNAPSHOT.jar

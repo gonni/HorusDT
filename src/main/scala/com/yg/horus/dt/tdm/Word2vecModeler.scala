@@ -62,7 +62,7 @@ class Word2vecModeler(val spark: SparkSession) {
 
 }
 
-object Word2vecModeler extends SparkJobInit("W2VM") {
+object Word2vecModeler {
   val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
   komoran.setUserDic(RuntimeConfig.getRuntimeConfig().getString("komoran.dic"))
 
@@ -93,23 +93,25 @@ object Word2vecModeler extends SparkJobInit("W2VM") {
 //    test.saveModelToFile(model, "data/short_w2v_1h_2022082112b")
 //    println("fit completed ..")
 
-    println("------------------------------------------------")
-    println("Active Profile : " + RuntimeConfig.getRuntimeConfig().getString("profile.name"))
-    println("------------------------------------------------")
-    println("Profile ALl => " + RuntimeConfig())
-
-    val test = new Word2vecModeler(spark)
-    //    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(3))
-    //    test.loadSource(25L, fromTime) show
-    //    println("count of data =>" + test.loadSourceFromDaysAgo(21L, 20).count())
-
-    val data = test.loadSourceFromDaysAgo(21L, 1)
-    //    data.show()
-    val model = test.createModel(data)
-    println("Result ..")
-    model.findSynonyms("김", 30).show(100)
-
-    test.saveModelToFile(model, "/usr/local/spark/resources/horus/w2v_d1_2022082112")
-    println("fit completed ..")
+    // ---------
+//    println("------------------------------------------------")
+//    println("Active Profile : " + RuntimeConfig.getRuntimeConfig().getString("profile.name"))
+//    println("------------------------------------------------")
+//    println("Profile ALl => " + RuntimeConfig())
+//
+//    val test = new Word2vecModeler(spark)
+//    //    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(3))
+//    //    test.loadSource(25L, fromTime) show
+//    //    println("count of data =>" + test.loadSourceFromDaysAgo(21L, 20).count())
+//
+//    val data = test.loadSourceFromMinsAgo(1L, 60)
+//    //    data.show()
+//    val model = test.createModel(data)
+//    println("Result ..")
+//    model.findSynonyms("김", 30).show(100)
+//
+////    test.saveModelToFile(model, "/usr/local/spark/resources/horus/w2v_d1_2022082112")
+//    test.saveModelToFile(model, RuntimeConfig("spark.jobs.word2vec.modelFile") + "w2v_common_" + System.currentTimeMillis())
+//    println("fit completed ..")
   }
 }

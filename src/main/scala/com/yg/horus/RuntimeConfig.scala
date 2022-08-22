@@ -2,7 +2,7 @@ package com.yg.horus
 import com.typesafe.config.ConfigFactory
 
 object RuntimeConfig {
-  val conf = ConfigFactory.load()
+  val conf = ConfigFactory.load("application.conf")
 
   def getRuntimeConfig() = {
 //    val profile = System.getProperty("profile.active")

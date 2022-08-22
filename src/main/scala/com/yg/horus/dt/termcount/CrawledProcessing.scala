@@ -51,18 +51,13 @@ object CrawledProcessing extends SparkStreamingInit("SPP") {
 
   def main(args: Array[String]): Unit = {
     println("Active System ..")
-    if(args.length > 0) {
-      System.setProperty("active.profile", args(0))
-    } else {
-      println("NoArgs .. set on localDevEnv")
-      System.setProperty("active.profile", "office_local")
-    }
 
     println("------------------------------------------------")
     println("Active Profile : " + RuntimeConfig.getRuntimeConfig().getString("profile.name"))
     println("------------------------------------------------")
+    println("RuntimeConfig Details : " + RuntimeConfig())
 
-    processCrawled(21L)
+    processCrawled(1L)
 
 //    val anchors = ssc.receiverStream(new MySqlSourceReceiver(Seq(9L)))
 //    val words = anchors.flatMap(anchor => {

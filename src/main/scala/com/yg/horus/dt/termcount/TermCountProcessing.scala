@@ -3,6 +3,7 @@ package com.yg.horus.dt.termcount
 import com.yg.horus.conn.InfluxClient
 import org.apache.spark.streaming.StreamingContext
 
+@deprecated
 class TermCountProcessing(val ssc : StreamingContext) {
 
   def processCrawled(seedId : Long) = {
