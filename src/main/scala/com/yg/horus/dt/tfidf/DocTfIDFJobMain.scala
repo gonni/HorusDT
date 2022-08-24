@@ -24,7 +24,7 @@ object DocTfIDFJobMain {
 
     val test = new TfIdfProcessing(spark)
     val rawData = test.getRawDataToAnalyze(100)
-    test.tfidf(rawData) show
+    test.tfidf(rawData) show(300)
 
     println("Finished ..")
   }
