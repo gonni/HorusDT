@@ -4,13 +4,16 @@ import org.apache.spark.SparkConf
 import org.apache.spark.sql.{Row, SparkSession}
 import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover}
 import org.apache.spark.ml.feature.CountVectorizer
-import org.apache.spark.ml.linalg.{SparseVector}
+import org.apache.spark.ml.linalg.SparseVector
+
+import scala.collection.mutable
 //import org.apache.spark.rdd.RDD
 //import org.apache.spark.mllib.linalg.Vector
 //import org.apache.spark.mllib.clustering.{LDA, OnlineLDAOptimizer}
 import org.apache.spark.ml.clustering.LDA
 
 object LdaProcessing {
+  case class TopicTermScore(term: String, score: Double)
 
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setMaster("local[*]").setAppName("text lda")
@@ -47,6 +50,9 @@ object LdaProcessing {
     val filtered_df =remover.transform(tokenized_df)
 //    filtered_df show 10
 
+    println("raw source ======")
+    filtered_df.show()
+
     // Set params for CountVectorizer
     val vectorizer = new CountVectorizer()
       .setInputCol("filtered")
@@ -55,7 +61,9 @@ object LdaProcessing {
       .setMinDF(5)
       .fit(filtered_df)
 
+
     val countVectors = vectorizer.transform(filtered_df).select("id", "features")
+    println("vectorized ======")
     countVectors.show(10)
 
     countVectors.take(1).map(println)
@@ -86,11 +94,27 @@ object LdaProcessing {
 
     val vocabList = vectorizer.vocabulary
     println("--- Final Result --->")
-    //scala.collection.mutable.WrappedArray
-    topicIndices.foreach { row =>
-      row.getList[Int](1).forEach(termIndx => {
-        println(vocabList(termIndx))
-      })
+
+    val topics = topicIndices.map{ row =>
+      row.getAs[mutable.WrappedArray[Int]](1).map(vocabList(_))
+        .zip(row.getAs[mutable.WrappedArray[Double]](2))
+    }
+
+    topics.show()
+    //    val topicsDF = topics.toDF()
+
+//    topics.foreach(row => {
+//      println(row.mkString("|"))
+//    })
+
+    val fRes = topics.map(row => {
+      row.map(ts => TopicTermScore(ts._1, ts._2)).toSeq
+    }).collect()
+
+    for(i <- 0 until fRes.length) {
+      println(s"Topic #${i}")
+      fRes(i).foreach(a => println(a))
+      println("--------------")
     }
 
     println("completed ..")
