@@ -6,13 +6,17 @@ import kr.co.shineware.nlp.komoran.core.Komoran
 import org.apache.spark.SparkConf
 import org.apache.spark.ml.clustering.LDA
 import org.apache.spark.ml.feature.CountVectorizer
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, SaveMode, SparkSession}
 import org.apache.spark.sql.expressions.UserDefinedFunction
-import org.apache.spark.sql.functions.{col, desc, udf}
+import org.apache.spark.sql.functions.{col, desc, monotonically_increasing_id, row_number, typedLit, udf}
+import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType, StructType}
 
 import java.util.Properties
 import scala.collection.mutable
 import scala.jdk.CollectionConverters.asScalaBufferConverter
+import Array._
+import scala.collection.mutable.ArrayBuffer
+import scala.collection.parallel.immutable
 
 case class TopicTermScore(term: String, score: Double)
 class LdaTopicProcessing(val spark: SparkSession) {
@@ -22,7 +26,44 @@ class LdaTopicProcessing(val spark: SparkSession) {
 
   }
 
-  def topics(dfTokenized: DataFrame, countOfTopics: Int, cntTermsForTopic: Int) = {
+  def convertObject(topics : Dataset[mutable.WrappedArray[(String, Double)]]) = {
+    val res = topics.map(row => {
+      row.map(ts => TopicTermScore(ts._1, ts._2)).toSeq
+    }).collect()
+    res
+  }
+
+  def saveToDB(topics : Dataset[mutable.WrappedArray[(String, Double)]], seedNo: Long, minAgo: Int) = {
+    val res = convertObject(topics)
+
+    val lstRes = res.flatMap(topicRow => {
+      topicRow.map { ts => {
+        (res.indexOf(topicRow), ts.term, ts.score)
+        }
+      }
+    }).toSeq
+
+    println("Size => " + lstRes.size)
+
+    val ts = System.currentTimeMillis()
+    val resDf = lstRes.toDF("TOPIC_NO", "TERM", "SCORE")
+      .withColumn("START_MIN_AGO", typedLit(minAgo))
+      .withColumn("SEED_NO", typedLit(seedNo))
+      .withColumn("GRP_TS", typedLit(ts))
+
+    println("DF show ")
+    resDf.show()
+
+    val prop = new Properties()
+    prop.put("user", RuntimeConfig().getString("mysql.user"))
+    prop.put("password", RuntimeConfig().getString("mysql.password"))
+
+    resDf.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.lda.writeDB"),
+      "DT_LDA_TOPICS", prop)
+  }
+
+  def topics(dfTokenized: DataFrame, countOfTopics: Int, cntTermsForTopic: Int,
+             write: Dataset[mutable.WrappedArray[(String, Double)]] => Unit = (_) => println("No Write Chain")) = {
     val vectorizer = new CountVectorizer()
       .setInputCol("tokenized")
       .setOutputCol("features")
@@ -39,10 +80,38 @@ class LdaTopicProcessing(val spark: SparkSession) {
       row.getAs[mutable.WrappedArray[Int]](1).map(vocabList(_))
         .zip(row.getAs[mutable.WrappedArray[Double]](2))
     }
-
-    topics.map(row => {
-      row.map(ts => TopicTermScore(ts._1, ts._2)).toSeq
-    }).collect()
+//    val exTopics = topics.withColumn("topic_no", row_number())
+//    println("=============================")
+//
+//    val dsTopics = topics.flatMap(row => {
+//      row.zipWithIndex.map{case(ts, index) => {
+//        (index, ts._1, ts._2)
+//      }}
+//    })
+//
+//    val exTopic = topics.withColumn("idx", row_number().over())
+//    dsTopics.show()
+//    println("===============+=============")
+//    exTopic.show()
+    write(topics)
+    topics
+//    val res = topics.map(row => {
+//      row.map(ts => TopicTermScore(ts._1, ts._2)).toSeq
+//    }).collect()
+//
+//    val lstRes = res.flatMap(topicRow => {
+//      topicRow.map{ts => {
+//        (res.indexOf(topicRow), ts.term, ts.score)
+//      }}
+//    }).toSeq
+//
+//    println("Size => " + lstRes.size)
+//
+//    val resDf = lstRes.toDF("TOPIC_NO", "TERM", "SCORE")
+//    println("DF show ")
+//    resDf.show()
+//
+//    res
   }
 
   def loadSource(seedNo: Long, fromTime: java.sql.Timestamp) = {
@@ -75,10 +144,12 @@ class LdaTopicProcessing(val spark: SparkSession) {
 
 object LdaTopicProcessing {
   val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
-  komoran.setUserDic(RuntimeConfig.getRuntimeConfig().getString("komoran.dic"))
+  komoran.setUserDic(RuntimeConfig("komoran.dic"))
+//  komoran.setUserDic("/Users/ygkim/IdeaProjects/HorusDT/myDic.txt")
 
   def main(args: Array[String]): Unit = {
     println("Active System ..")
+    komoran.analyze("윤석렬 대통령은 김건희 여사에게 한방을 말했다.").getNouns.asScala.foreach(println)
   }
 
   def sample() = {

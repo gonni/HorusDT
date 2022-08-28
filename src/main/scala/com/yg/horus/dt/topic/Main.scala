@@ -13,19 +13,22 @@ object Main {
     val spark = SparkSession.builder().config(conf).getOrCreate()
 
     val test = new LdaTopicProcessing(spark)
-    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(60 * 100))
-    val source = test.loadSource(1L, fromTime)
+    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(10))
+    val source = test.loadSource(21L, fromTime)
 
     source.show()
 
     println("----- Topic terms -----")
-    val fRes = test.topics(source, 30, 15)
+    val topics = test.topics(source, 10, 10)
+    val fRes = test.convertObject(topics)
 
     for(i <- 0 until fRes.length) {
       println(s"Topic #${i}")
       fRes(i).foreach(a => println(a))
       println("--------------")
     }
+
+    test.saveToDB(topics, 21L, 30)
 
 //    println("Size => " + source.collect().size)
   }
