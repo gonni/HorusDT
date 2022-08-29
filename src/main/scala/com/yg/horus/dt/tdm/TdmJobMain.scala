@@ -4,6 +4,10 @@ import com.yg.horus.RuntimeConfig
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 
+/**
+ * Word2vec:Job -- (model created) --> TDM:Job
+ * Arguments : appName, sparkMasterUrl, seedNo, minAgo
+ */
 object TdmJobMain {
   case class RunParams(appName: String, master: String, seedNo: Long, minAgo: Int)
 
@@ -46,7 +50,7 @@ object TdmJobMain {
 
     topics.foreach(term => {
       try {
-        tdm.saveToDB(tdm.highTermDistances(term), ts)
+        tdm.saveToDB(tdm.highTermDistances(term), rparam.seedNo, rparam.minAgo, ts)
       }catch {
         case _ => println(s"No Terms in Model : ${term}")
       }

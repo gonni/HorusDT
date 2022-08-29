@@ -37,20 +37,19 @@ class TdmMaker(val spark: SparkSession, val model: Word2VecModel) {
     dbAll2
   }
 
-  def saveToDB(df: DataFrame, ts: Long): Unit = {
+  def saveToDB(df: DataFrame, seedNo: Long, tRangeMinAgo:Int, ts: Long): Unit = {
     println("Write Data to DB.Table ------------------------")
-    val dfWithTs = df.withColumn("GRP_TS", typedLit(ts))
+
+    val dfWithTs = df.withColumn("T_RANGE_MIN_AGO", typedLit(tRangeMinAgo))
+      .withColumn("SEED_NO", typedLit(seedNo))
+      .withColumn("GRP_TS", typedLit(ts))
+
     val prop = new Properties()
     prop.put("user", "root")
     prop.put("password", "18651865")
 
     dfWithTs.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.tdm.writeDB"),
       "TERM_DIST", prop)
-
-
-//    dfWithTs.write.mode(SaveMode.Append).jdbc("jdbc:mysql://localhost:3306/horus?" +
-//      "useUnicode=true&characterEncoding=utf8&useSSL=false",
-//      "TERM_DIST", prop)
   }
 
 }
