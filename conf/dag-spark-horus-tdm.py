@@ -36,7 +36,7 @@ dag = DAG(
     dag_id="spark-horus-tdm-1h",
     description="spark ml term-distance-matrix processing",
     default_args=default_args,
-    schedule_interval='*/1 * * * *'
+    schedule_interval='* */1 * * * *'
 )
 
 start = DummyOperator(task_id="start", dag=dag)
