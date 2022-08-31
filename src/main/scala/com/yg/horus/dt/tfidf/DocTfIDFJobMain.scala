@@ -5,7 +5,10 @@ import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 
 object DocTfIDFJobMain {
-  case class TfidfParam(appName: String, master: String, seedId: Long, limit: Int)
+  case class TfidfParam(appName: String = "TF_IDF",
+                        master: String = "local[*]",
+                        seedId: Long = 9L,
+                        limit: Int = 100)
 
   def main(args: Array[String]): Unit = {
     println("Active System ..")
@@ -16,14 +19,23 @@ object DocTfIDFJobMain {
     println("ConfigDetails : " + RuntimeConfig())
 
     val runParams = args.length match {
-      case _ => TfidfParam("TFIDF_JOB", "local", 9, 100)
+      case 4 => TfidfParam("TFIDF_JOB", "local", 9, 100)
+      case _ =>
+        if(RuntimeConfig.getActiveProfile().contains("home"))
+          TfidfParam(seedId = 21L)
+        else
+          TfidfParam()
     }
+    println("--------------------------------------")
+    println(s"TF-IDF Job Args : ${runParams}")
+    println("--------------------------------------")
 
     val conf = new SparkConf().setMaster(runParams.master).setAppName(runParams.appName)
     val spark = SparkSession.builder().config(conf).getOrCreate()
 
     val test = new TfIdfProcessing(spark)
-    val rawData = test.getRawDataToAnalyze(100)
+    val rawData = test.getRawDataToAnalyze(1L, 100)
+
     test.tfidf(rawData) show(300)
 
     println("Finished ..")
