@@ -6,7 +6,7 @@ import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
 import kr.co.shineware.nlp.komoran.core.Komoran
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession, functions}
-import org.apache.spark.sql.functions.{col, count, countDistinct, desc, explode, length, size, udf}
+import org.apache.spark.sql.functions.{col, count, countDistinct, desc, explode, length, size, typedLit, udf}
 
 import java.util.Properties
 import scala.jdk.CollectionConverters.asScalaBufferConverter
@@ -32,7 +32,8 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
 
     val tableDf = spark.read.jdbc(RuntimeConfig("mysql.url"), "crawl_unit1", prop)
 
-    val sourceData = tableDf.filter($"SEED_NO" === seedNo && $"STATUS" === "SUCC")
+    val sourceData = tableDf.filter($"SEED_NO" === seedNo && $"STATUS" === "SUCC"
+      && $"CRAWL_NO" > 210100L && $"CRAWL_NO" < 220320L)
       .orderBy(desc("CRAWL_NO"))
       .select($"CRAWL_NO", $"ANCHOR_TEXT", $"PAGE_TEXT")
       .withColumn("document", getNounsUdf($"PAGE_TEXT"))
@@ -63,36 +64,25 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
     val tokenWithIdf = tokenWithDf.withColumn("idf", calcIdfUdf1(col("df")))
 
     val tfidf = tokenWithTf.join(tokenWithIdf, Seq("token"), "left")
-      .withColumn("tf_id", col("tf") * col("idf"))
+      .withColumn("tfidf", col("tf") * col("idf"))
     tfidf
   }
-
-//  def tfidf(source: DataFrame) = {
-//    val documents = source.select($"document", $"CRAWL_NO" as "DOC_ID")
-//
-//    val columns = documents.columns.map(col) :+ (explode(col("document")) as "TOKEN")
-//    val unfoldedDocs = documents.select(columns: _*)
-//    //    unfoldedDocs.show
-//
-//    val tokenWithTf = unfoldedDocs.groupBy("DOC_ID", "TOKEN")
-//      .agg(count("document") as "TF")
-//
-//    val tokenWithDf = unfoldedDocs.groupBy("TOKEN")
-//      .agg(countDistinct("DOC_ID") as "DF")
-////    println("=>" + documents.count())
-//    val tokenWithIdf = tokenWithDf.withColumn("IDF", calcIdfUdf1(col("DF")))
-//
-//    val tfidf = tokenWithTf.join(tokenWithIdf, Seq("TOKEN"), "left")
-//      .withColumn("TFIDF", col("TF") * col("IDF"))
-//    tfidf
-//  }
 
   def write2db(tfidf: DataFrame, seedNo: Long, minAgo: Int, grpTs: Long) = {
     val prop = new Properties()
     prop.put("user", "root")
     prop.put("password", "18651865")
 
-    tfidf.write.mode(SaveMode.Append).jdbc(RuntimeConfig("mysql.url"), "DT_TFIDF", prop)
+    tfidf.show()
+
+    val exTfidf = tfidf
+      .withColumn("START_MIN_AGO", typedLit(minAgo))
+      .withColumn("SEED_NO", typedLit(seedNo))
+      .withColumn("GRP_TS", typedLit(grpTs))
+
+    exTfidf show
+
+    exTfidf.write.mode(SaveMode.Append).jdbc(RuntimeConfig("mysql.url"), "DT_TFIDF", prop)
   }
 
 }

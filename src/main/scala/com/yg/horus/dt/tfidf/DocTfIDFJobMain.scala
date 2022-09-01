@@ -36,7 +36,10 @@ object DocTfIDFJobMain {
     val test = new TfIdfProcessing(spark)
     val rawData = test.getRawDataToAnalyze(1L, 100)
 
-    test.tfidf(rawData) show(300)
+    val tfidf = test.tfidf(rawData)
+    println("Save data to DB ..")
+
+    test.write2db(tfidf, 1L, 300, System.currentTimeMillis())
 
     println("Finished ..")
   }
