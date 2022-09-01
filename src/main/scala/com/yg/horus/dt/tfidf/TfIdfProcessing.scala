@@ -39,12 +39,9 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
       .withColumn("document", getNounsUdf($"PAGE_TEXT"))
       .withColumn("token_size", size(col("document"))).limit(limit)
 
-//    sourceData.show()
-
     val fd = sourceData.filter($"token_size" > 0)
-    fd.show(300)
+//    fd.show(300)
     fd
-//    sourceData
   }
 
   def tfidf(source: DataFrame) = {
@@ -55,9 +52,6 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
     unfoldedDocs.show
 
     val tokenWithTf = unfoldedDocs.groupBy("doc_id", "token").agg(count("document") as "tf")
-
-//    println("unfoleded ------------------")
-//    unfoldedDocs.show(10000)
 
     val tokenWithDf = unfoldedDocs.groupBy("token").agg(countDistinct("doc_id") as "df")
     //    println("=>" + documents.count())
@@ -73,13 +67,12 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
     prop.put("user", "root")
     prop.put("password", "18651865")
 
-    tfidf.show()
-
     val exTfidf = tfidf
       .withColumn("START_MIN_AGO", typedLit(minAgo))
       .withColumn("SEED_NO", typedLit(seedNo))
       .withColumn("GRP_TS", typedLit(grpTs))
 
+    println("sva")
     exTfidf show
 
     exTfidf.write.mode(SaveMode.Append).jdbc(RuntimeConfig("mysql.url"), "DT_TFIDF", prop)

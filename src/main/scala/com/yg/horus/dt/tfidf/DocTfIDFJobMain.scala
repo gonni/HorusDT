@@ -31,10 +31,12 @@ object DocTfIDFJobMain {
     println("--------------------------------------")
 
     val conf = new SparkConf().setMaster(runParams.master).setAppName(runParams.appName)
+    conf.set("spark.sql.autoBroadcastJoinThreshold", "-1")
+
     val spark = SparkSession.builder().config(conf).getOrCreate()
 
     val test = new TfIdfProcessing(spark)
-    val rawData = test.getRawDataToAnalyze(1L, 100)
+    val rawData = test.getRawDataToAnalyze(1L, 5000)
 
     val tfidf = test.tfidf(rawData)
     println("Save data to DB ..")
