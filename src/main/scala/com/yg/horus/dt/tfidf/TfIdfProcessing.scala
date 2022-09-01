@@ -72,7 +72,7 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
       .withColumn("SEED_NO", typedLit(seedNo))
       .withColumn("GRP_TS", typedLit(grpTs))
 
-    println("sva")
+    println("save ifidf data to db")
     exTfidf show
 
     exTfidf.write.mode(SaveMode.Append).jdbc(RuntimeConfig("mysql.url"), "DT_TFIDF", prop)
