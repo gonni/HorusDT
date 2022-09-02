@@ -19,3 +19,15 @@ create table DT_LDA_TOPICS (
 );
 
 
+create table DT_TFIDF (
+                          TFIDF_NO INT not null AUTO_INCREMENT PRIMARY KEY,
+                          TOKEN varchar(64),
+                          DOC_ID long,
+                          TF int,
+                          DF int,
+                          IDF double,
+                          TFIDF double,
+                          START_MIN_AGO int,
+                          SEED_NO int,
+                          GRP_TS long
+);
