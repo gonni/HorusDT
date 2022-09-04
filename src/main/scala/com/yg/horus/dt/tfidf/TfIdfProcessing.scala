@@ -33,7 +33,7 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
     val tableDf = spark.read.jdbc(RuntimeConfig("mysql.url"), "crawl_unit1", prop)
 
     val sourceData = tableDf.filter($"SEED_NO" === seedNo && $"STATUS" === "SUCC"
-      && $"CRAWL_NO" > 210100L && $"CRAWL_NO" < 220320L)
+      && $"CRAWL_NO" > 960851L && $"CRAWL_NO" < 964851L)
       .orderBy(desc("CRAWL_NO"))
       .select($"CRAWL_NO", $"ANCHOR_TEXT", $"PAGE_TEXT")
       .withColumn("document", getNounsUdf($"PAGE_TEXT"))
@@ -59,6 +59,7 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
 
     val tfidf = tokenWithTf.join(tokenWithIdf, Seq("token"), "left")
       .withColumn("tfidf", col("tf") * col("idf"))
+    tfidf.show()
     tfidf
   }
 

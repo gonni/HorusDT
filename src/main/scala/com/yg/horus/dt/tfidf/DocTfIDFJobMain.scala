@@ -19,7 +19,7 @@ object DocTfIDFJobMain {
     println("ConfigDetails : " + RuntimeConfig())
 
     val runParams = args.length match {
-      case 4 => TfidfParam("TFIDF_JOB", "local", 9, 100)
+      case 4 => TfidfParam("TFIDF_JOB", "local[6]", 9, 100)
       case _ =>
         if(RuntimeConfig.getActiveProfile().contains("home"))
           TfidfParam(seedId = 21L)
@@ -36,12 +36,12 @@ object DocTfIDFJobMain {
     val spark = SparkSession.builder().config(conf).getOrCreate()
 
     val test = new TfIdfProcessing(spark)
-    val rawData = test.getRawDataToAnalyze(1L, 5000)
+    val rawData = test.getRawDataToAnalyze(21L, 5000)
 
     val tfidf = test.tfidf(rawData)
     println("Save data to DB ..")
 
-    test.write2db(tfidf, 1L, 300, System.currentTimeMillis())
+    test.write2db(tfidf, 21L, 300, System.currentTimeMillis())
 
     println("Finished ..")
   }
