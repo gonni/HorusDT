@@ -17,3 +17,13 @@ sudo docker exec -it docker_spark_1 spark-submit \
 --num-executors 2 --executor-memory 512m --total-executor-cores 3 \
 --conf spark.dynamicAllocation.enabled=false \
 /usr/local/spark/resources/horus/HorusDT-assembly-0.1.0-SNAPSHOT.jar
+
+
+docker exec -it docker_spark-worker-1_1 sh -c 'rm -R /opt/bitnami/spark/work/app-*'
+
+
+select a.BASE_TERM, a.COMP_TERM, a.DIST_VAL,
+( select 1 + count(*) from (select * from TERM_DIST where GRP_TS = 1663052659432) a1
+  where a1.BASE_TERM = a.BASE_TERM and a1.DIST_VAL > a.DIST_VAL) as RNK
+from (select * from TERM_DIST where GRP_TS = 1663052659432) a
+order by a.BASE_TERM, a.DIST_VAL desc ;
