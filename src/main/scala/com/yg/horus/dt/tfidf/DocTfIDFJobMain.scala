@@ -10,16 +10,14 @@ object DocTfIDFJobMain {
                         seedId: Long = 9L,
                         limit: Int = 100)
 
-  def main(args: Array[String]): Unit = {
-    println("Active System ..")
-
+  def main(v: Array[String]): Unit = {
     println("--------------------------------------")
     println("Active Profile :" + RuntimeConfig("profile.name"))
     println("--------------------------------------")
     println("ConfigDetails : " + RuntimeConfig())
 
-    val runParams = args.length match {
-      case 4 => TfidfParam("TFIDF_JOB", "local[6]", 9, 100)
+    val runParams = v.length match {
+      case 4 => TfidfParam(v(0), v(1), v(2).toLong, v(3).toInt)
       case _ =>
         if(RuntimeConfig.getActiveProfile().contains("home"))
           TfidfParam(seedId = 21L)
