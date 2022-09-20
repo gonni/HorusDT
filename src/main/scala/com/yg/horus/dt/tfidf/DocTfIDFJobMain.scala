@@ -6,9 +6,9 @@ import org.apache.spark.sql.SparkSession
 
 object DocTfIDFJobMain {
   case class TfidfParam(appName: String = "TF_IDF",
-                        master: String = "local[*]",
-                        seedId: Long = 9L,
-                        limit: Int = 100)
+                        master: String = RuntimeConfig("spark.master"),
+                        seedId: Long = 1L,
+                        limit: Int = 500)
 
   def main(v: Array[String]): Unit = {
     println("--------------------------------------")
@@ -34,12 +34,13 @@ object DocTfIDFJobMain {
     val spark = SparkSession.builder().config(conf).getOrCreate()
 
     val test = new TfIdfProcessing(spark)
-    val rawData = test.getRawDataToAnalyze(21L, 5000)
+    val rawData = test.getRawDataToAnalyze(runParams.seedId, runParams.limit)
 
     val tfidf = test.tfidf(rawData)
-    println("Save data to DB ..")
-
-    test.write2db(tfidf, 21L, 300, System.currentTimeMillis())
+//    println("Save data to DB ..")
+//    test.write2db(tfidf, 21L, 300, System.currentTimeMillis())
+    println("Calc AVG ..")
+    test.avgStatistics(tfidf, runParams.seedId, runParams.limit, System.currentTimeMillis)
 
     println("Finished ..")
   }
