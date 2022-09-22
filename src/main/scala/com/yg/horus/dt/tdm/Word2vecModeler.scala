@@ -66,10 +66,12 @@ object Word2vecModeler {
   def createW2vModel(df: DataFrame) = {
     new Word2Vec()
       .setInputCol("tokenized")
-      .setOutputCol("vector")
-      .setVectorSize(200)
-      .setMinCount(8)
-      .setWindowSize(7)
+      .setOutputCol("result") // ori: vector
+      .setStepSize(0.025)
+      .setVectorSize(100)
+      .setMinCount(5)
+      .setSeed(1L)
+      .setWindowSize(5)
 //      .setMaxIter(8)
       .fit(df)
   }

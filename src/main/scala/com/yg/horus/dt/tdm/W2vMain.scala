@@ -8,8 +8,8 @@ object W2vMain {
   case class RunArgs(appName: String = "W2V_Model_File_Creation",
                      master: String = RuntimeConfig("spark.master"),
                      seedNo: Long = 1L,
-                     minAgo: Int = 60,
-                     modelFilePath: String = RuntimeConfig("spark.jobs.word2vec.modelFile") + "w2v_common_" + System.currentTimeMillis)
+                     minAgo: Int = 7000,
+                     modelFilePath: String = RuntimeConfig("spark.jobs.word2vec.modelFile") + "w2v_d101_" + System.currentTimeMillis)
 
   def main(v: Array[String]): Unit = {
     var runParam = v.length match {
