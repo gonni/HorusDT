@@ -1,12 +1,9 @@
 package com.yg.horus.dt.tdm
 
 import com.yg.horus.RuntimeConfig
-import com.yg.horus.dt.SparkJobInit
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
 import kr.co.shineware.nlp.komoran.core.Komoran
-import org.apache.spark.SparkConf
 import org.apache.spark.ml.feature.{Word2Vec, Word2VecModel}
-import org.apache.spark.sql.execution.streaming.FileStreamSource.Timestamp
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.{col, desc, udf}
@@ -64,15 +61,17 @@ class Word2vecModeler(val spark: SparkSession) {
 
 object Word2vecModeler {
   val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
-  komoran.setUserDic(RuntimeConfig.getRuntimeConfig().getString("komoran.dic"))
+  komoran.setUserDic(RuntimeConfig("komoran.dic"))
 
   def createW2vModel(df: DataFrame) = {
     new Word2Vec()
       .setInputCol("tokenized")
-      .setOutputCol("vector")
-      .setVectorSize(200)
-      .setMinCount(8)
-      .setWindowSize(7)
+      .setOutputCol("result") // ori: vector
+      .setStepSize(0.025)
+      .setVectorSize(100)
+      .setMinCount(5)
+      .setSeed(1L)
+      .setWindowSize(5)
 //      .setMaxIter(8)
       .fit(df)
   }

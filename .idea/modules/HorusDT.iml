@@ -206,6 +206,7 @@
     <orderEntry type="library" name="sbt: org.glassfish.jersey.inject:jersey-hk2:2.30:jar" level="project" />
     <orderEntry type="library" name="sbt: org.glassfish.jersey.media:jersey-media-jaxb:2.30:jar" level="project" />
     <orderEntry type="library" name="sbt: org.javassist:javassist:3.25.0-GA:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.jblas:jblas:1.2.5:jar" level="project" />
     <orderEntry type="library" name="sbt: org.jetbrains.kotlin:kotlin-stdlib-common:1.6.20:jar" level="project" />
     <orderEntry type="library" name="sbt: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.20:jar" level="project" />
     <orderEntry type="library" name="sbt: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20:jar" level="project" />

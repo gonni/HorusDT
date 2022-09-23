@@ -6,7 +6,7 @@ import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
 import kr.co.shineware.nlp.komoran.core.Komoran
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession, functions}
-import org.apache.spark.sql.functions.{col, count, countDistinct, desc, explode, length, size, typedLit, udf}
+import org.apache.spark.sql.functions.{avg, col, count, countDistinct, desc, explode, length, size, typedLit, udf}
 
 import java.util.Properties
 import scala.jdk.CollectionConverters.asScalaBufferConverter
@@ -32,8 +32,8 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
 
     val tableDf = spark.read.jdbc(RuntimeConfig("mysql.url"), "crawl_unit1", prop)
 
-    val sourceData = tableDf.filter($"SEED_NO" === seedNo && $"STATUS" === "SUCC"
-      && $"CRAWL_NO" > 960851L && $"CRAWL_NO" < 964851L)
+    val sourceData = tableDf.filter($"SEED_NO" === seedNo && $"STATUS" === "SUCC")
+//      && $"CRAWL_NO" > 960851L && $"CRAWL_NO" < 964851L)
       .orderBy(desc("CRAWL_NO"))
       .select($"CRAWL_NO", $"ANCHOR_TEXT", $"PAGE_TEXT")
       .withColumn("document", getNounsUdf($"PAGE_TEXT"))
@@ -77,6 +77,34 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
     exTfidf show
 
     exTfidf.write.mode(SaveMode.Append).jdbc(RuntimeConfig("mysql.url"), "DT_TFIDF", prop)
+  }
+  // tfidf = TFIDF_NO | TOKEN | TF | DF | IDF | TFIDF | START_MIN_AGO | SEED_NO | GRP_TS
+  def avgStatistics(tfidf: DataFrame, seedNo: Long, dataRangeMin: Int, grpTs: Long): Unit = {
+//    tfidf.groupBy("token")
+//      .avg("tfidf").as("avg_tfidf")
+//      .show(300)
+//    println("---------+++++---------")
+
+//    tfidf.groupBy("TOKEN").agg(
+//      avg("tfidf").as("AVG_TFIDF"),
+//      avg("df").as("AVG_DF"))
+//      .orderBy("avg_tfidf")
+//      .show(300)
+
+    val tableData = tfidf.groupBy("TOKEN").agg(
+      avg("tfidf").as("AVG_TFIDF"),
+      avg("df").as("AVG_DF"))
+      .withColumn("DATA_RANGE_MIN", typedLit(dataRangeMin))
+      .withColumn("SEED_NO", typedLit(seedNo))
+      .withColumn("GRP_TS", typedLit(grpTs))
+
+    tableData.show(300)
+
+    val prop = new Properties()
+    prop.put("user", "root")
+    prop.put("password", "18651865")
+
+    tableData.write.mode(SaveMode.Append).jdbc(RuntimeConfig("mysql.url"), "DT_TERM_SCORE", prop)
   }
 
 }
