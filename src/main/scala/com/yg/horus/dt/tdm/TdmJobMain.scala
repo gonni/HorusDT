@@ -21,10 +21,10 @@ object TdmJobMain {
 
     val rparam = args.length match {
       case 4 => RunParams(args(0), args(1), args(2).toLong, args(3).toInt)
-      case _ => RunParams("MODEL_TDM", RuntimeConfig("spark.master"), 21L, 60)
+      case _ => RunParams("MODEL_TDM", RuntimeConfig("spark.master"), 21L, 600)
     }
 
-    println("Applied Params :" + RunParams)
+    println("Applied Params :" + rparam)
 
     val conf = new SparkConf().setMaster(rparam.master).setAppName(rparam.appName)
     val spark = SparkSession.builder().config(conf).getOrCreate()
