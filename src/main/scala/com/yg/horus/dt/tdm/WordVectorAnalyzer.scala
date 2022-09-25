@@ -17,7 +17,8 @@ class WordVectorAnalyzer {
 
 object WordVectorAnalyzer extends SparkJobInit("W2vAnalyzer") {
   import spark.implicits._
-  val model = Word2VecModel.load("data/w2v_d101_1663837864518")
+//  val model = Word2VecModel.load("data/w2vNews2Cont_v200_m8_w7_it8")
+  val model = Word2VecModel.load("data/w2v_2m")
   val df_vectors = model.getVectors.persist(org.apache.spark.storage.StorageLevel.MEMORY_ONLY_SER)
 
   println("=======================")
@@ -76,9 +77,10 @@ object WordVectorAnalyzer extends SparkJobInit("W2vAnalyzer") {
 //    val result = searchByRelation(positive_word_01,  positive_word_03, 10)
 //    result.show()
 
-    val src = Seq("중국", "우주")
+    val src = Seq("미국", "우주")
     nearTermsOnVector(src, 10) show 20
 
+    searchByRelation("미국", "우주", 10) show 10
   }
 
 

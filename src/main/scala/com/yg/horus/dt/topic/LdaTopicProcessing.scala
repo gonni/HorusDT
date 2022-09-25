@@ -80,38 +80,9 @@ class LdaTopicProcessing(val spark: SparkSession) {
       row.getAs[mutable.WrappedArray[Int]](1).map(vocabList(_))
         .zip(row.getAs[mutable.WrappedArray[Double]](2))
     }
-//    val exTopics = topics.withColumn("topic_no", row_number())
-//    println("=============================")
-//
-//    val dsTopics = topics.flatMap(row => {
-//      row.zipWithIndex.map{case(ts, index) => {
-//        (index, ts._1, ts._2)
-//      }}
-//    })
-//
-//    val exTopic = topics.withColumn("idx", row_number().over())
-//    dsTopics.show()
-//    println("===============+=============")
-//    exTopic.show()
+
     write(topics)
     topics
-//    val res = topics.map(row => {
-//      row.map(ts => TopicTermScore(ts._1, ts._2)).toSeq
-//    }).collect()
-//
-//    val lstRes = res.flatMap(topicRow => {
-//      topicRow.map{ts => {
-//        (res.indexOf(topicRow), ts.term, ts.score)
-//      }}
-//    }).toSeq
-//
-//    println("Size => " + lstRes.size)
-//
-//    val resDf = lstRes.toDF("TOPIC_NO", "TERM", "SCORE")
-//    println("DF show ")
-//    resDf.show()
-//
-//    res
   }
 
   def loadSource(seedNo: Long, fromTime: java.sql.Timestamp) = {
