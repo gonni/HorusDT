@@ -50,6 +50,7 @@ object TdmJobMain {
 
     topics.foreach(term => {
       try {
+        // need to change logic
         tdm.saveToDB(tdm.highTermDistances(term), rparam.seedNo, rparam.minAgo, ts)
       }catch {
         case _ => println(s"No Terms in Model : ${term}")

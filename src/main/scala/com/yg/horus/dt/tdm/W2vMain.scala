@@ -48,5 +48,7 @@ object W2vMain {
     test.saveModelToFile(model, runParam.modelFilePath)
     println("fit completed ..")
 
+    spark.close()
+
   }
 }
