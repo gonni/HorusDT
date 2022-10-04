@@ -39,6 +39,6 @@ CREATE TABLE `dt_term_score` (
                                  `AVG_DF` int(11) DEFAULT NULL,
                                  `DATA_RANGE_MIN` int(11) DEFAULT NULL,
                                  `SEED_NO` int(11) DEFAULT NULL,
-                                 `GRP_TS` mediumtext,
+                                 `GRP_TS` long,
                                  PRIMARY KEY (`TS_NO`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7957 DEFAULT CHARSET=utf8mb4 ;

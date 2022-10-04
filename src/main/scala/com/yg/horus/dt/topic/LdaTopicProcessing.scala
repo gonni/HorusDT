@@ -43,7 +43,7 @@ class LdaTopicProcessing(val spark: SparkSession) {
       }
     }).toSeq
 
-    println("Size => " + lstRes.size)
+//    println("Topic Size => " + lstRes.size)
 
     val ts = System.currentTimeMillis()
     val resDf = lstRes.toDF("TOPIC_NO", "TERM", "SCORE")
@@ -51,7 +51,6 @@ class LdaTopicProcessing(val spark: SparkSession) {
       .withColumn("SEED_NO", typedLit(seedNo))
       .withColumn("GRP_TS", typedLit(ts))
 
-    println("DF show ")
     resDf.show()
 
     val prop = new Properties()
