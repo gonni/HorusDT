@@ -19,7 +19,7 @@ class TdmMaker(val spark: SparkSession, val model: Word2VecModel) {
     math.exp(-1 * distPow / (10 * math.sqrt(vari)))
   }
 
-  def highTermDistances(topicWord: String, limit: Int = 200) = {
+  def highTermDistances(topicWord: String, limit: Int = 20) = {
 
     val res = model.findSynonyms(topicWord, limit)
     val exRes = res.withColumn("rvsim", revertDouble($"similarity"))
