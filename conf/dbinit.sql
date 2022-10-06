@@ -42,3 +42,11 @@ CREATE TABLE `dt_term_score` (
                                  `GRP_TS` long,
                                  PRIMARY KEY (`TS_NO`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7957 DEFAULT CHARSET=utf8mb4 ;
+
+
+create table DT_JOB_LOG (
+                            LOG_NO INT not null AUTO_INCREMENT PRIMARY KEY,
+                            JOB_NAME varchar(64),
+                            STATUS varchar(4),
+                            FINISHED_AT datetime default current_timestamp
+) ;

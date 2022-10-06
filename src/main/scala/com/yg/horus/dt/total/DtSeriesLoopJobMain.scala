@@ -4,41 +4,79 @@ import com.yg.horus.dt.SparkJobInit
 import com.yg.horus.dt.tdm.{TdmMaker, TopicTermManager, Word2vecModeler}
 import com.yg.horus.dt.topic.LdaTopicProcessing
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
+import org.apache.spark.sql.types.{StringType, StructField, StructType}
 
 import java.sql.Timestamp
 import java.time.LocalDateTime
+import java.util.Properties
 
-class DtSeriesLoopJobMain {
+class DtSeriesLoopJobMain(spark: SparkSession) {
+  import spark.implicits._
 
+  val prop = new Properties()
+  prop.put("user", RuntimeConfig().getString("mysql.user"))
+  prop.put("password", RuntimeConfig().getString("mysql.password"))
+
+  def logJob(jobName: String, status: String) = {
+    val dataDf = Seq((jobName, status)).toDF("JOB_NAME", "STATUS")
+    dataDf show
+
+    dataDf.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.lda.writeDB"),
+      "DT_JOB_LOG", prop)
+  }
 }
 
 object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
 
-  case class RunParams(appName: String, master: String, seedNo: Long, minAgo: Int,
-                       cntTopic: Int = 10, cntTopicTerms: Int = 10)
+  case class RunParams(master: String = RuntimeConfig("spark.master"),
+                       seedNo: Long,
+                       minAgo: Int,
+                       cntTopic: Int = 10,
+                       cntTopicTerms: Int = 10,
+                       tdmEachLimit: Int = 20,
+                       loopPeriod: Long = 180000L
+                      )
 
   def main(v: Array[String]): Unit = {
     println("Active SparkJob ..")
     displayInitConf()
 
     val rtParam = v.length match {
-      case 6 => RunParams(v(0), v(1), v(2).toLong, v(3).toInt, v(4).toInt, v(5).toInt)
-      case _ => RunParams("LDA_TOPIC", RuntimeConfig("spark.master"), 1L, 600)
+      case 6 => RunParams(v(0), v(1).toLong, v(2).toInt, v(3).toInt, v(4).toInt, v(5).toInt, v(6).toLong)
+      case 3 => RunParams(seedNo = v(0).toLong, minAgo = v(1).toInt, loopPeriod = v(2).toLong)
+      case _ => RunParams(seedNo = 1L, minAgo = 600)
     }
     println("Run Params => " + rtParam)
 
-    for(i <- 0 to 3) { //TODO need to set by external args
-      println(s"Processing UnitJob turn ## ${i}")
-      runHotLda(rtParam.seedNo, rtParam.minAgo)
-      runHotTdm(rtParam.seedNo, rtParam.minAgo, new TopicTermManager(spark).getTopicsSeq(2))
+    val logger = new DtSeriesLoopJobMain(spark)
+    logger.logJob("START_LOOP_JOB", "GOOD")
 
-      println(s"Sleep 5sec ... ${i}")
-      //TODO need to calc sleep time
-      Thread.sleep(5000L)
+    var ts = 0L
+    var ts1 = 0L
+    for(i <- 0 to 10000) { //TODO need to set by external args
+      println(s"Processing UnitJob turn ## ${i}")
+      ts = System.currentTimeMillis()
+
+      runHotLda(rtParam.seedNo, rtParam.minAgo)
+      logger.logJob("HOT_LDA_" + i + "_" + (System.currentTimeMillis() - ts), "FIN")
+
+      ts1 = System.currentTimeMillis()
+      runHotTdm(rtParam.seedNo, rtParam.minAgo,
+        new TopicTermManager(spark).getTopicsSeq(2), rtParam.tdmEachLimit)
+      logger.logJob("HOT_TDM_" + i + "_" + (System.currentTimeMillis() - ts1), "FIN")
+
+      var dts = rtParam.loopPeriod - (System.currentTimeMillis() - ts)
+      logger.logJob("SLEEP_" + dts, "GOOD")
+
+      if(dts > 0) {
+        println(s"Sleep for delta period for ${dts}")
+        Thread.sleep(dts)
+      }
     }
 
-
+    logger.logJob("FINISHED_LOOP", "SUCC")
+    spark.close()
   }
 
   def runHotLda(seedNo: Long, minAgo: Int) = {
@@ -63,7 +101,7 @@ object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
   }
 
 
-  def runHotTdm(seedNo: Long, minAgo: Int, topics: Seq[String]) = {
+  def runHotTdm(seedNo: Long, minAgo: Int, topics: Seq[String], eachLimit: Int) = {
     val test = new Word2vecModeler(spark)
 
     val data = test.loadSourceFromMinsAgo(seedNo, minAgo)
@@ -80,7 +118,7 @@ object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
     topics.foreach(term => {
       try {
         // need to change logic
-        tdm.saveToDB(tdm.highTermDistances(term), seedNo, minAgo, ts)
+        tdm.saveToDB(tdm.highTermDistances(term, eachLimit), seedNo, minAgo, ts)
       }catch {
         case _ => println(s"No Terms in Model : ${term}")
       }

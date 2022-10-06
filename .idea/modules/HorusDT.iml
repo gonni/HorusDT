@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="root [file:/Users/ygkim/IdeaProjects/HorusDT/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
+<module external.linked.project.id="root [file:/Users/a1000074/dev/works/HorusDT/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../target/scala-2.12/classes" />
     <output-test url="file://$MODULE_DIR$/../../target/scala-2.12/test-classes" />
     <exclude-output />
@@ -59,7 +59,6 @@
     <orderEntry type="library" name="sbt: com.squareup.retrofit2:converter-gson:2.9.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.squareup.retrofit2:converter-scalars:2.9.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.squareup.retrofit2:retrofit:2.9.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.sun.activation:jakarta.activation:1.2.1:jar" level="project" />
     <orderEntry type="library" name="sbt: com.sun.istack:istack-commons-runtime:3.0.8:jar" level="project" />
     <orderEntry type="library" name="sbt: com.thoughtworks.paranamer:paranamer:2.8:jar" level="project" />
     <orderEntry type="library" name="sbt: com.twitter:chill-java:0.9.5:jar" level="project" />
@@ -90,7 +89,6 @@
     <orderEntry type="library" name="sbt: io.netty:netty-all:4.1.51.Final:jar" level="project" />
     <orderEntry type="library" name="sbt: io.netty:netty:3.10.6.Final:jar" level="project" />
     <orderEntry type="library" name="sbt: io.reactivex.rxjava3:rxjava:3.1.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: jakarta.activation:jakarta.activation-api:1.2.1:jar" level="project" />
     <orderEntry type="library" name="sbt: jakarta.annotation:jakarta.annotation-api:1.3.5:jar" level="project" />
     <orderEntry type="library" name="sbt: jakarta.servlet:jakarta.servlet-api:4.0.3:jar" level="project" />
     <orderEntry type="library" name="sbt: jakarta.validation:jakarta.validation-api:2.0.2:jar" level="project" />
