@@ -35,7 +35,8 @@ object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
                        cntTopic: Int = 10,
                        cntTopicTerms: Int = 10,
                        tdmEachLimit: Int = 20,
-                       loopPeriod: Long = 180000L
+                       loopPeriod: Long = 180000L,
+                       allTurn: Int = 10000
                       )
 
   def main(v: Array[String]): Unit = {
@@ -44,7 +45,8 @@ object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
 
     val rtParam = v.length match {
       case 6 => RunParams(v(0), v(1).toLong, v(2).toInt, v(3).toInt, v(4).toInt, v(5).toInt, v(6).toLong)
-      case 3 => RunParams(seedNo = v(0).toLong, minAgo = v(1).toInt, loopPeriod = v(2).toLong)
+      case 4 => RunParams(seedNo = v(0).toLong, minAgo = v(1).toInt, loopPeriod = v(2).toLong,
+        allTurn = v(3).toInt)
       case _ => RunParams(seedNo = 1L, minAgo = 600)
     }
     println("Run Params => " + rtParam)
@@ -54,17 +56,20 @@ object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
 
     var ts = 0L
     var ts1 = 0L
-    for(i <- 0 to 10000) { //TODO need to set by external args
+    for(i <- 0 to rtParam.allTurn) { //TODO need to set by external args
       println(s"Processing UnitJob turn ## ${i}")
       ts = System.currentTimeMillis()
 
       runHotLda(rtParam.seedNo, rtParam.minAgo)
-      logger.logJob("HOT_LDA_" + i + "_" + (System.currentTimeMillis() - ts), "FIN")
+      logger.logJob("HOT_LDA_" + i + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
 
       ts1 = System.currentTimeMillis()
-      runHotTdm(rtParam.seedNo, rtParam.minAgo,
-        new TopicTermManager(spark).getTopicsSeq(2), rtParam.tdmEachLimit)
-      logger.logJob("HOT_TDM_" + i + "_" + (System.currentTimeMillis() - ts1), "FIN")
+      runHotTdm(
+        rtParam.seedNo,
+        rtParam.minAgo,
+        new TopicTermManager(spark).getTopicsSeq(2),
+        rtParam.tdmEachLimit)
+      logger.logJob("HOT_TDM_" + i + "_" + (System.currentTimeMillis() - ts1) /1000, "FIN")
 
       var dts = rtParam.loopPeriod - (System.currentTimeMillis() - ts)
       logger.logJob("SLEEP_" + dts, "GOOD")
