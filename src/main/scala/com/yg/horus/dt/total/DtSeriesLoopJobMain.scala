@@ -47,7 +47,7 @@ object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
       case 6 => RunParams(v(0), v(1).toLong, v(2).toInt, v(3).toInt, v(4).toInt, v(5).toInt, v(6).toLong)
       case 4 => RunParams(seedNo = v(0).toLong, minAgo = v(1).toInt, loopPeriod = v(2).toLong,
         allTurn = v(3).toInt)
-      case _ => RunParams(seedNo = 1L, minAgo = 600)
+      case _ => RunParams(seedNo = 25L, minAgo = 600, loopPeriod = 0, allTurn = 1)
     }
     println("Run Params => " + rtParam)
 
@@ -57,26 +57,33 @@ object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
     var ts = 0L
     var ts1 = 0L
     for(i <- 0 to rtParam.allTurn) { //TODO need to set by external args
-      println(s"Processing UnitJob turn ## ${i}")
-      ts = System.currentTimeMillis()
+      try {
+        println(s"Processing UnitJob turn ## ${i}")
+        ts = System.currentTimeMillis()
 
-      runHotLda(rtParam.seedNo, rtParam.minAgo)
-      logger.logJob("HOT_LDA_" + i + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
+        runHotLda(rtParam.seedNo, rtParam.minAgo)
+        logger.logJob("HOT_LDA_" + i + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
 
-      ts1 = System.currentTimeMillis()
-      runHotTdm(
-        rtParam.seedNo,
-        rtParam.minAgo,
-        new TopicTermManager(spark).getTopicsSeq(2),
-        rtParam.tdmEachLimit)
-      logger.logJob("HOT_TDM_" + i + "_" + (System.currentTimeMillis() - ts1) /1000, "FIN")
+        ts1 = System.currentTimeMillis()
+        runHotTdm(
+          rtParam.seedNo,
+          rtParam.minAgo,
+          new TopicTermManager(spark).getTopicsSeq(2),
+          rtParam.tdmEachLimit)
+        logger.logJob("HOT_TDM_" + i + "_" + (System.currentTimeMillis() - ts1) / 1000, "FIN")
 
-      var dts = rtParam.loopPeriod - (System.currentTimeMillis() - ts)
-      logger.logJob("SLEEP_" + dts, "GOOD")
+        var dts = rtParam.loopPeriod - (System.currentTimeMillis() - ts)
+        logger.logJob("SLEEP_" + dts, "GOOD")
 
-      if(dts > 0) {
-        println(s"Sleep for delta period for ${dts}")
-        Thread.sleep(dts)
+        if (dts > 0) {
+          println(s"Sleep for delta period for ${dts}")
+          Thread.sleep(dts)
+        }
+      } catch {
+        case e: Exception => {
+          println("Detected Critical Error ..")
+          Thread.sleep(10000L)
+        }
       }
     }
 
