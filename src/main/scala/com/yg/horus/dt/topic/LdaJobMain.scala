@@ -19,7 +19,7 @@ object LdaJobMain {
 
     val rtParam = args.length match {
       case 6 => RunParams(args(0), args(1), args(2).toLong, args(3).toInt, args(4).toInt, args(5).toInt)
-      case _ => RunParams("LDA_TOPIC", RuntimeConfig("spark.master"), 1L, 600)
+      case _ => RunParams("LDA_TOPIC", RuntimeConfig("spark.master"), 999L, 600)
     }
 
     println(s"Applied Params : ${rtParam}")
@@ -27,31 +27,32 @@ object LdaJobMain {
     val conf = new SparkConf().setMaster(rtParam.master).setAppName(rtParam.appName)
     val spark = SparkSession.builder().config(conf).getOrCreate()
 
-//    val test = new LdaTopicProcessing(spark)
-//    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(rtParam.minAgo))
-//    val source = test.loadSource(rtParam.seedNo, fromTime)
-//
-//    source.show()
-//
-////    println("----- Topic terms -----")
-//    val topics = test.topics(source, 10, 15)
-//    val fRes = test.convertObject(topics)
-//
-//    for(i <- 0 until fRes.length) {
-//      println(s"Topic #${i}")
-//      fRes(i).foreach(a => println(a))
-//      println("--------------")
-//    }
-//
-//    test.saveToDB(topics, rtParam.seedNo, rtParam.minAgo)
+    val test = new LdaTopicProcessing(spark)
+    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(rtParam.minAgo))
+    val source = test.loadSource(rtParam.seedNo, fromTime)
 
-    for(i <- 0 to 10) {
-      println(s"Processing UnitJob turn ## ${i}")
-      runUnitJob(spark, rtParam.seedNo, rtParam.minAgo)
+    source.show()
 
-      println(s"Sleep 5sec ... ${i}")
-      Thread.sleep(5000L)
+//    println("----- Topic terms -----")
+    val topics = test.topics(source, 50, 5)
+    val fRes = test.convertObject(topics)
+
+    for(i <- 0 until fRes.length) {
+      println(s"Topic #${i}")
+      fRes(i).foreach(a => println(a))
+      println("--------------")
     }
+
+    test.saveToDB(topics, rtParam.seedNo, rtParam.minAgo)
+
+    // loop logic
+//    for(i <- 0 to 10) {
+//      println(s"Processing UnitJob turn ## ${i}")
+//      runUnitJob(spark, rtParam.seedNo, rtParam.minAgo)
+//
+//      println(s"Sleep 5sec ... ${i}")
+//      Thread.sleep(5000L)
+//    }
 
 
     spark.close()

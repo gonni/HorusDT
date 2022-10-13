@@ -131,6 +131,37 @@ class KeywordExtractor(fileName: String) extends Extractor {
   }
 }
 
+class TagExtractor(fileName: String) extends Extractor with Serializable {
+
+  val words = filterStop(splitWords(fileName))
+  val wordHash = genHash(words)
+  val indexHash = genInvHash(words)
+  val wordN = wordHash.size
+  val dists = calcWordDist(7)
+  override val threshold = 0.001
+
+  def linkWord(a: Word, b: Word): List[(Int, Int)] = {
+    List(wordHash(a) -> wordHash(b), wordHash(b) -> wordHash(a))
+  }
+
+  def linkWindow(window: List[Word]): List[(Int, Int)] = {
+    window combinations(2) map(t => linkWord(t.head, t.last)) reduceLeft(_ ++ _)
+  }
+
+  def calcWordDist(windowSize: Int): Map[Int, List[Int]] = {
+    val pairs = words sliding(windowSize) map(linkWindow) reduceLeft(_ ++ _)
+    pairs.distinct groupBy(_._1) mapValues( _.map(_._2) )
+  }
+
+  def dis(idx: Int): Map[Int, Double] =
+    dists getOrElse (idx, List(0)) map (_ -> 1.0) toMap
+
+  def extract: List[(Double, String)] = {
+    val a = textRank(50)(iterFunc(dis), List.fill(wordN)(1))
+    a.zipWithIndex.map(t => (t._1, indexHash(t._2))).sortWith(_._1 > _._1)
+  }
+}
+
 class SummaryExtractor(fileName: String) extends Extractor {
 
   val sentences = genListOfSentences(fileName)
@@ -168,6 +199,9 @@ class SummaryExtractor(fileName: String) extends Extractor {
   }
 
 }
+
+
+
 
 
 object TextRankMain {
