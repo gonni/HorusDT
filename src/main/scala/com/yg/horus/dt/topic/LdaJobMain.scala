@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 
 object LdaJobMain {
   case class RunParams(appName: String, master: String, seedNo: Long, minAgo: Int,
-                       cntTopic: Int = 10, cntTopicTerms: Int = 10)
+                       cntTopic: Int = 20, cntTopicTerms: Int = 10)
 
   def main(args: Array[String]): Unit = {
     println("--------------------------------------")
@@ -19,7 +19,7 @@ object LdaJobMain {
 
     val rtParam = args.length match {
       case 6 => RunParams(args(0), args(1), args(2).toLong, args(3).toInt, args(4).toInt, args(5).toInt)
-      case _ => RunParams("LDA_TOPIC", RuntimeConfig("spark.master"), 999L, 600)
+      case _ => RunParams("LDA_TOPIC", RuntimeConfig("spark.master"), 999L, 60000)
     }
 
     println(s"Applied Params : ${rtParam}")
@@ -31,10 +31,11 @@ object LdaJobMain {
     val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(rtParam.minAgo))
     val source = test.loadSource(rtParam.seedNo, fromTime)
 
-    source.show()
+    source.show
 
 //    println("----- Topic terms -----")
-    val topics = test.topics(source, 50, 5)
+    val topics = test.topics(source, 10, 5)
+
     val fRes = test.convertObject(topics)
 
     for(i <- 0 until fRes.length) {

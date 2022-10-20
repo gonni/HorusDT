@@ -47,7 +47,7 @@ object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
       case 6 => RunParams(v(0), v(1).toLong, v(2).toInt, v(3).toInt, v(4).toInt, v(5).toInt, v(6).toLong)
       case 4 => RunParams(seedNo = v(0).toLong, minAgo = v(1).toInt, loopPeriod = v(2).toLong,
         allTurn = v(3).toInt)
-      case _ => RunParams(seedNo = 25L, minAgo = 600, loopPeriod = 0, allTurn = 1)
+      case _ => RunParams(seedNo = 999L, minAgo = 60000, loopPeriod = 0, allTurn = 1)
     }
     println("Run Params => " + rtParam)
 
@@ -97,10 +97,15 @@ object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
     println(s"Target data to be processed from ${fromTime}")
     val source = lda.loadSource(seedNo, fromTime)
 
-    source.show()
+    println("[Source Data for LDA] ----------------- ")
+    source.show(3000)
 
     //    println("----- Topic terms -----")
-    val topics = lda.topics(source, 10, 15)
+    val topics = lda.topics(source, 30, 5)
+
+    println("[LDA(30:5)] ----------------- ")
+    topics.show(600)
+
     val fRes = lda.convertObject(topics)
 
     for(i <- 0 until fRes.length) {
@@ -121,11 +126,6 @@ object DtSeriesLoopJobMain extends SparkJobInit("DT_INTEGRATED_SERIES_LOOP") {
 
     val tdm = new TdmMaker(spark, model)
     val ts = System.currentTimeMillis()
-
-//    val topics = Seq("경제", "사건", "대통령", "주식", "화폐", "사건",
-//      "날씨", "북한", "이재명", "금리", "연봉", "코로나", "러시아", "IT",
-//      "중국", "미국", "원유", "휘발유", "디젤", "물가", "부동산",
-//      "에너지", "공포", "전쟁", "정치")
 
     topics.foreach(term => {
       try {

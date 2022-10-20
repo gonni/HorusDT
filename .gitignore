@@ -11,3 +11,4 @@ project/target/
 /project/target/.sbt-compilation-infos/
 /project/
 /project/target/
+/project/src/main/resources/application.conf

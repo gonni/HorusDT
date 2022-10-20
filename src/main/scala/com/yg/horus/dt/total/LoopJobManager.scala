@@ -18,7 +18,7 @@ class SeedJob(val seedId: Long, val period: Long, spark: SparkSession, var remai
       true
     }
     else {
-      remain -= period
+      remain -= offsetTime
       false
     }
   }
@@ -74,7 +74,7 @@ object LoopJobManager extends SparkJobInit("DT_LOOP_JOB_MANAGER") {
 
   def main(args: Array[String]): Unit = {
     println("Active System ..")
-    val jobProcessor = new SeedJob(1, 1000, spark)
+    val jobProcessor = new SeedJob(1, 1000, spark, 1000)
 
     println(jobProcessor.isRunning(999))
     println(jobProcessor.isRunning(999))

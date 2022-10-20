@@ -80,16 +80,6 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
   }
   // tfidf = TFIDF_NO | TOKEN | TF | DF | IDF | TFIDF | START_MIN_AGO | SEED_NO | GRP_TS
   def avgStatistics(tfidf: DataFrame, seedNo: Long, dataRangeMin: Int, grpTs: Long): Unit = {
-//    tfidf.groupBy("token")
-//      .avg("tfidf").as("avg_tfidf")
-//      .show(300)
-//    println("---------+++++---------")
-
-//    tfidf.groupBy("TOKEN").agg(
-//      avg("tfidf").as("AVG_TFIDF"),
-//      avg("df").as("AVG_DF"))
-//      .orderBy("avg_tfidf")
-//      .show(300)
 
     val tableData = tfidf.groupBy("TOKEN").agg(
       avg("tfidf").as("AVG_TFIDF"),
