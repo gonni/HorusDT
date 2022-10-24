@@ -10,7 +10,7 @@ abstract class SerialJoblet(val period: Long, var remain: Long = 0) {
     System.currentTimeMillis() - ts
   }
 
-  def deltaRun2(plusOffset: Long) = {
+  def deltaRun(plusOffset: Long) = {
     if(remain - plusOffset < 0) {
       val timeEstimated = delta(run)
       remain = if (period - timeEstimated > 0) {
@@ -33,16 +33,6 @@ abstract class SerialJoblet(val period: Long, var remain: Long = 0) {
     }
   }
 
-//  def deltaRun(offset: Long) = {
-//    if(remain - offset < 0L) {
-//      remain = period
-//      delta(run)
-//    } else {
-//      remain = remain - offset
-//      0
-//    }
-//  }
-
   def run()
 
 }
@@ -55,13 +45,13 @@ class SeiralJobManager(cntTurns: Int = 100, checkPeriod: Long = 5000L) {
   }
 
 
-  def start2() = {
+  def start() = {
     var runEstimated = 0L
     for(i <- 1 to cntTurns) {
       println(s"Trun Start #${i} .. with delta: ${checkPeriod}")
       runEstimated = 0
       for(job <- jobs) {
-        runEstimated += job.deltaRun2(runEstimated + checkPeriod)
+        runEstimated += job.deltaRun(runEstimated + checkPeriod)
       }
       println("Turn Completed #" + i + " .. processed run time :" + runEstimated)
       sleepTime(checkPeriod - runEstimated)
@@ -73,46 +63,6 @@ class SeiralJobManager(cntTurns: Int = 100, checkPeriod: Long = 5000L) {
     if (time > 0) Thread.sleep(time)
     else println("No Sleep for this turn ..")
   }
-
-//  def start() = {
-//    var delta = 0L
-//    var isDelayed = false ;
-//    for(i <- 1 to cntTurns) {
-//      println(s"Trun Start #${i} .. with delta: ${delta}")
-//      if(delta > checkPeriod) isDelayed = true else isDelayed = false
-//
-//      for(job <- jobs) {
-//
-//        delta += job.deltaRun(delta)
-////        println(i + " : plus detla :" + delta)
-//      }
-//      println("Turn Completed #" + i + " .. processed time :" + delta)
-//      if(isDelayed) delta = checkPeriod
-//
-//      delta = sleepDelta(delta)
-//      println
-//    }
-//  }
-
-
-
-//  def sleepDelta(offset: Long = 5000L) = {
-//    val spTime = checkPeriod - offset
-//    try {
-//      if(spTime > 0) {
-//        println("JOB Period Sleep : " + spTime)
-//        Thread.sleep(spTime)
-//      } else {
-//        println("JOB Period No Sleep : " + spTime)
-//      }
-//    }
-//    catch {
-//      case e: Exception => println(s"Detected error in sleep : ${e.getMessage}")
-//    }
-//
-//    if(spTime > 0) checkPeriod
-//    else offset
-//  }
 }
 
 object SeiralJobManager {
@@ -141,6 +91,6 @@ object SeiralJobManager {
 //    test.jobs.foreach(job => println("delta ->" + job.deltaRun(1000)))
 
     println("=====================")
-    test.start2()
+    test.start()
   }
 }

@@ -8,13 +8,6 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 object Main {
   def main(args: Array[String]): Unit = {
     println("Active System ..")
-//    if(args.length > 0) {
-//      println("Input detected profile :", args(0))
-//      System.setProperty("profile.active", args(0))
-//    } else {
-//      println("No Args .. set on " + RuntimeConfig.getActiveProfile())
-//      System.setProperty("active.profile", RuntimeConfig.getActiveProfile())
-//    }
 
     println("------------------------------------------------")
     println("Active Profile : " + RuntimeConfig("profile.name"))

@@ -73,16 +73,16 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
 
     val count = DtLogger.countValue()
     var ts = System.currentTimeMillis()
-    runHotLda(seedNo, minAgo)
+    runHotLda(seedNo, minAgo, logger)
     logger.logJob("JOBLET_LDA_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
 
     ts = System.currentTimeMillis()
-    runHotTdm(seedNo, minAgo, new TopicTermManager(spark).getTopicsSeq(2), 2)
+    runHotTdm(seedNo, minAgo, new TopicTermManager(spark).getTopicsSeq(2), 2 , logger)
     logger.logJob("JOBLET_TDM_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
 
   }
 
-  def runHotLda(seedNo: Long, minAgo: Int) = {
+  def runHotLda(seedNo: Long, minAgo: Int, logger: DtLogger) = {
     val lda = new LdaTopicProcessing(spark)
     val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(minAgo))
     println(s"Target data to be processed from ${fromTime}")
@@ -91,56 +91,74 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
     println("[Source Data for LDA] ----------------- ")
     source.show(3000)
 
-    //    println("----- Topic terms -----")
-    val topics = lda.topics(source, 30, 5)
+    if(source.count() < 10) {
+      println("==> Crawled data for LDA is not enough .." + source.count())
+      logger.logJob("JOBLET_LDA_" + seedNo + "_NOT_ENOUGH_DATA" , "NA")
+    } else {
+      //    println("----- Topic terms -----")
+      val topics = lda.topics(source, 30, 5)
 
-    println("[LDA(30:5)] ----------------- ")
-    topics.show(600)
+      println("[LDA(30:5)] ----------------- ")
+      topics.show(600)
 
-    val fRes = lda.convertObject(topics)
+      val fRes = lda.convertObject(topics)
 
-    for (i <- 0 until fRes.length) {
-      println(s"Topic #${i}")
-      fRes(i).foreach(a => println(a))
-      println("--------------")
+      for (i <- 0 until fRes.length) {
+        println(s"Topic #${i}")
+        fRes(i).foreach(a => println(a))
+        println("--------------")
+      }
+
+      lda.saveToDB(topics, seedNo, minAgo)
     }
-
-    lda.saveToDB(topics, seedNo, minAgo)
   }
 
 
-  def runHotTdm(seedNo: Long, minAgo: Int, topics: Seq[String], eachLimit: Int) = {
+  def runHotTdm(seedNo: Long, minAgo: Int, topics: Seq[String], eachLimit: Int, logger: DtLogger) = {
     val test = new Word2vecModeler(spark)
 
     val data = test.loadSourceFromMinsAgo(seedNo, minAgo)
-    val model = test.createModel(data)
+    if (data.count() < 10) {
+      println("==> Crawled data for TDM is not enough .." + data.count())
+      logger.logJob("JOBLET_TDM_" + seedNo + "_NOT_ENOUGH_DATA" , "NA")
+    } else {
 
-    val tdm = new TdmMaker(spark, model)
-    val ts = System.currentTimeMillis()
+      val model = test.createModel(data)
 
-    topics.foreach(term => {
-      try {
-        // need to change logic
-        tdm.saveToDB(tdm.highTermDistances(term, eachLimit), seedNo, minAgo, ts)
-      } catch {
-        case _ => println(s"No Terms in Model : ${term}")
-      }
-    })
+      val tdm = new TdmMaker(spark, model)
+      val ts = System.currentTimeMillis()
 
-    println("Job Finished ..")
+      topics.foreach(term => {
+        try {
+          // need to change logic
+          tdm.saveToDB(tdm.highTermDistances(term, eachLimit), seedNo, minAgo, ts)
+        } catch {
+          case _ => println(s"No Terms in Model : ${term}")
+        }
+      })
+
+      println("TDM Job Finished ..")
+    }
   }
 }
 
 object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
+  implicit def k(v: Int) : Kilo = new Kilo(v)
+
+  class Kilo(val x: Int) {
+    def k(): Long = x * 1000L
+  }
 
   def main(args: Array[String]): Unit = {
     println("Active Serial Job ..")
     implicit def now : Long = System.currentTimeMillis()
 
     val jobManager = new SeiralJobManager(cntTurns = 300, checkPeriod = 5000L)
-    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 120000L))
-    jobManager.addJob(new LdaTdmJoblet(spark, 25, 120, 300000L))
-    jobManager.start2()
+//    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 120000L))
+//    jobManager.addJob(new LdaTdmJoblet(spark, 25, 120, 300000L))
+    jobManager.addJob(new LdaTdmJoblet(spark, 1, 60, 180.k))
+    jobManager.start()
+
 
     spark.close()
   }

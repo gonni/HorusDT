@@ -46,10 +46,16 @@ object CrawledProcessing extends SparkStreamingInit("SPP") {
         InfluxClient.writeTf(seedId, tf._1, tf._2)
       })
     })
-
   }
 
-  def main(args: Array[String]): Unit = {
+  def processCrawleds(seedIds: Seq[Long]) = {
+    seedIds.foreach(seedId => {
+      processCrawled(seedId)
+    }
+    )
+  }
+
+  def main(v: Array[String]): Unit = {
     println("Active System ..")
 
     println("------------------------------------------------")
@@ -57,30 +63,21 @@ object CrawledProcessing extends SparkStreamingInit("SPP") {
     println("------------------------------------------------")
     println("RuntimeConfig Details : " + RuntimeConfig())
 
-    processCrawled(1L)
+    if(v.length > 0) {
+      println("Count of Input Arguments => " + v.length)
+      val seeds = v.map(args => {
+        args.toLong
+      }).toSeq
 
-//    val anchors = ssc.receiverStream(new MySqlSourceReceiver(Seq(9L)))
-//    val words = anchors.flatMap(anchor => {
-////      HangleTokenizer().arrayTokens(anchor)
-//      HangleTokenizer().arrayNouns(anchor)
-//    })
-//
-////    val words = anchors.flatMap(_.split(" "))
-//    // Count each word in each batch
-//    val pairs = words.map(word => (word, 1))
-//    val wordCounts = pairs.reduceByKey(_ + _)
-//
-//    // Print the first ten elements of each RDD generated in this DStream to the console
-//    wordCounts.print
-////    wordCounts.foreachRDD((a, b) => {println(a + "->" + b)})
-//    wordCounts.foreachRDD(rdd => {
-//      rdd.foreach(tf => {
-////        println(tf._1 + " --> " + tf._2)
-//        InfluxClient.writeTf(1L, tf._1, tf._2)
-//      })
-//    })
+      processCrawleds(seeds)
 
-    ssc.start()
+      ssc.start()
+    } else {
+      println("No input arguments or Invalid type arguments detected ..")
+    }
+
+//    processCrawled(1L)
+
     ssc.awaitTermination()
   }
 
