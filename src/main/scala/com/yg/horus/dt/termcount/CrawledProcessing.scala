@@ -55,6 +55,7 @@ object CrawledProcessing extends SparkStreamingInit("SPP") {
     )
   }
 
+
   def main(v: Array[String]): Unit = {
     println("Active System ..")
 
