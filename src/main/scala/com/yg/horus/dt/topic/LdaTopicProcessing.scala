@@ -54,8 +54,8 @@ class LdaTopicProcessing(val spark: SparkSession) {
     resDf.show()
 
     val prop = new Properties()
-    prop.put("user", RuntimeConfig().getString("mysql.user"))
-    prop.put("password", RuntimeConfig().getString("mysql.password"))
+    prop.put("user", RuntimeConfig("mysql.user"))
+    prop.put("password", RuntimeConfig("mysql.password"))
 
     resDf.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.lda.writeDB"),
       "DT_LDA_TOPICS", prop)

@@ -45,8 +45,8 @@ class TdmMaker(val spark: SparkSession, val model: Word2VecModel) {
       .withColumn("GRP_TS", typedLit(ts))
 
     val prop = new Properties()
-    prop.put("user", "root")
-    prop.put("password", "18651865")
+    prop.put("user", RuntimeConfig("mysql.user"))
+    prop.put("password", RuntimeConfig("mysql.password"))
 
     dfWithTs.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.tdm.writeDB"),
       "TERM_DIST", prop)

@@ -73,12 +73,19 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
 
     val count = DtLogger.countValue()
     var ts = System.currentTimeMillis()
-    runHotLda(seedNo, minAgo, logger)
-    logger.logJob("JOBLET_LDA_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
+    try {
+      runHotLda(seedNo, minAgo, logger)
+      logger.logJob("JOBLET_LDA_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
 
-    ts = System.currentTimeMillis()
-    runHotTdm(seedNo, minAgo, new TopicTermManager(spark).getTopicsSeq(2), 2 , logger)
-    logger.logJob("JOBLET_TDM_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
+      ts = System.currentTimeMillis()
+      runHotTdm(seedNo, minAgo, new TopicTermManager(spark).getTopicsSeq(2), 2, logger)
+      logger.logJob("JOBLET_TDM_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
+    } catch {
+      case e: Exception => {
+        logger.logJob("JOBLET_LDATDM_ERROR_"  + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
+        e.printStackTrace()
+      }
+    }
 
   }
 
@@ -122,7 +129,7 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       println("==> Crawled data for TDM is not enough .." + data.count())
       logger.logJob("JOBLET_TDM_" + seedNo + "_NOT_ENOUGH_DATA" , "NA")
     } else {
-
+      println("processing TDM .. " + seedNo)
       val model = test.createModel(data)
 
       val tdm = new TdmMaker(spark, model)
@@ -133,7 +140,8 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
           // need to change logic
           tdm.saveToDB(tdm.highTermDistances(term, eachLimit), seedNo, minAgo, ts)
         } catch {
-          case _ => println(s"No Terms in Model : ${term}")
+//          case _ => println(s"No Terms in Model : ${term}")
+          case e: Exception => e.printStackTrace()
         }
       })
 
@@ -153,12 +161,16 @@ object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
     println("Active Serial Job ..")
     implicit def now : Long = System.currentTimeMillis()
 
-    val jobManager = new SeiralJobManager(cntTurns = 300, checkPeriod = 5000L)
-//    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 120000L))
-//    jobManager.addJob(new LdaTdmJoblet(spark, 25, 120, 300000L))
-    jobManager.addJob(new LdaTdmJoblet(spark, 1, 60, 180.k))
-    jobManager.start()
+    println("------------------------------------------------")
+    println("Active Profile : " + RuntimeConfig("profile.name"))
+    println("------------------------------------------------")
+    println("RuntimeConfig Details : " + RuntimeConfig())
 
+    val jobManager = new SeiralJobManager(cntTurns = 30000, checkPeriod = 5000L)
+    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 120 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 230 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 300 k))
+    jobManager.start()
 
     spark.close()
   }

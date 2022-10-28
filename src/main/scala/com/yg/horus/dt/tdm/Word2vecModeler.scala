@@ -64,6 +64,9 @@ object Word2vecModeler {
   komoran.setUserDic(RuntimeConfig("komoran.dic"))
 
   def createW2vModel(df: DataFrame) = {
+    println("Data for W2V Modeling -----")
+    df.show()
+
     new Word2Vec()
       .setInputCol("tokenized")
       .setOutputCol("result") // ori: vector
