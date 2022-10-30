@@ -50,3 +50,13 @@ create table DT_JOB_LOG (
                             STATUS varchar(4),
                             FINISHED_AT datetime default current_timestamp
 ) ;
+
+CREATE TABLE DT_TOPIC_TDM (
+                              `TT_NO` int(11) NOT NULL AUTO_INCREMENT,
+                              `BASE_TERM` varchar(164) DEFAULT NULL,
+                              `NEAR_TERM` varchar(164) DEFAULT NULL,
+                              `TOPIC_SCORE` double DEFAULT NULL,
+                              `SEED_NO` int(11) DEFAULT NULL,
+                              `GRP_TS` mediumtext,
+                              PRIMARY KEY (`TT_NO`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;

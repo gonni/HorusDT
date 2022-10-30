@@ -2,14 +2,18 @@ package com.yg.horus.dt.jobflow
 
 import com.yg.horus.RuntimeConfig
 import com.yg.horus.dt.SparkJobInit
+import com.yg.horus.dt.jobflow.SerialJobMain.spark
+import com.yg.horus.dt.tdm.TopicTermManager.spark
 import com.yg.horus.dt.tdm.{TdmMaker, TopicTermManager, Word2vecModeler}
 import com.yg.horus.dt.topic.LdaTopicProcessing
 import com.yg.horus.dt.total.DtSeriesLoopJobMain
+import org.apache.spark.ml.feature.Word2VecModel
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
 import java.sql.Timestamp
 import java.time.LocalDateTime
 import java.util.Properties
+import scala.collection.mutable.ListBuffer
 
 object DtLogger {
   var count = 0
@@ -34,36 +38,7 @@ class DtLogger(spark: SparkSession) {
       "DT_JOB_LOG", prop)
   }
 }
-
-class LdaJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long) extends SerialJoblet(period) {
-
-  override def run(): Unit = {
-    val lda = new LdaTopicProcessing(spark)
-    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(minAgo))
-    println(s"Target data to be processed from ${fromTime}")
-    val source = lda.loadSource(seedNo, fromTime)
-
-    println("[Source Data for LDA] ----------------- ")
-    source.show(3000)
-
-    //    println("----- Topic terms -----")
-    val topics = lda.topics(source, 30, 5)
-
-    println("[LDA(30:5)] ----------------- ")
-    topics.show(600)
-
-    val fRes = lda.convertObject(topics)
-
-    for (i <- 0 until fRes.length) {
-      println(s"Topic #${i}")
-      fRes(i).foreach(a => println(a))
-      println("--------------")
-    }
-
-    lda.saveToDB(topics, seedNo, minAgo)
-  }
-
-}
+case class TopicTdm(baseTerm: String, nearTerm: String, topicScore: Double, seedNo: Int, gprTs: Long)
 
 class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
   extends SerialJoblet(period) {
@@ -78,8 +53,9 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       logger.logJob("JOBLET_LDA_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
 
       ts = System.currentTimeMillis()
-      runHotTdm(seedNo, minAgo, new TopicTermManager(spark).getTopicsSeq(2), 2, logger)
+      runHotTdm(seedNo, minAgo, new TopicTermManager(spark).getLatestTopicsSeq(seedNo, 2), 10, logger)
       logger.logJob("JOBLET_TDM_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
+
     } catch {
       case e: Exception => {
         logger.logJob("JOBLET_LDATDM_ERROR_"  + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
@@ -88,6 +64,25 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
     }
 
   }
+
+  def runHotMergedTdm(seedNo: Int, model: Word2VecModel, grpTs: Long) = {
+    import spark.implicits._
+    val topicTermManager = new TopicTermManager(spark)
+    val mergedTopics = topicTermManager.getMergedTopicSeq(21L, 10, 10)
+    val tdm = new TdmMaker(spark, model)
+
+    val res = mergedTopics.map(topic => {
+      val strNearTerms = tdm.strNearTermsOnVectorIn(topic.topicName, 7)
+      TopicTdm(topic.topicName, strNearTerms, topic.score, seedNo, grpTs)
+    })
+
+    val resDf = res.toDF("BASE_TERM", "NEAR_TERM", "TOPIC_SCORE", "SEED_NO", "GRP_TS")
+    resDf.show
+
+    tdm.saveMergedTopicTdm(resDf)
+  }
+
+
 
   def runHotLda(seedNo: Long, minAgo: Int, logger: DtLogger) = {
     val lda = new LdaTopicProcessing(spark)
@@ -103,10 +98,10 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       logger.logJob("JOBLET_LDA_" + seedNo + "_NOT_ENOUGH_DATA" , "NA")
     } else {
       //    println("----- Topic terms -----")
-      val topics = lda.topics(source, 30, 5)
+      val topics = lda.topics(source, 10, 10)
 
       println("[LDA(30:5)] ----------------- ")
-      topics.show(600)
+      topics.show(100)
 
       val fRes = lda.convertObject(topics)
 
@@ -120,17 +115,16 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
     }
   }
 
-
   def runHotTdm(seedNo: Long, minAgo: Int, topics: Seq[String], eachLimit: Int, logger: DtLogger) = {
-    val test = new Word2vecModeler(spark)
+    val w2vModeler = new Word2vecModeler(spark)
 
-    val data = test.loadSourceFromMinsAgo(seedNo, minAgo)
+    val data = w2vModeler.loadSourceFromMinsAgo(seedNo, minAgo)
     if (data.count() < 10) {
       println("==> Crawled data for TDM is not enough .." + data.count())
       logger.logJob("JOBLET_TDM_" + seedNo + "_NOT_ENOUGH_DATA" , "NA")
     } else {
       println("processing TDM .. " + seedNo)
-      val model = test.createModel(data)
+      val model = w2vModeler.createModel(data)
 
       val tdm = new TdmMaker(spark, model)
       val ts = System.currentTimeMillis()
@@ -145,20 +139,25 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
         }
       })
 
+      runHotMergedTdm(seedNo.toInt, model, ts)
       println("TDM Job Finished ..")
     }
   }
+
 }
 
 object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
   implicit def k(v: Int) : Kilo = new Kilo(v)
 
+
   class Kilo(val x: Int) {
     def k(): Long = x * 1000L
   }
 
+
   def main(args: Array[String]): Unit = {
     println("Active Serial Job ..")
+
     implicit def now : Long = System.currentTimeMillis()
 
     println("------------------------------------------------")
@@ -166,11 +165,21 @@ object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
     println("------------------------------------------------")
     println("RuntimeConfig Details : " + RuntimeConfig())
 
-    val jobManager = new SeiralJobManager(cntTurns = 30000, checkPeriod = 5000L)
+    val jobManager = new SeiralJobManager(cntTurns = 30, checkPeriod = 5000L)
     jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 120 k))
-    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 230 k))
-    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 300 k))
+//    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 230 k))
+//    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 300 k))
     jobManager.start()
+
+//    val w2vModeler = new Word2vecModeler(spark)
+//    val data = w2vModeler.loadSourceFromMinsAgo(21L, 60)
+//    val model = w2vModeler.createModel(data)
+//
+
+//    Seq(TopicTdm("A1", "B1", 12.1, 21, 1L)).toDF("BASE_TERM", "NEAR_TERM", "TOPIC_SCORE", "SEED_NO", "GRP_TS").show
+//    val w2vModeler = new Word2vecModeler(spark)
+//    val model = Word2VecModel.load("data/w2vNews2Cont_v200_m8_w7_it8")
+//    runHotMergedTdm(21, new DtLogger(spark), model, 18L)
 
     spark.close()
   }

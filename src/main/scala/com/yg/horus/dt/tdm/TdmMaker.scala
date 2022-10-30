@@ -5,11 +5,12 @@ import com.yg.horus.dt.{SparkJobInit, SparkStreamingInit}
 import org.apache.spark.ml.feature.Word2VecModel
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 import org.apache.spark.sql.expressions.UserDefinedFunction
-import org.apache.spark.sql.functions.{avg, lit, stddev, typedLit, udf, variance}
+import org.apache.spark.sql.functions.{avg, col, lit, stddev, typedLit, udf, variance}
+import org.apache.spark.ml.linalg.{Vector, Vectors}
 
 import java.util.Properties
 
-class TdmMaker(val spark: SparkSession, val model: Word2VecModel) {
+class TdmMaker(val spark: SparkSession, val model: Word2VecModel) extends W2vDistUtil {
   import spark.implicits._
 
   val revertDouble: UserDefinedFunction = udf((v: Double) => 1 - v)
@@ -52,24 +53,46 @@ class TdmMaker(val spark: SparkSession, val model: Word2VecModel) {
       "TERM_DIST", prop)
   }
 
+  //DF.schema = "BASE_TERM", "NEAR_TERM", "TOPIC_SCORE", "SEED_NO", "GRP_TS"
+  def saveMergedTopicTdm(df: DataFrame) = {
+    println("Write Data to DB.Table ------------------------")
+
+    val prop = new Properties()
+    prop.put("user", RuntimeConfig("mysql.user"))
+    prop.put("password", RuntimeConfig("mysql.password"))
+
+    df.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.tdm.writeDB"),
+      "DT_TOPIC_TDM", prop)
+  }
+
 }
 
-object TdmMaker extends SparkJobInit("TDM") {
+object TdmMaker {
 
-  def test(): Unit = {
+//  def test(): Unit = {
+//    val model = Word2VecModel.load("data/w2vNews2Cont_v200_m8_w7_it8")
+//
+//    val tt = new TdmMaker(spark, model)
+//    tt.highTermDistances("김").show()
+//    tt.highTermDistances(Seq("A"))
+//  }
+
+  def main(args: Array[String]): Unit = {
+    val spark = SparkSession.builder()
+      .appName("W2vTopicCls")
+      .master("local")
+      .getOrCreate()
+//    test
+
     val model = Word2VecModel.load("data/w2vNews2Cont_v200_m8_w7_it8")
 
     val tt = new TdmMaker(spark, model)
-    tt.highTermDistances("김") show
-  }
+//    tt.highTermDistances("김").show()
 
-  def main(args: Array[String]): Unit = {
-//    val spark = SparkSession.builder()
-//      .appName("W2vTopicCls")
-//      .master("local")
-//      .getOrCreate()
-    test
+//    tt.highVectorDistances(List("한국", "러시아", "우크라이나"))
 
+    val nearTerms = tt.nearTermsOnVector(Seq("한국", "러시아", "우크라이나"), 10)
+    nearTerms.toDF().show()
   }
 
 
