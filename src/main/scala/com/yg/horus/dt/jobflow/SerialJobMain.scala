@@ -68,7 +68,7 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
   def runHotMergedTdm(seedNo: Int, model: Word2VecModel, grpTs: Long) = {
     import spark.implicits._
     val topicTermManager = new TopicTermManager(spark)
-    val mergedTopics = topicTermManager.getMergedTopicSeq(21L, 10, 10)
+    val mergedTopics = topicTermManager.getMergedTopicSeq(seedNo, 10, 10)
     val tdm = new TdmMaker(spark, model)
 
     val res = mergedTopics.map(topic => {
@@ -166,7 +166,7 @@ object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
     println("RuntimeConfig Details : " + RuntimeConfig())
 
     val jobManager = new SeiralJobManager(cntTurns = 30, checkPeriod = 5000L)
-    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 120 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 1, 600, 120 k))
 //    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 230 k))
 //    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 300 k))
     jobManager.start()
