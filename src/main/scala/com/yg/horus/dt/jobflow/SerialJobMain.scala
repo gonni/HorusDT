@@ -163,10 +163,11 @@ object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
     println("------------------------------------------------")
     println("RuntimeConfig Details : " + RuntimeConfig())
 
-    val jobManager = new SeiralJobManager(cntTurns = 30, checkPeriod = 5000L)
-    jobManager.addJob(new LdaTdmJoblet(spark, 1, 600, 120 k))
-//    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 230 k))
-//    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 300 k))
+    val jobManager = new SeiralJobManager(cntTurns = 300000, checkPeriod = 5000L)
+    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 120 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 230 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 300 k))
+
     jobManager.start()
 
 //    val w2vModeler = new Word2vecModeler(spark)

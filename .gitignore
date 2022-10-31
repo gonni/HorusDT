@@ -12,3 +12,5 @@ project/target/
 /project/
 /project/target/
 /project/src/main/resources/application.conf
+/.idea/
+/.bsp/
