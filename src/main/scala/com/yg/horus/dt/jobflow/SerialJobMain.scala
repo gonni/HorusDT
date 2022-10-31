@@ -82,8 +82,6 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
     tdm.saveMergedTopicTdm(resDf)
   }
 
-
-
   def runHotLda(seedNo: Long, minAgo: Int, logger: DtLogger) = {
     val lda = new LdaTopicProcessing(spark)
     val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(minAgo))
