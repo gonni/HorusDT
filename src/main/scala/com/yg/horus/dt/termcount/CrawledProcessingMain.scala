@@ -5,6 +5,8 @@ import com.yg.horus.conn.InfluxClient
 import com.yg.horus.dt.SparkStreamingInit
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
 import kr.co.shineware.nlp.komoran.core.Komoran
+import org.apache.spark.SparkConf
+import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 import scala.collection.JavaConverters._
 
@@ -28,9 +30,13 @@ object HangleTokenizer {
   def apply() : HangleTokenizer = new HangleTokenizer
 }
 
-object CrawledProcessingMain extends SparkStreamingInit("SPP") {
+object CrawledProcessingMain {//extends SparkStreamingInit("SPP") {
 //  override val sparkAppName: String = "SparkStreaming_CrawledTermCount"
+val conf = new SparkConf().setMaster(RuntimeConfig("spark.master")).setAppName("STR-TC")
+  val ssc = new StreamingContext(conf, Seconds(10))
+
   def processCrawled(seedId : Long) = {
+    println("processing .. " + seedId)
     val anchors = ssc.receiverStream(new MySqlSourceReceiver(seedId))
     val words = anchors.flatMap(anchor => {
       HangleTokenizer().arrayNouns(anchor)
@@ -75,6 +81,10 @@ object CrawledProcessingMain extends SparkStreamingInit("SPP") {
       ssc.start()
     } else {
       println("No input arguments or Invalid type arguments detected ..")
+
+      val seeds = Seq[Long](21L, 23L, 25L)
+      processCrawleds(seeds)
+
     }
 
 //    processCrawled(1L)
