@@ -28,7 +28,7 @@ object HangleTokenizer {
   def apply() : HangleTokenizer = new HangleTokenizer
 }
 
-object CrawledProcessing extends SparkStreamingInit("SPP") {
+object CrawledProcessingMain extends SparkStreamingInit("SPP") {
 //  override val sparkAppName: String = "SparkStreaming_CrawledTermCount"
   def processCrawled(seedId : Long) = {
     val anchors = ssc.receiverStream(new MySqlSourceReceiver(seedId))

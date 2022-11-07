@@ -135,10 +135,10 @@ object TopicTermManager extends SparkJobInit("TOPIC_TERM") {
 // ------------
     val model = Word2VecModel.load("data/w2vNews2Cont_v200_m8_w7_it8")
 
-    val tt = new TdmMaker(spark, model)
+    val tt = new TdmMaker(spark)
 
     mergedTopics.foreach(mtpc => {
-      val a = tt.nearTermsOnVectorIn(mtpc.topicName.split("\\|").toSeq, 7)
+      val a = tt.nearTermsOnVectorIn(model, mtpc.topicName.split("\\|").toSeq, 7)
         .orderBy($"similarity".desc)
         .map(_.getAs[String]("word")).collect().mkString("|")
       println("nearTerm =>" + a)

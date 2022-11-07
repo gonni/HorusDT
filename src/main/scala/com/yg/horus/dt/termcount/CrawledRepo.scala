@@ -56,12 +56,20 @@ object CrawledRepo {
     .filter(_.seedNo === seedNo).filter(_.status === "SUCC").filter(_.crawlNo > startCrawlNo)
     .sortBy(_.crawlNo.desc).drop(0).take(limit).map(_.pageText)
 
+  def findAllLatestContent(startCrawlNo: Long, limit: Int) =
+    crawlUnitsQuery
+      .filter(_.status === "SUCC")
+      .filter(_.crawlNo > startCrawlNo)
+      .sortBy(_.crawlNo.desc)
+      .drop(0)
+      .take(limit)
+
   def findAll(seedNo: Long) = crawlUnitsQuery.filter(_.seedNo === seedNo)
     .sortBy(_.crawlNo.desc)
     .drop(0)
     .take(20)
 
-  def findLatestCrawlNo(seedNo1: Long) = crawlUnitsQuery.filter(_.seedNo === seedNo1)
+  def findLatestCrawlNo(seedNo: Long) = crawlUnitsQuery.filter(_.seedNo === seedNo)
     .filter(_.status === "SUCC").map(_.crawlNo).max
 
   def getCrawledData(crawlNo: Long) = crawlUnitsQuery.filter(_.crawlNo === crawlNo)

@@ -42,10 +42,14 @@ case class TopicTdm(baseTerm: String, nearTerm: String, topicScore: Double, seed
 
 class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
   extends SerialJoblet(period) {
+  val logger = new DtLogger(spark)
+
+  val lda = new LdaTopicProcessing(spark)
+  val w2vModeler = new Word2vecModeler(spark)
+  val topicTermManager = new TopicTermManager(spark)
+  val tdm = new TdmMaker(spark)
 
   override def run(): Unit = {
-    val logger = new DtLogger(spark)
-
     val count = DtLogger.countValue()
     var ts = System.currentTimeMillis()
     try {
@@ -56,6 +60,8 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       runHotTdm(seedNo, minAgo, new TopicTermManager(spark).getLatestTopicsSeq(seedNo, 2), 10, logger)
       logger.logJob("JOBLET_TDM_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
 
+      spark.catalog.clearCache()
+      println("cache cleaned ----------------------------------------------")
     } catch {
       case e: Exception => {
         logger.logJob("JOBLET_LDATDM_ERROR_"  + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
@@ -67,12 +73,12 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
 
   def runHotMergedTdm(seedNo: Int, model: Word2VecModel, grpTs: Long) = {
     import spark.implicits._
-    val topicTermManager = new TopicTermManager(spark)
+//    val topicTermManager = new TopicTermManager(spark)
     val mergedTopics = topicTermManager.getMergedTopicSeq(seedNo, 10, 10)
-    val tdm = new TdmMaker(spark, model)
+//    val tdm = new TdmMaker(spark, model)
 
     val res = mergedTopics.map(topic => {
-      val strNearTerms = tdm.strNearTermsOnVectorIn(topic.topicName, 7)
+      val strNearTerms = tdm.strNearTermsOnVectorIn(model, topic.topicName, 7)
       TopicTdm(topic.topicName, strNearTerms, topic.score, seedNo, grpTs)
     })
 
@@ -80,10 +86,13 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
     resDf.show
 
     tdm.saveMergedTopicTdm(resDf)
+
+    resDf.unpersist()
+
   }
 
   def runHotLda(seedNo: Long, minAgo: Int, logger: DtLogger) = {
-    val lda = new LdaTopicProcessing(spark)
+//    val lda = new LdaTopicProcessing(spark)
     val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(minAgo))
     println(s"Target data to be processed from ${fromTime}")
     val source = lda.loadSource(seedNo, fromTime)
@@ -111,10 +120,11 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
 
       lda.saveToDB(topics, seedNo, minAgo)
     }
+    source.unpersist()
   }
 
   def runHotTdm(seedNo: Long, minAgo: Int, topics: Seq[String], eachLimit: Int, logger: DtLogger) = {
-    val w2vModeler = new Word2vecModeler(spark)
+//    val w2vModeler = new Word2vecModeler(spark)
 
     val data = w2vModeler.loadSourceFromMinsAgo(seedNo, minAgo)
     if (data.count() < 10) {
@@ -124,13 +134,13 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       println("processing TDM .. " + seedNo)
       val model = w2vModeler.createModel(data)
 
-      val tdm = new TdmMaker(spark, model)
+//      val tdm = new TdmMaker(spark, model)
       val ts = System.currentTimeMillis()
 
       topics.foreach(term => {
         try {
           // need to change logic
-          tdm.saveToDB(tdm.highTermDistances(term, eachLimit), seedNo, minAgo, ts)
+          tdm.saveToDB(tdm.highTermDistances(model, term, eachLimit), seedNo, minAgo, ts)
         } catch {
 //          case _ => println(s"No Terms in Model : ${term}")
           case e: Exception => e.printStackTrace()
@@ -139,8 +149,11 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
 
       runHotMergedTdm(seedNo.toInt, model, ts)
       println("TDM Job Finished ..")
+
+      data.unpersist()
     }
   }
+
 
 }
 
@@ -164,9 +177,9 @@ object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
     println("RuntimeConfig Details : " + RuntimeConfig())
 
     val jobManager = new SeiralJobManager(cntTurns = 300000, checkPeriod = 5000L)
-    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 120 k))
-    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 230 k))
-    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 300 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 60 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 120 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 200 k))
 
     jobManager.start()
 

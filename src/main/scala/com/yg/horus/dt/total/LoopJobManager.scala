@@ -50,13 +50,13 @@ class SeedJob(val seedId: Long, val period: Long, spark: SparkSession, var remai
     val data = test.loadSourceFromMinsAgo(seedNo, minAgo)
     val model = test.createModel(data)
 
-    val tdm = new TdmMaker(spark, model)
+    val tdm = new TdmMaker(spark)
     val ts = System.currentTimeMillis()
 
     topics.foreach(term => {
       try {
         // need to change logic
-        tdm.saveToDB(tdm.highTermDistances(term, eachLimit), seedNo, minAgo, ts)
+        tdm.saveToDB(tdm.highTermDistances(model, term, eachLimit), seedNo, minAgo, ts)
       }catch {
         case _ => println(s"No Terms in Model : ${term}")
       }

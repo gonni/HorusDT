@@ -7,20 +7,26 @@ import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.{avg, col, lit, stddev, typedLit, udf, variance}
 import org.apache.spark.ml.linalg.{Vector, Vectors}
+import org.jblas.{DoubleMatrix => DM}
 
 import java.util.Properties
 
-class TdmMaker(val spark: SparkSession, val model: Word2VecModel) extends W2vDistUtil {
+//class TdmMaker(val spark: SparkSession, val model: Word2VecModel) extends W2vDistUtil {
+class TdmMaker(val spark: SparkSession) {
   import spark.implicits._
 
   val revertDouble: UserDefinedFunction = udf((v: Double) => 1 - v)
+
+  val prop = new Properties()
+  prop.put("user", RuntimeConfig("mysql.user"))
+  prop.put("password", RuntimeConfig("mysql.password"))
 
   val getTermDistance = udf{ (rvsim: Double, vari: Double) =>
     val distPow = math.pow(rvsim, 2)
     math.exp(-1 * distPow / (10 * math.sqrt(vari)))
   }
 
-  def highTermDistances(topicWord: String, limit: Int = 20) = {
+  def highTermDistances(model: Word2VecModel, topicWord: String, limit: Int = 20) = {
 
     val res = model.findSynonyms(topicWord, limit)
     val exRes = res.withColumn("rvsim", revertDouble($"similarity"))
@@ -45,10 +51,6 @@ class TdmMaker(val spark: SparkSession, val model: Word2VecModel) extends W2vDis
       .withColumn("SEED_NO", typedLit(seedNo))
       .withColumn("GRP_TS", typedLit(ts))
 
-    val prop = new Properties()
-    prop.put("user", RuntimeConfig("mysql.user"))
-    prop.put("password", RuntimeConfig("mysql.password"))
-
     dfWithTs.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.tdm.writeDB"),
       "TERM_DIST", prop)
   }
@@ -57,12 +59,39 @@ class TdmMaker(val spark: SparkSession, val model: Word2VecModel) extends W2vDis
   def saveMergedTopicTdm(df: DataFrame) = {
     println("Write Data to DB.Table ------------------------")
 
-    val prop = new Properties()
-    prop.put("user", RuntimeConfig("mysql.user"))
-    prop.put("password", RuntimeConfig("mysql.password"))
+//    val prop = new Properties()
+//    prop.put("user", RuntimeConfig("mysql.user"))
+//    prop.put("password", RuntimeConfig("mysql.password"))
 
     df.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.tdm.writeDB"),
       "DT_TOPIC_TDM", prop)
+  }
+
+  def nearTermsOnVectorIn(model: Word2VecModel, srcTerms: Seq[String], limit: Int) = {
+    val df_vectors = model.getVectors.persist(org.apache.spark.storage.StorageLevel.MEMORY_ONLY_SER)
+
+    def word2DM(word: String) = {
+      new DM(df_vectors.filter($"word" === word).head.getAs[Vector]("vector").toArray)
+    }
+
+    val filtered = srcTerms.filter(term => {
+      df_vectors.filter($"word" === term).count() > 0
+    })
+    //    println("Filtered Size = " + filtered.size)
+
+    val sumVector = filtered.foldLeft(word2DM(filtered(0)))((a, b) => a.add(word2DM(b)))
+    val centerVector = sumVector.div(filtered.length)
+
+    val terms = model.findSynonyms(Vectors.dense(centerVector.toArray), limit + filtered.size)
+    terms.filter(term => {
+      !filtered.contains(term.getAs[String]("word"))
+    })
+  }
+
+  def strNearTermsOnVectorIn(model: Word2VecModel, mergedTerms: String, limit: Int) = {
+    nearTermsOnVectorIn(model, mergedTerms.split("\\|").toSeq, limit)
+      .orderBy($"similarity".desc)
+      .map(_.getAs[String]("word")).collect().mkString("|")
   }
 
 }
@@ -86,13 +115,13 @@ object TdmMaker {
 
     val model = Word2VecModel.load("data/w2vNews2Cont_v200_m8_w7_it8")
 
-    val tt = new TdmMaker(spark, model)
-//    tt.highTermDistances("김").show()
-
-//    tt.highVectorDistances(List("한국", "러시아", "우크라이나"))
-
-    val nearTerms = tt.nearTermsOnVector(Seq("한국", "러시아", "우크라이나"), 10)
-    nearTerms.toDF().show()
+//    val tt = new TdmMaker(spark, model)
+////    tt.highTermDistances("김").show()
+//
+////    tt.highVectorDistances(List("한국", "러시아", "우크라이나"))
+//
+//    val nearTerms = tt.nearTermsOnVector(Seq("한국", "러시아", "우크라이나"), 10)
+//    nearTerms.toDF().show()
   }
 
 

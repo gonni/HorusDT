@@ -37,25 +37,25 @@ object TdmJobMain {
 //    model.findSynonyms("김", 30).show(100)
 //    println("Create TDM ..")
 
-    val tdm = new TdmMaker(spark, model)
-//    val rs = tdm.highTermDistances("김")
-//    rs.show()
-
-    val ts = System.currentTimeMillis()
-
-    val topics = Seq("경제", "사건", "대통령", "주식", "화폐", "사건",
-      "날씨", "북한", "이재명", "금리", "연봉", "코로나", "러시아", "IT",
-      "중국", "미국", "원유", "휘발유", "디젤", "물가", "부동산",
-      "에너지", "공포", "전쟁", "정치")
-
-    topics.foreach(term => {
-      try {
-        // need to change logic
-        tdm.saveToDB(tdm.highTermDistances(term), rparam.seedNo, rparam.minAgo, ts)
-      }catch {
-        case _ => println(s"No Terms in Model : ${term}")
-      }
-    })
+//    val tdm = new TdmMaker(spark, model)
+////    val rs = tdm.highTermDistances("김")
+////    rs.show()
+//
+//    val ts = System.currentTimeMillis()
+//
+//    val topics = Seq("경제", "사건", "대통령", "주식", "화폐", "사건",
+//      "날씨", "북한", "이재명", "금리", "연봉", "코로나", "러시아", "IT",
+//      "중국", "미국", "원유", "휘발유", "디젤", "물가", "부동산",
+//      "에너지", "공포", "전쟁", "정치")
+//
+//    topics.foreach(term => {
+//      try {
+//        // need to change logic
+//        tdm.saveToDB(tdm.highTermDistances(term), rparam.seedNo, rparam.minAgo, ts)
+//      }catch {
+//        case _ => println(s"No Terms in Model : ${term}")
+//      }
+//    })
 
     println("Job Finished ..")
 

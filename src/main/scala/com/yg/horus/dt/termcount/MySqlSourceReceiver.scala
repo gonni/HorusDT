@@ -41,15 +41,22 @@ object DbUtil {
     Await.result(db.run(CrawledRepo.findLatestContent(seedNo, startCrawlNo, 100).result), 10.seconds)
   }
 
+  def getAllLatestContext(startCrawlNo: Long) = {
+    Await.result(db.run(CrawledRepo.findAllLatestContent(startCrawlNo, 1000).result), 10.seconds)
+  }
+
 //  val getLatestAnchorFrom = (startCrawlNo: Long) => Await.result(db.run(CrawledRepo.findLatestAnchor(21L).result), 10.seconds)
 
   def main(args: Array[String]): Unit = {
 //    getLatestAnchorWithLimit(21L,1L,10).foreach(anchor => {
 //      println(anchor)
 //    })
-    println("LatestCrawlNo ->" + getMaxCrawlNo(9L))
+//    println("LatestCrawlNo ->" + getMaxCrawlNo(9L))
+//
+//    println("Cont =>" + getLatestContextFrom(9L, 361830L).map(_.getOrElse("NULL")).mkString("\n\n"))
 
-    println("Cont =>" + getLatestContextFrom(9L, 361830L).map(_.getOrElse("NULL")).mkString("\n\n"))
+    getAllLatestContext(2309539).foreach(println)
+
 //      .foreach(a => {
 //      println(a)
 //    })
@@ -96,4 +103,48 @@ class MySqlSourceReceiver(val seedNo : Long) extends Receiver[String](StorageLev
       }
     }
   }
+}
+
+class TimePeriodMysqlSourceReceiver(seedNos: Seq[Long]) extends Receiver[(Long, String)](StorageLevel.MEMORY_AND_DISK_2)
+  with Logging {
+
+  var latestCrawlNo = 0L
+
+  override def onStart(): Unit = {
+    new Thread("MysqlSt") {
+      override def run(): Unit = {
+        createGetData
+      }
+    }.start()
+  }
+
+  override def onStop(): Unit = synchronized {
+    //    this.db.close()
+  }
+
+  private def createGetData(): Unit = {
+    while (!isStopped) {
+      try {
+        val res = DbUtil.getAllLatestContext(latestCrawlNo)
+        println(s"Count of crawled data : ${res.size} for seed#All")
+
+//        val mergedRes = DbUtil.getAllLatestContext(latestCrawlNo).mkString("\n\n")
+
+        for(seedNo <- seedNos) {
+          val strAllData = res.filter(_.seedNo == seedNo).map(row => row.anchorText + "\n" + row.pageText).mkString("\n\n")
+          store((seedNo, strAllData))
+        }
+
+        // TODO
+        latestCrawlNo = res.take(1).headOption.get.seedNo
+//        latestCrawlNo = DbUtil.latestCrawlNo(seedNo)
+        println(s"Update Point ${latestCrawlNo} for seed#All")
+
+        Thread.sleep(5000)
+      } catch {
+        case e: Exception => e.printStackTrace()
+      }
+    }
+  }
+
 }
