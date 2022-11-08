@@ -7,22 +7,26 @@ import com.yg.horus.conn.InfluxClient
 
 object MultiMain {
 
-  def processCrawled(ssc: StreamingContext, seedId: Long) = {
-    val anchors = ssc.receiverStream(new MySqlSourceReceiver(seedId))
-    val words = anchors.flatMap(anchor => {
-      HangleTokenizer().arrayNouns(anchor)
-    })
+  def processCrawled(ssc: StreamingContext, seedIds: Seq[Long]) = {
+    val anchors = ssc.receiverStream(new TimePeriodMysqlSourceReceiver(seedIds))
 
-    val pairs = words.map(word => (word, 1))
-    val wordCounts = pairs.reduceByKey(_ + _)
-
-    wordCounts.print
-
-    wordCounts.foreachRDD(rdd => {
-      rdd.foreach(tf => {
-        InfluxClient.writeTf(seedId, tf._1, tf._2)
+    for(seed <- seedIds ) {
+      val words = anchors.flatMap(anchor => {
+        HangleTokenizer().arrayNouns(anchor._2)
       })
-    })
+
+      val pairs = words.map(word => (word, 1))
+      val wordCounts = pairs.reduceByKey(_ + _)
+
+      wordCounts.print
+
+      wordCounts.foreachRDD(rdd => {
+        rdd.foreach(tf => {
+          InfluxClient.writeTf(seedId, tf._1, tf._2)
+        })
+      })
+    }
+
   }
 
   def processCrawleds(ssc: StreamingContext, seedIds: Seq[Long]) = {
