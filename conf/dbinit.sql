@@ -30,7 +30,7 @@ create table DT_TFIDF (
                           START_MIN_AGO int,
                           SEED_NO int,
                           GRP_TS long
-);
+) ENGINE=InnoDB AUTO_INCREMENT=7957 DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE `dt_term_score` (
                                  `TS_NO` int(11) NOT NULL AUTO_INCREMENT,
@@ -57,6 +57,6 @@ CREATE TABLE DT_TOPIC_TDM (
                               `NEAR_TERM` varchar(164) DEFAULT NULL,
                               `TOPIC_SCORE` double DEFAULT NULL,
                               `SEED_NO` int(11) DEFAULT NULL,
-                              `GRP_TS` mediumtext,
+                              `GRP_TS` long,
                               PRIMARY KEY (`TT_NO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;

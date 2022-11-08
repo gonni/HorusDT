@@ -14,3 +14,10 @@ project/target/
 /project/src/main/resources/application.conf
 /.idea/
 /.bsp/
+*/application.conf
+/src/main/resources/application.conf
+.idea/
+/.idea/modules/
+/.bsp/
+/.idea/
+/.bsp/

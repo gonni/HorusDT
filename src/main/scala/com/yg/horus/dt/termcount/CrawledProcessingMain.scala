@@ -30,10 +30,10 @@ object HangleTokenizer {
   def apply() : HangleTokenizer = new HangleTokenizer
 }
 
-object CrawledProcessingMain {//extends SparkStreamingInit("SPP") {
+object CrawledProcessingMain extends SparkStreamingInit("STREAM-TERM-COUNT") {
 //  override val sparkAppName: String = "SparkStreaming_CrawledTermCount"
-val conf = new SparkConf().setMaster(RuntimeConfig("spark.master")).setAppName("STR-TC")
-  val ssc = new StreamingContext(conf, Seconds(10))
+//val conf = new SparkConf().setMaster(RuntimeConfig("spark.master")).setAppName("STR-TC")
+//  val ssc = new StreamingContext(conf, Seconds(10))
 
   def processCrawled(seedId : Long) = {
     println("processing .. " + seedId)
@@ -78,17 +78,17 @@ val conf = new SparkConf().setMaster(RuntimeConfig("spark.master")).setAppName("
 
       processCrawleds(seeds)
 
-      ssc.start()
+//      ssc.start()
     } else {
       println("No input arguments or Invalid type arguments detected ..")
 
-      val seeds = Seq[Long](21L, 23L, 25L)
+//      val seeds = Seq[Long](21L, 23L, 25L)
+      val seeds = Seq[Long](1L)
       processCrawleds(seeds)
-
     }
 
 //    processCrawled(1L)
-
+    ssc.start()
     ssc.awaitTermination()
   }
 
