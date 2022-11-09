@@ -83,7 +83,7 @@ object CrawledProcessingMain extends SparkStreamingInit("STREAM-TERM-COUNT") {
       println("No input arguments or Invalid type arguments detected ..")
 
 //      val seeds = Seq[Long](21L, 23L, 25L)
-      val seeds = Seq[Long](1L)
+      val seeds = Seq[Long](1L, 2L)
       processCrawleds(seeds)
     }
 

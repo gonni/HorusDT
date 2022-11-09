@@ -55,7 +55,12 @@ object DbUtil {
 //
 //    println("Cont =>" + getLatestContextFrom(9L, 361830L).map(_.getOrElse("NULL")).mkString("\n\n"))
 
-    getAllLatestContext(2309539).foreach(println)
+    println("latest crawlNo 1-> " + latestCrawlNo(1L))
+    println("latest crawlNo 2-> " + latestCrawlNo(2L))
+
+//    getAllLatestContext(1556564).foreach(println)
+
+
 
 //      .foreach(a => {
 //      println(a)
@@ -111,6 +116,9 @@ class TimePeriodMysqlSourceReceiver(seedNos: Seq[Long]) extends Receiver[(Long, 
   var latestCrawlNo = 0L
 
   override def onStart(): Unit = {
+    latestCrawlNo = DbUtil.latestCrawlNo(2L)
+    println("--------------> Set Latest CrawlNo :" + latestCrawlNo)
+
     new Thread("MysqlSt") {
       override def run(): Unit = {
         createGetData
@@ -128,17 +136,23 @@ class TimePeriodMysqlSourceReceiver(seedNos: Seq[Long]) extends Receiver[(Long, 
         val res = DbUtil.getAllLatestContext(latestCrawlNo)
         println(s"Count of crawled data : ${res.size} for seed#All")
 
+//        println("=================================================")
+//        res.foreach(println)
+//        println("=================================================")
+
 //        val mergedRes = DbUtil.getAllLatestContext(latestCrawlNo).mkString("\n\n")
 
         for(seedNo <- seedNos) {
-          val strAllData = res.filter(_.seedNo == seedNo).map(row => row.anchorText + "\n" + row.pageText).mkString("\n\n")
-          store((seedNo, strAllData))
+          val strAllData = res.filter(_.seedNo == seedNo).map(row =>
+            row.anchorText.getOrElse(" ")  + "\n" + row.pageText.getOrElse(" "))
+            .mkString("\n\n")
+
+          if(strAllData != null && strAllData.trim.length > 0)
+            store((seedNo, strAllData))
         }
 
-        // TODO
-        latestCrawlNo = res.take(1).headOption.get.seedNo
-//        latestCrawlNo = DbUtil.latestCrawlNo(seedNo)
-        println(s"Update Point ${latestCrawlNo} for seed#All")
+        latestCrawlNo = res.map(_.crawlNo).headOption.getOrElse(latestCrawlNo)
+        println(s"Update Start Crawl Point : ${latestCrawlNo} for seed#All")
 
         Thread.sleep(5000)
       } catch {

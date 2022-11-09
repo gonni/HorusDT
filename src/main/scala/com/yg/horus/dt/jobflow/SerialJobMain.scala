@@ -61,6 +61,7 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       logger.logJob("JOBLET_TDM_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
 
       spark.catalog.clearCache()
+
       println("cache cleaned ----------------------------------------------")
     } catch {
       case e: Exception => {
@@ -87,7 +88,7 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
 
     tdm.saveMergedTopicTdm(resDf)
 
-    resDf.unpersist()
+    resDf.unpersist(blocking = true)
 
   }
 
@@ -120,7 +121,7 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
 
       lda.saveToDB(topics, seedNo, minAgo)
     }
-    source.unpersist()
+    source.unpersist(blocking = true)
   }
 
   def runHotTdm(seedNo: Long, minAgo: Int, topics: Seq[String], eachLimit: Int, logger: DtLogger) = {
@@ -150,7 +151,7 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       runHotMergedTdm(seedNo.toInt, model, ts)
       println("TDM Job Finished ..")
 
-      data.unpersist()
+      data.unpersist(blocking = true)
     }
   }
 
