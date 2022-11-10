@@ -1,23 +1,10 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
 /target/
-target/*
-project/target/
-/project/target/
-/project/target/*
 /project/
-/data/
-/project/target/
-/project/target/scala-2.12/
-/project/target/streams/
-/project/target/.sbt-compilation-infos/
-/project/
-/project/target/
-/project/src/main/resources/application.conf
-/.idea/
-/.bsp/
-*/application.conf
-/src/main/resources/application.conf
-.idea/
-/.idea/modules/
-/.bsp/
-/.idea/
-/.bsp/
