@@ -136,12 +136,6 @@ class TimePeriodMysqlSourceReceiver(seedNos: Seq[Long]) extends Receiver[(Long, 
         val res = DbUtil.getAllLatestContext(latestCrawlNo)
         println(s"Count of crawled data : ${res.size} for seed#All")
 
-//        println("=================================================")
-//        res.foreach(println)
-//        println("=================================================")
-
-//        val mergedRes = DbUtil.getAllLatestContext(latestCrawlNo).mkString("\n\n")
-
         for(seedNo <- seedNos) {
           val strAllData = res.filter(_.seedNo == seedNo).map(row =>
             row.anchorText.getOrElse(" ")  + "\n" + row.pageText.getOrElse(" "))
