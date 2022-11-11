@@ -61,6 +61,8 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       logger.logJob("JOBLET_TDM_" + seedNo + "_" + count + "_" + (System.currentTimeMillis() - ts) / 1000, "FIN")
 
       spark.catalog.clearCache()
+      spark.sqlContext.clearCache()
+      spark.sparkContext.clearJobGroup()
 
       println("cache cleaned ----------------------------------------------")
     } catch {
@@ -81,6 +83,7 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
     val res = mergedTopics.map(topic => {
       val strNearTerms = tdm.strNearTermsOnVectorIn(model, topic.topicName, 7)
       TopicTdm(topic.topicName, strNearTerms, topic.score, seedNo, grpTs)
+
     })
 
     val resDf = res.toDF("BASE_TERM", "NEAR_TERM", "TOPIC_SCORE", "SEED_NO", "GRP_TS")
@@ -89,17 +92,16 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
     tdm.saveMergedTopicTdm(resDf)
 
     resDf.unpersist(blocking = true)
-
+    resDf.checkpoint()
   }
 
   def runHotLda(seedNo: Long, minAgo: Int, logger: DtLogger) = {
-//    val lda = new LdaTopicProcessing(spark)
     val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(minAgo))
     println(s"Target data to be processed from ${fromTime}")
     val source = lda.loadSource(seedNo, fromTime)
 
     println("[Source Data for LDA] ----------------- ")
-    source.show(3000)
+    source.show
 
     if(source.count() < 10) {
       println("==> Crawled data for LDA is not enough .." + source.count())
@@ -120,8 +122,13 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       }
 
       lda.saveToDB(topics, seedNo, minAgo)
+
+      topics.unpersist(blocking = true)
+      topics.checkpoint()
     }
+
     source.unpersist(blocking = true)
+    source.checkpoint()
   }
 
   def runHotTdm(seedNo: Long, minAgo: Int, topics: Seq[String], eachLimit: Int, logger: DtLogger) = {
@@ -150,12 +157,10 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
 
       runHotMergedTdm(seedNo.toInt, model, ts)
       println("TDM Job Finished ..")
-
-      data.unpersist(blocking = true)
     }
+    data.unpersist(blocking = true)
+    data.checkpoint()
   }
-
-
 }
 
 object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
@@ -178,9 +183,11 @@ object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
     println("RuntimeConfig Details : " + RuntimeConfig())
 
     val jobManager = new SeiralJobManager(cntTurns = 300000, checkPeriod = 5000L)
-    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 60 k))
-    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 120 k))
-    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 200 k))
+//    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 60 k))
+//    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 120 k))
+//    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 200 k))
+      jobManager.addJob(new LdaTdmJoblet(spark, 1, 60, 120 k))
+      jobManager.addJob(new LdaTdmJoblet(spark, 2, 60, 300 k))
 
     jobManager.start()
 

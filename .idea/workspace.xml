@@ -5,11 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe25bf36-b6d2-45e4-8d98-940e696db9bd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialPeriodMysqlSourceReceiver.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/StreamSerialJobMain.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__com_sun_activation_jakarta_activation_1_2_1_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__jakarta_activation_jakarta_activation_api_1_2_1_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/HorusDT.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/HorusDT.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/SparkStreamingInit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/SparkStreamingInit.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/termcount/MySqlSourceReceiver.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/termcount/MySqlSourceReceiver.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy_office.sh" beforeDir="false" afterPath="$PROJECT_DIR$/deploy_office.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialJobMain.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialJobMain.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +70,7 @@
     "nodejs_package_manager_path": "npm"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.StreamSerialJobMain">
+  <component name="RunManager" selected="Application.SerialJobMain">
     <configuration name="MultiMain" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.yg.horus.dt.termcount.MultiMain" />
       <module name="HorusDT" />
@@ -94,6 +97,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SerialJobMain" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.yg.horus.dt.jobflow.SerialJobMain" />
+      <module name="HorusDT" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.yg.horus.dt.jobflow.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="StreamSerialJobMain" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.yg.horus.dt.jobflow.StreamSerialJobMain" />
       <module name="HorusDT" />
@@ -109,6 +125,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.SerialJobMain" />
         <item itemvalue="Application.StreamSerialJobMain" />
         <item itemvalue="Application.RuntimeConfig" />
         <item itemvalue="Application.MultiMain" />
@@ -123,7 +140,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1668044599030</updated>
-      <workItem from="1668044601065" duration="12962000" />
+      <workItem from="1668044601065" duration="21932000" />
     </task>
     <servers />
   </component>
