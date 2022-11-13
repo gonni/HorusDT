@@ -2,7 +2,6 @@ package com.yg.horus.dt.termcount
 
 import com.yg.horus.RuntimeConfig
 import com.yg.horus.conn.InfluxClient
-import com.yg.horus.dt.SparkStreamingInit
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
 import kr.co.shineware.nlp.komoran.core.Komoran
 import org.apache.spark.SparkConf
@@ -30,12 +29,12 @@ object HangleTokenizer {
   def apply() : HangleTokenizer = new HangleTokenizer
 }
 
-object CrawledProcessingMain extends SparkStreamingInit("STREAM-TERM-COUNT") {
+object CrawledProcessingMain {
 //  override val sparkAppName: String = "SparkStreaming_CrawledTermCount"
 //val conf = new SparkConf().setMaster(RuntimeConfig("spark.master")).setAppName("STR-TC")
 //  val ssc = new StreamingContext(conf, Seconds(10))
 
-  def processCrawled(seedId : Long) = {
+  def processCrawled(seedId : Long)(implicit ssc: StreamingContext) = {
     println("processing .. " + seedId)
     val anchors = ssc.receiverStream(new MySqlSourceReceiver(seedId))
     val words = anchors.flatMap(anchor => {
@@ -54,7 +53,7 @@ object CrawledProcessingMain extends SparkStreamingInit("STREAM-TERM-COUNT") {
     })
   }
 
-  def processCrawleds(seedIds: Seq[Long]) = {
+  def processCrawleds(seedIds: Seq[Long])(implicit ssc: StreamingContext) = {
     seedIds.foreach(seedId => {
       processCrawled(seedId)
     }
@@ -69,6 +68,11 @@ object CrawledProcessingMain extends SparkStreamingInit("STREAM-TERM-COUNT") {
     println("Active Profile : " + RuntimeConfig.getRuntimeConfig().getString("profile.name"))
     println("------------------------------------------------")
     println("RuntimeConfig Details : " + RuntimeConfig())
+
+    val runtimeConf = RuntimeConfig.getRuntimeConfig()
+    val conf = new SparkConf().setMaster(runtimeConf.getString("spark.master")).setAppName("STREAM-MULTI-SEEDS-TC")
+    //  val spark = SparkSession.builder().config(conf).getOrCreate()
+    implicit val ssc = new StreamingContext(conf, Seconds(10))
 
     if(v.length > 0) {
       println("Count of Input Arguments => " + v.length)

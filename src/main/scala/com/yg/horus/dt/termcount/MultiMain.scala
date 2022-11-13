@@ -4,13 +4,11 @@ import com.yg.horus.RuntimeConfig
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import com.yg.horus.conn.InfluxClient
-import com.yg.horus.dt.SparkStreamingInit
+
+object MultiMain {
 
 
-object MultiMain extends SparkStreamingInit("STREAM_TC") {
-
-
-  def processCrawled(seedIds: Seq[Long]) = {
+  def processCrawled(seedIds: Seq[Long])(implicit ssc: StreamingContext) = {
     val anchors = ssc.receiverStream(new TimePeriodMysqlSourceReceiver(seedIds))
 //    anchors.print()
 
@@ -18,33 +16,16 @@ object MultiMain extends SparkStreamingInit("STREAM_TC") {
       val wordCounts = anchors.filter(a => a._1 == seedId).flatMap(an => {
         HangleTokenizer().arrayNouns(an._2)
       }).map(word => (word, 1)).reduceByKey(_ + _)
-
+      println(s"------------- seedId# ${seedId} ---------------")
       wordCounts.print()
 
-//      wordCounts.foreachRDD( wc => {
-//          InfluxClient.writeTf(seedId,)
-//        }
-//      )
+      wordCounts.foreachRDD( wc => {
+        wc.foreach(tf => {
+          InfluxClient.writeTf(seedId, tf._1, tf._2)
+        })
+        }
+      )
     })
-
-    //---------
-//    val words = anchors.flatMap(anchor => {
-//      HangleTokenizer().arrayNouns(anchor._2)
-//    })
-//
-//
-//
-//    val pairs = words.map(word => (word, 1))
-//    val wordCounts = pairs.reduceByKey(_ + _)
-//
-//    wordCounts.print
-
-//    wordCounts.foreachRDD(rdd => {
-//      rdd.foreach(tf => {
-//        InfluxClient.writeTf(anchors., tf._1, tf._2)
-//      })
-//    })
-
   }
 
 
@@ -56,6 +37,11 @@ object MultiMain extends SparkStreamingInit("STREAM_TC") {
     println("------------------------------------------------")
     println("RuntimeConfig Details : " + RuntimeConfig())
 
+    val runtimeConf = RuntimeConfig.getRuntimeConfig()
+    val conf = new SparkConf().setMaster(runtimeConf.getString("spark.master")).setAppName("STREAM-MULTI-SEEDS-TC")
+    //  val spark = SparkSession.builder().config(conf).getOrCreate()
+    implicit val ssc = new StreamingContext(conf, Seconds(10))
+
     if (v.length > 0) {
       println("Count of Input Arguments => " + v.length)
       val seeds = v.map(args => {
@@ -66,7 +52,7 @@ object MultiMain extends SparkStreamingInit("STREAM_TC") {
     } else {
       println("No input arguments or Invalid type arguments detected ..")
 
-      val seeds = Seq(1L, 2L)
+      val seeds = Seq(21L, 23L, 25L)
       processCrawled(seeds)
 
     }

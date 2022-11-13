@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/HorusDT.iml" filepath="$PROJECT_DIR$/.idea/modules/HorusDT.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/HorusDT-build.iml" filepath="$PROJECT_DIR$/.idea/modules/HorusDT-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/project.HorusDT-build.iml" filepath="$PROJECT_DIR$/.idea/modules/project.HorusDT-build.iml" />
     </modules>
   </component>
 </project>

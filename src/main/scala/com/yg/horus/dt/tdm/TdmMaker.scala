@@ -1,7 +1,6 @@
 package com.yg.horus.dt.tdm
 
 import com.yg.horus.RuntimeConfig
-import com.yg.horus.dt.{SparkJobInit, SparkStreamingInit}
 import org.apache.spark.ml.feature.Word2VecModel
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 import org.apache.spark.sql.expressions.UserDefinedFunction

@@ -5,12 +5,12 @@ import org.apache.spark._
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming._
 
-abstract class SparkStreamingInit(sparkAppName: String) {
+abstract class SparkStreamingInitDevOnly(sparkAppName: String) {
   val runtimeConf = RuntimeConfig.getRuntimeConfig()
   val conf = new SparkConf().setMaster(runtimeConf.getString("spark.master")).setAppName(sparkAppName)
-  val spark = SparkSession.builder().config(conf).getOrCreate()
-//  val ssc = new StreamingContext(conf, Seconds(10))
-  val ssc = new StreamingContext(spark.sparkContext, Seconds(10))
+//  val spark = SparkSession.builder().config(conf).getOrCreate()
+  val ssc = new StreamingContext(conf, Seconds(10))
+//  val ssc = new StreamingContext(spark.sparkContext, Seconds(10))
 }
 
 trait SparkStreamingApp {

@@ -13,7 +13,6 @@ object RuntimeConfig {
   def getActiveProfile() = {
     conf.getString("profile.active")
   }
-
   def apply() = getRuntimeConfig()
 
   def apply(key: String) = getRuntimeConfig().getString(key)
