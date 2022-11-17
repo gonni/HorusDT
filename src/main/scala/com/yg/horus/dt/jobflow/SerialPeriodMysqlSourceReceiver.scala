@@ -94,7 +94,7 @@ class SerialPeriodMysqlSourceReceiver(minAgo: Int)
         } else {
           println("spark session is null ..")
         }
-        Thread.sleep(5000L)
+        Thread.sleep(180*1000L)
       } catch {
         case e: Exception => {
           e.printStackTrace()

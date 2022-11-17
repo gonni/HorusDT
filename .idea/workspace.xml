@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe25bf36-b6d2-45e4-8d98-940e696db9bd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.bsp/sbt.json" beforeDir="false" afterPath="$PROJECT_DIR$/.bsp/sbt.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/HorusDT-build.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/HorusDT-build.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/HorusDT.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/HorusDT.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialJobMain.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialJobMain.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialPeriodMysqlSourceReceiver.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialPeriodMysqlSourceReceiver.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/StreamSerialJobMain.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/StreamSerialJobMain.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

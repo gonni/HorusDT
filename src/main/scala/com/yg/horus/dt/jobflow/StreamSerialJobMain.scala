@@ -38,9 +38,24 @@ object StreamSerialJobMain {
       rdd.foreach(println)
       val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(600))
 
-//      val lda = new LdaTopicProcessing(ss)
+      val lda = new LdaTopicProcessing(ss)
+      val source = lda.loadSource(1L, fromTime)
+      source.show()
+
+      if(source.count() > 10) {
+        val topics = lda.topics(source, 10, 10)
+        topics.show()
+
+        lda.saveToDB(topics, 1398, minAgo = 60)
+
+      } else {
+        println("Not enough data .. " + source.count())
+      }
+
+
 //      lda.loadSource(1L, fromTime).foreach(row => println(row.mkString("|")))
 //      val job =  LdaTdmJoblet(spark, 21, 60, 60 k)(1L)
+
       println(s"Finished Processing Term ------------- ${time}")
     })
 
@@ -75,7 +90,7 @@ class MySqlDataPointReceiver(val seedNo : Long) extends Receiver[Long](StorageLe
 
         println(s"Update Point ${latestCrawlNo} for seed#${seedNo}")
 
-        Thread.sleep(5000)
+        Thread.sleep(60000)
       } catch {
         case e: Exception => e.printStackTrace()
       }
