@@ -76,9 +76,7 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
 
   def runHotMergedTdm(seedNo: Int, model: Word2VecModel, grpTs: Long) = {
     import spark.implicits._
-//    val topicTermManager = new TopicTermManager(spark)
     val mergedTopics = topicTermManager.getMergedTopicSeq(seedNo, 10, 10)
-//    val tdm = new TdmMaker(spark, model)
 
     val res = mergedTopics.map(topic => {
       val strNearTerms = tdm.strNearTermsOnVectorIn(model, topic.topicName, 7)
@@ -92,7 +90,6 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
     tdm.saveMergedTopicTdm(resDf)
 
     resDf.unpersist(blocking = true)
-//    resDf.checkpoint()
   }
 
   def runHotLda(seedNo: Long, minAgo: Int, logger: DtLogger) = {
@@ -107,28 +104,14 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       println("==> Crawled data for LDA is not enough .." + source.count())
       logger.logJob("JOBLET_LDA_" + seedNo + "_NOT_ENOUGH_DATA" , "NA")
     } else {
-      //    println("----- Topic terms -----")
       val topics = lda.topics(source, 10, 10)
-
-      println("[LDA(30:5)] ----------------- ")
       topics.show(100)
-
-      val fRes = lda.convertObject(topics)
-
-      for (i <- 0 until fRes.length) {
-        println(s"Topic #${i}")
-        fRes(i).foreach(a => println(a))
-        println("--------------")
-      }
 
       lda.saveToDB(topics, seedNo, minAgo)
 
       topics.unpersist(blocking = true)
-//      topics.checkpoint()
     }
-
     source.unpersist(blocking = true)
-//    source.checkpoint()
   }
 
   def runHotTdm(seedNo: Long, minAgo: Int, topics: Seq[String], eachLimit: Int, logger: DtLogger) = {
@@ -142,7 +125,6 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       println("processing TDM .. " + seedNo)
       val model = w2vModeler.createModel(data)
 
-//      val tdm = new TdmMaker(spark, model)
       val ts = System.currentTimeMillis()
 
       topics.foreach(term => {
@@ -150,7 +132,6 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
           // need to change logic
           tdm.saveToDB(tdm.highTermDistances(model, term, eachLimit), seedNo, minAgo, ts)
         } catch {
-//          case _ => println(s"No Terms in Model : ${term}")
           case e: Exception => e.printStackTrace()
         }
       })
@@ -159,7 +140,6 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
       println("TDM Job Finished ..")
     }
     data.unpersist(blocking = true)
-//    data.checkpoint()
   }
 }
 
