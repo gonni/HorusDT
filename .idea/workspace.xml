@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="fe25bf36-b6d2-45e4-8d98-940e696db9bd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialPeriodMysqlSourceReceiver.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialPeriodMysqlSourceReceiver.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy_office.sh" beforeDir="false" afterPath="$PROJECT_DIR$/deploy_office.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/StreamSerialJobMain.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/StreamSerialJobMain.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

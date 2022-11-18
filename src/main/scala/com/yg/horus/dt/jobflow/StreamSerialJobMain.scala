@@ -16,7 +16,11 @@ import java.time.LocalDateTime
 
 object StreamSerialJobMain {
 
+  class Kilo(val x: Int) {
+    def k(): Long = x * 1000L
+  }
 
+  implicit def k(v: Int) : Kilo = new Kilo(v)
 
   def main(args: Array[String]): Unit = {
     println("Active System..")
@@ -28,30 +32,34 @@ object StreamSerialJobMain {
 
     val conf = new SparkConf().setMaster(RuntimeConfig("spark.master")).setAppName("SC-AND-SSC")
     val ss = SparkSession.builder().config(conf).getOrCreate()
-    val ssc = new StreamingContext(ss.sparkContext, Seconds(10))
+    val ssc = new StreamingContext(ss.sparkContext, Seconds(300))
 
     import ss.implicits._
 
     val res = ssc.receiverStream(new MySqlDataPointReceiver(1L))
 
     res.foreachRDD((rdd, time) => {
-      rdd.foreach(println)
-      val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(600))
+      println("Handle data from RCV :" + rdd.map(_.toString).collect().mkString("|") + " at " + time)
 
-      val lda = new LdaTopicProcessing(ss)
-      val source = lda.loadSource(1L, fromTime)
-      source.show()
+      new LdaTdmJoblet(ss, 1L, 600, 60 k).run()
+      new LdaTdmJoblet(ss, 2L, 600, 120 k).run()
 
-      if(source.count() > 10) {
-        val topics = lda.topics(source, 10, 10)
-        topics.show()
-
-        lda.saveToDB(topics, 1398, minAgo = 60)
-
-      } else {
-        println("Not enough data .. " + source.count())
-      }
-
+//      rdd.foreach(println)
+//      val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(600))
+//
+//      val lda = new LdaTopicProcessing(ss)
+//      val source = lda.loadSource(1L, fromTime)
+//      source.show()
+//
+//      if(source.count() > 10) {
+//        val topics = lda.topics(source, 10, 10)
+//        topics.show()
+//
+//        lda.saveToDB(topics, 1398, minAgo = 60)
+//
+//      } else {
+//        println("Not enough data .. " + source.count())
+//      }
 
 //      lda.loadSource(1L, fromTime).foreach(row => println(row.mkString("|")))
 //      val job =  LdaTdmJoblet(spark, 21, 60, 60 k)(1L)
