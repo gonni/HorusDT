@@ -62,7 +62,7 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
 
       spark.catalog.clearCache()
       spark.sqlContext.clearCache()
-      spark.sparkContext.clearJobGroup()
+//      spark.sparkContext.clearJobGroup()
 
       println("cache cleaned ----------------------------------------------")
     } catch {
@@ -115,8 +115,6 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
   }
 
   def runHotTdm(seedNo: Long, minAgo: Int, topics: Seq[String], eachLimit: Int, logger: DtLogger) = {
-//    val w2vModeler = new Word2vecModeler(spark)
-
     val data = w2vModeler.loadSourceFromMinsAgo(seedNo, minAgo)
     if (data.count() < 10) {
       println("==> Crawled data for TDM is not enough .." + data.count())

@@ -19,12 +19,18 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.parallel.immutable
 
 case class TopicTermScore(term: String, score: Double)
-class LdaTopicProcessing(val spark: SparkSession) {
+class LdaTopicProcessing(val spark: SparkSession) extends Serializable {
   import spark.implicits._
 
-  def saveTopic2Data() = {
-
-  }
+//  val komoran = getHangleAnaylzer()
+//
+//  def getHangleAnaylzer() = {
+//    val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+//    println("Dic :" + RuntimeConfig("komoran.dic"))
+//
+//    komoran.setUserDic(RuntimeConfig("komoran.dic"))
+//    komoran
+//  }
 
   def convertObject(topics : Dataset[mutable.WrappedArray[(String, Double)]]) = {
     val res = topics.map(row => {
@@ -88,7 +94,13 @@ class LdaTopicProcessing(val spark: SparkSession) {
     val getTokenListUdf2: UserDefinedFunction = udf[Seq[String], String] { sentence =>
       try {
 //        LdaTopicProcessing.komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
-        LdaTopicProcessing.komoran.analyze(sentence).getNouns.asScala
+        val analyzer = LdaTopicProcessing.komoran
+//        analyzer.setUserDic(RuntimeConfig("komoran.dic"))
+        analyzer.analyze(sentence).getNouns.asScala
+
+//        LdaTopicProcessing.getHangleAnaylzer().analyze(sentence).getNouns.asScala
+
+//        LdaTopicProcessing.getHangleAnaylzer().analyze(sentence).getNouns.asScala
       } catch {
         case e: Exception => {
           println("Detected Null Pointer .. " + e.getMessage)
@@ -115,7 +127,15 @@ class LdaTopicProcessing(val spark: SparkSession) {
 object LdaTopicProcessing {
   val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
   komoran.setUserDic(RuntimeConfig("komoran.dic"))
+  println("Komoran.setUserDic completed .. ")
 //  komoran.setUserDic("/Users/ygkim/IdeaProjects/HorusDT/myDic.txt")
+
+  def getHangleAnaylzer() = {
+    val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+////    println("Dic :" + RuntimeConfig("komoran.dic"))
+    komoran.setUserDic(RuntimeConfig("komoran.dic"))
+    komoran
+  }
 
   def main(args: Array[String]): Unit = {
     println("Active System ..")

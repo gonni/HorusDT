@@ -32,17 +32,18 @@ object StreamSerialJobMain {
 
     val conf = new SparkConf().setMaster(RuntimeConfig("spark.master")).setAppName("SC-AND-SSC")
     val ss = SparkSession.builder().config(conf).getOrCreate()
-    val ssc = new StreamingContext(ss.sparkContext, Seconds(300))
+    val ssc = new StreamingContext(ss.sparkContext, Seconds(90))
 
     import ss.implicits._
 
-    val res = ssc.receiverStream(new MySqlDataPointReceiver(1L))
+    val res = ssc.receiverStream(new MySqlDataPointReceiver(21L))
 
     res.foreachRDD((rdd, time) => {
       println("Handle data from RCV :" + rdd.map(_.toString).collect().mkString("|") + " at " + time)
 
-      new LdaTdmJoblet(ss, 1L, 600, 60 k).run()
-      new LdaTdmJoblet(ss, 2L, 600, 120 k).run()
+      new LdaTdmJoblet(ss, 21L, 600, 60 k).run()
+//      new LdaTdmJoblet(ss, 23L, 600, 120 k).run()
+//      new LdaTdmJoblet(ss, 25L, 600, 120 k).run()
 
 //      rdd.foreach(println)
 //      val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(600))

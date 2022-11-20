@@ -37,6 +37,11 @@ class Word2vecModeler(val spark: SparkSession) {
   def loadSource(seedNo: Long, fromTime: java.sql.Timestamp) = {
     val getTokenListUdf2: UserDefinedFunction = udf[Seq[String], String] { sentence =>
       try {
+//        val analyzer = Word2vecModeler.komoran
+//        analyzer.setUserDic(RuntimeConfig("komoran.dic"))
+//        analyzer.analyze(sentence).getTokenList.asScala.map(_.getMorph)
+//        Word2vecModeler.getHangleAnalyzer().analyze(sentence).getTokenList.asScala.map(_.getMorph)
+
         Word2vecModeler.komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
       } catch {
         case e: Exception => {
@@ -62,6 +67,13 @@ class Word2vecModeler(val spark: SparkSession) {
 object Word2vecModeler {
   val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
   komoran.setUserDic(RuntimeConfig("komoran.dic"))
+  println("Komran.setUserDic completed ..")
+
+  def getHangleAnalyzer() = {
+    val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+    komoran.setUserDic(RuntimeConfig("komoran.dic"))
+    komoran
+  }
 
   def createW2vModel(df: DataFrame) = {
     println("Data for W2V Modeling -----")
