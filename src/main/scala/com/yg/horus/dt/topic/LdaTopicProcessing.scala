@@ -95,7 +95,7 @@ class LdaTopicProcessing(val spark: SparkSession) extends Serializable {
       try {
 //        LdaTopicProcessing.komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
         val analyzer = LdaTopicProcessing.komoran
-//        analyzer.setUserDic(RuntimeConfig("komoran.dic"))
+        analyzer.setUserDic(RuntimeConfig("komoran.dic"))
         analyzer.analyze(sentence).getNouns.asScala
 
 //        LdaTopicProcessing.getHangleAnaylzer().analyze(sentence).getNouns.asScala

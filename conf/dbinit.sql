@@ -60,3 +60,8 @@ CREATE TABLE DT_TOPIC_TDM (
                               `GRP_TS` long,
                               PRIMARY KEY (`TT_NO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
+
+create table DT_TEST_TEMP (
+                              TLOG_NO INT not null AUTO_INCREMENT PRIMARY KEY,
+                              RES mediumtext
+) ;

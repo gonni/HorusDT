@@ -98,7 +98,7 @@ class LdaTdmJoblet(spark: SparkSession, seedNo: Long, minAgo: Int, period: Long)
     val source = lda.loadSource(seedNo, fromTime)
 
     println("[Source Data for LDA] ----------------- ")
-    source.show
+    source.show(300)
 
     if(source.count() < 10) {
       println("==> Crawled data for LDA is not enough .." + source.count())
@@ -161,10 +161,10 @@ object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
     println("RuntimeConfig Details : " + RuntimeConfig())
 
     val jobManager = new SeiralJobManager(cntTurns = 300000, checkPeriod = 5000L)
-    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 60 k))
-    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 120 k))
-    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 200 k))
-//      jobManager.addJob(new LdaTdmJoblet(spark, 1, 60, 120 k))
+//    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 60 k))
+//    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 120 k))
+//    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 200 k))
+      jobManager.addJob(new LdaTdmJoblet(spark, 1, 600, 120 k))
 //      jobManager.addJob(new LdaTdmJoblet(spark, 2, 60, 300 k))
 
     jobManager.start()

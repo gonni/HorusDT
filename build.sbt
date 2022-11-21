@@ -1,4 +1,4 @@
-ThisBuild / version := "0.7.9"
+ThisBuild / version := "0.7.9.9"
 
 ThisBuild / scalaVersion := "2.12.10"
 
@@ -7,6 +7,9 @@ val akkaVersion = "2.5.26"
 val akkaHttpVersion = "10.1.11"
 
 resolvers += "jitpack" at "https://jitpack.io"
+
+
+
 
 lazy val root = (project in file("."))
   .settings(
@@ -23,7 +26,8 @@ lazy val root = (project in file("."))
       "com.typesafe.slick" %% "slick-hikaricp" % "3.3.2",
       "com.mchange" % "c3p0" % "0.9.5.2",
       "com.typesafe" % "config" % "1.4.2",
-      "org.jblas" % "jblas" % "1.2.5"
+      "org.jblas" % "jblas" % "1.2.5",
+//      "org.bitbucket.eunjeon" %% "seunjeon" % "1.5.0",
     )
   )
 
