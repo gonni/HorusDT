@@ -19,9 +19,9 @@ import java.nio.charset.CodingErrorAction
 
 object Hangle extends SparkJobInit("HANGLE_PARSE_TEST") {
   def main(v: Array[String]): Unit = {
-    implicit val codec = Codec("UTF-8")
-    codec.onMalformedInput(CodingErrorAction.REPLACE)
-    codec.onUnmappableCharacter(CodingErrorAction.REPLACE)
+//    implicit val codec = Codec("UTF-8")
+//    codec.onMalformedInput(CodingErrorAction.REPLACE)
+//    codec.onUnmappableCharacter(CodingErrorAction.REPLACE)
 
     import spark.implicits._
 
@@ -60,39 +60,43 @@ object Hangle extends SparkJobInit("HANGLE_PARSE_TEST") {
     println("----------- Result parsed -------------")
     komoran.analyze(src).getNouns.forEach(println)
 
-    println("----------- Result parsed to DF -------------")
-    val df = komoran.analyze(src).getNouns.asScala.toDF.select($"value" as "res")
-    df.show()
-
-    val prop = new Properties()
-    prop.put("user", RuntimeConfig("mysql.user"))
-    prop.put("password", RuntimeConfig("mysql.password"))
-
-    df.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.lda.writeDB"),
-      "DT_TEST_TEMP", prop)
-
-    println("=======================================")
-    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(minAgo))
-    val lda = new LdaTopicProcessing(spark)
-    val source = lda.loadSource(1, fromTime)
-    println("[Source Data for LDA] ----------------- ")
-    source.show(10)
-
-    val db = source.select($"PAGE_TEXT", $"tokenized").map(_.mkString).select($"value" as "res")
-//    db.select("")
-    db.show(30)
-
-    db.write.mode(SaveMode.Append)
-    .jdbc(RuntimeConfig("spark.jobs.lda.writeDB"),
-    "DT_TEST_TEMP", prop)
 
 
+
+//    println("----------- Result parsed to DF -------------")
+//    val df = komoran.analyze(src).getNouns.asScala.toDF.select($"value" as "res")
+//    df.show()
+//
+//    val prop = new Properties()
+//    prop.put("user", RuntimeConfig("mysql.user"))
+//    prop.put("password", RuntimeConfig("mysql.password"))
+//
+//    df.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.lda.writeDB"),
+//      "DT_TEST_TEMP", prop)
+//
 //    println("=======================================")
-//    source.foreach(row => {
-//      val a = row.mkString("|")
-//      if(a.contains("윤석") || a.contains("알코르,") || a.contains("국민의"))
-//        println(a)
-//    })
+//    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(minAgo))
+//    val lda = new LdaTopicProcessing(spark)
+//    val source = lda.loadSource(1, fromTime)
+//    println("[Source Data for LDA] ----------------- ")
+//    source.show(10)
+//
+//    val db = source.select($"PAGE_TEXT", $"tokenized").map(_.mkString).select($"value" as "res")
+////    db.select("")
+//    db.show(30)
+//
+//    db.write.mode(SaveMode.Append)
+//    .jdbc(RuntimeConfig("spark.jobs.lda.writeDB"),
+//    "DT_TEST_TEMP", prop)
+//
+//
+////    println("=======================================")
+////    source.foreach(row => {
+////      val a = row.mkString("|")
+////      if(a.contains("윤석") || a.contains("알코르,") || a.contains("국민의"))
+////        println(a)
+////    })
+
 
     spark.close()
   }

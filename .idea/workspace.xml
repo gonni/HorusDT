@@ -5,18 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe25bf36-b6d2-45e4-8d98-940e696db9bd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/sbt__com_sun_activation_jakarta_activation_1_2_1_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/sbt__com_typesafe_scala_logging_scala_logging_2_12_3_5_0_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/sbt__jakarta_activation_jakarta_activation_api_1_2_1_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/sbt__org_bitbucket_eunjeon_seunjeon_1_3_0_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.bsp/sbt.json" beforeDir="false" afterPath="$PROJECT_DIR$/.bsp/sbt.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__com_sun_activation_jakarta_activation_1_2_1_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__jakarta_activation_jakarta_activation_api_1_2_1_jar.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/HorusDT-build.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/HorusDT-build.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules/HorusDT.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/HorusDT.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/dbinit.sql" beforeDir="false" afterPath="$PROJECT_DIR$/conf/dbinit.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy_office.sh" beforeDir="false" afterPath="$PROJECT_DIR$/deploy_office.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/run.script" beforeDir="false" afterPath="$PROJECT_DIR$/conf/run.script" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy_home.sh" beforeDir="false" afterPath="$PROJECT_DIR$/deploy_home.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy_studio.sh" beforeDir="false" afterPath="$PROJECT_DIR$/deploy_studio.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialJobMain.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/SerialJobMain.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/topic/LdaTopicProcessing.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/topic/LdaTopicProcessing.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/util/Hangle.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/util/Hangle.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

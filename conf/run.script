@@ -27,3 +27,15 @@ select a.BASE_TERM, a.COMP_TERM, a.DIST_VAL,
   where a1.BASE_TERM = a.BASE_TERM and a1.DIST_VAL > a.DIST_VAL) as RNK
 from (select * from TERM_DIST where GRP_TS = 1663052659432) a
 order by a.BASE_TERM, a.DIST_VAL desc ;
+
+
+docker exec -it spark-build-spark-master-1 /opt/spark/bin/spark-submit \
+--driver-class-path /opt/spark-apps/mysql-connector-java-5.1.44.jar \
+--class com.yg.horus.dt.util.Hangle \
+--master spark://spark-master:7077 \
+--deploy-mode client \
+--num-executors 2 --executor-memory 1g --total-executor-cores 2 \
+--conf spark.dynamicAllocation.enabled=false \
+--conf "spark.driver.extraJavaOptions=-Dfile.encoding=UTF-8" \
+--conf "spark.executor.extraJavaOptions=-Dfile.encoding=UTF-8" \
+/opt/spark-apps/HorusDT-assembly-0.7.9.9.jar
