@@ -93,14 +93,10 @@ class LdaTopicProcessing(val spark: SparkSession) extends Serializable {
   def loadSource(seedNo: Long, fromTime: java.sql.Timestamp) = {
     val getTokenListUdf2: UserDefinedFunction = udf[Seq[String], String] { sentence =>
       try {
-//        LdaTopicProcessing.komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
-        val analyzer = LdaTopicProcessing.komoran
-        analyzer.setUserDic(RuntimeConfig("komoran.dic"))
+//        val analyzer = LdaTopicProcessing.komoran
+        val analyzer = LdaTopicProcessing.getHangleAnaylzer()
         analyzer.analyze(sentence).getNouns.asScala
 
-//        LdaTopicProcessing.getHangleAnaylzer().analyze(sentence).getNouns.asScala
-
-//        LdaTopicProcessing.getHangleAnaylzer().analyze(sentence).getNouns.asScala
       } catch {
         case e: Exception => {
           println("Detected Null Pointer .. " + e.getMessage)
@@ -125,16 +121,18 @@ class LdaTopicProcessing(val spark: SparkSession) extends Serializable {
 
 
 object LdaTopicProcessing {
+  private var komoranOpt: Option[Komoran] = None
   val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
   komoran.setUserDic(RuntimeConfig("komoran.dic"))
-  println("Komoran.setUserDic completed .. ")
-//  komoran.setUserDic("/Users/ygkim/IdeaProjects/HorusDT/myDic.txt")
 
-  def getHangleAnaylzer() = {
-    val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
-////    println("Dic :" + RuntimeConfig("komoran.dic"))
-    komoran.setUserDic(RuntimeConfig("komoran.dic"))
-    komoran
+  def getHangleAnaylzer(): Komoran = {
+    komoranOpt.getOrElse{
+      val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+      println("Komoran.setUserDic completed .. ")
+      komoran.setUserDic(RuntimeConfig("komoran.dic"))
+      komoranOpt = Some(komoran)
+      komoran
+    }
   }
 
   def main(args: Array[String]): Unit = {

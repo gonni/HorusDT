@@ -3,11 +3,15 @@ import com.typesafe.config.ConfigFactory
 
 object RuntimeConfig {
   val conf = ConfigFactory.load("application.conf")
+  var env: Option[String] = None
 
   def getRuntimeConfig() = {
-//    val profile = System.getProperty("profile.active")
-//    if(profile != null) conf.getConfig(profile) else conf.getConfig(conf.getString("profile.active"))
-    conf.getConfig(conf.getString("profile.active"))
+    conf.getConfig(env.getOrElse(conf.getString("profile.active")))
+//    conf.getConfig(conf.getString("profile.active"))
+  }
+
+  def setEnv(activeProfile: String) = {
+    env = Some(activeProfile)
   }
 
   def getActiveProfile() = {

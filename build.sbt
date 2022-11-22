@@ -1,4 +1,4 @@
-ThisBuild / version := "0.9.1"
+ThisBuild / version := "0.9.7"
 
 ThisBuild / scalaVersion := "2.12.10"
 
@@ -16,7 +16,7 @@ lazy val root = (project in file("."))
       "org.apache.spark" %% "spark-sql" % sparkVersion,
       "org.apache.spark" %% "spark-mllib" % sparkVersion,
       "mysql" % "mysql-connector-java" % "5.1.44",
-      "com.github.shin285" % "KOMORAN" % "3.3.4" from "file:///Users/ygkim/dev/core1.jar",
+      "com.github.shin285" % "KOMORAN" % "3.3.4",
       "com.influxdb" % "influxdb-client-scala_2.12" % "6.4.0",
       "com.typesafe.slick" %% "slick" % "3.3.2",
       "org.slf4j" % "slf4j-nop" % "1.6.4",
@@ -24,17 +24,12 @@ lazy val root = (project in file("."))
       "com.mchange" % "c3p0" % "0.9.5.2",
       "com.typesafe" % "config" % "1.4.2",
       "org.jblas" % "jblas" % "1.2.5",
-      "org.bitbucket.eunjeon" % "seunjeon" % "1.3.0",
-    ),
-    libraryDependencies ++= Seq(
-      "org.slf4j" % "slf4j-api" % "1.7.30",
-      "org.slf4j" % "jcl-over-slf4j" % "1.7.30"
-    ).map(_.force()),
+//      "org.bitbucket.eunjeon" % "seunjeon" % "1.3.0",
+      "org.deeplearning4j" % "deeplearning4j-core" % "1.0.0-M1.1",
+      "org.nd4j" % "nd4j-native-platform" % "1.0.0-M1.1",
+      "org.deeplearning4j" % "deeplearning4j-nlp" % "1.0.0-M1.1",
 
-      libraryDependencies ~= {
-      _.map(_.exclude("org.slf4j", "slf4j-jdk14"))
-    }
-
+    )
   )
 
 assemblyMergeStrategy in assembly := {
