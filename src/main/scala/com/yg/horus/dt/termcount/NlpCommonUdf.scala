@@ -7,14 +7,14 @@ import org.apache.spark.sql.functions.udf
 import scala.jdk.CollectionConverters.asScalaBufferConverter
 
 trait NlpCommonUdf extends Serializable {
-  val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+  val komoran = new Komoran(DEFAULT_MODEL.FULL)
 
   val getPlainTextUdf: UserDefinedFunction = udf[String, String] { sentence =>
     komoran.analyze(sentence).getPlainText
   }
 
   val getPlainTextUdf2: UserDefinedFunction = udf[Seq[String], String] { sentence =>
-    val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+    val komoran = new Komoran(DEFAULT_MODEL.FULL)
     komoran.analyze(sentence).getPlainText.split("\\s")
   }
 

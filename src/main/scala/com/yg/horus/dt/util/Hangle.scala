@@ -42,7 +42,7 @@ object Hangle {
 
     var dicLocation = RuntimeConfig("komoran.dic")
     var src = "대통령 윤석렬은 유지할 수 있을까? 알코르에서 대통령실 영부인 김건희는 사기꾼이 확실한데 .. 윤 대통령을 국민의 힘 국민의힘이 지켜줄라나"
-    var minAgo = 600
+    var minAgo = 60
 
     Source.fromFile(dicLocation).getLines().foreach(line => {
       println("=>" + line.split("\t").toSeq)
@@ -68,7 +68,7 @@ object Hangle {
     println("=======================================")
     val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(minAgo))
     val lda = new LdaTopicProcessing(spark)
-    val source = lda.loadSource(1, fromTime)
+    val source = lda.loadSource(21, fromTime)
     println("[Source Data for LDA] ----------------- ")
     source.show(30)
     source.filter(_.getAs[String]("ANCHOR_TEXT").contains("윤석열")).foreach(row => {

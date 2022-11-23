@@ -1,6 +1,7 @@
 package com.yg.horus.dt.tdm
 
 import com.yg.horus.RuntimeConfig
+import com.yg.horus.dt.topic.LdaTopicProcessing
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL
 import kr.co.shineware.nlp.komoran.core.Komoran
 import org.apache.spark.ml.feature.{Word2Vec, Word2VecModel}
@@ -41,8 +42,9 @@ class Word2vecModeler(val spark: SparkSession) {
 //        analyzer.setUserDic(RuntimeConfig("komoran.dic"))
 //        analyzer.analyze(sentence).getTokenList.asScala.map(_.getMorph)
 //        Word2vecModeler.getHangleAnalyzer().analyze(sentence).getTokenList.asScala.map(_.getMorph)
-
-        Word2vecModeler.komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
+        val analyzer = LdaTopicProcessing.getHangleAnaylzer()
+        analyzer.analyze(sentence).getNouns.asScala
+//        Word2vecModeler.komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
       } catch {
         case e: Exception => {
           println("Detected Null Pointer .. " + e.getMessage)
@@ -65,12 +67,12 @@ class Word2vecModeler(val spark: SparkSession) {
 }
 
 object Word2vecModeler {
-  val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+  val komoran = new Komoran(DEFAULT_MODEL.FULL)
   komoran.setUserDic(RuntimeConfig("komoran.dic"))
   println("Komran.setUserDic completed ..")
 
   def getHangleAnalyzer() = {
-    val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+    val komoran = new Komoran(DEFAULT_MODEL.FULL)
     komoran.setUserDic(RuntimeConfig("komoran.dic"))
     komoran
   }

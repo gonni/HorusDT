@@ -161,10 +161,11 @@ object SerialJobMain extends SparkJobInit("SERIAL_JOBS") {
     println("RuntimeConfig Details : " + RuntimeConfig())
 
     val jobManager = new SeiralJobManager(cntTurns = 300000, checkPeriod = 5000L)
-//    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 60 k))
-//    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 120 k))
-//    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 200 k))
-      jobManager.addJob(new LdaTdmJoblet(spark, 1, 600, 120 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 21, 60, 120 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 25, 60, 240 k))
+    jobManager.addJob(new LdaTdmJoblet(spark, 23, 60, 300 k))
+
+//      jobManager.addJob(new LdaTdmJoblet(spark, 1, 600, 120 k))
 //      jobManager.addJob(new LdaTdmJoblet(spark, 2, 60, 300 k))
 
     jobManager.start()

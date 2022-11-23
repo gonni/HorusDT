@@ -43,7 +43,7 @@ class Extractor {
     ("[a-zA-Z]+".r findAllIn content).toList
 
   def splitWords1(content: String): List[Word] = {
-    val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+    val komoran = new Komoran(DEFAULT_MODEL.FULL)
     komoran.setUserDic("/Users/a1000074/dev/myDic.txt")
 
     komoran.analyze(content).getTokenList.asScala.map(word => (word.getMorph + ":" + word.getPos)).toList
@@ -51,7 +51,7 @@ class Extractor {
   }
 
   def splitWords(content: String): List[Word] = {
-    val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+    val komoran = new Komoran(DEFAULT_MODEL.FULL)
     komoran.setUserDic("/Users/a1000074/dev/myDic.txt")
 
 //    komoran.analyze(content).getTokenList.asScala.filter(tk => {

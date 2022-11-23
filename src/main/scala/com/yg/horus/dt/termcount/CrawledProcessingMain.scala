@@ -10,7 +10,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 import scala.collection.JavaConverters._
 
 class HangleTokenizer extends Serializable {
-  val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+  val komoran = new Komoran(DEFAULT_MODEL.FULL)
 //  komoran.setUserDic("./myDic.txt")
 //  komoran.setUserDic(getClass.getClassLoader.getResource("myDic.txt").getPath);
   komoran.setUserDic(RuntimeConfig("komoran.dic"))

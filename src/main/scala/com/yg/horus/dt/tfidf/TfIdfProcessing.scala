@@ -16,7 +16,7 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
 
   val getNounsUdf: UserDefinedFunction = udf[Seq[String], String] { sentence =>
     if(sentence != null) {
-      val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+      val komoran = new Komoran(DEFAULT_MODEL.FULL)
       komoran.analyze(sentence).getNouns.asScala
     } else {
       Seq[String]()

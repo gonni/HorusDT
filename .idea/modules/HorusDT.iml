@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="root [file:/Users/a1000074/dev/works/HorusDT/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="root [file:/Users/ygkim/IdeaProjects/HorusDT/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../target/scala-2.12/classes" />
     <output-test url="file://$MODULE_DIR$/../../target/scala-2.12/test-classes" />
@@ -15,7 +15,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: aopalliance:aopalliance:1.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.chuusai:shapeless_2.12:2.3.3:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.clearspring.analytics:stream:2.9.8:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.clearspring.analytics:stream:2.9.6:jar" level="project" />
     <orderEntry type="library" name="sbt: com.esotericsoftware:kryo-shaded:4.0.2:jar" level="project" />
     <orderEntry type="library" name="sbt: com.esotericsoftware:minlog:1.3.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.fasterxml.jackson.core:jackson-annotations:2.10.0:jar" level="project" />
@@ -28,20 +28,16 @@
     <orderEntry type="library" name="sbt: com.fasterxml.jackson.module:jackson-module-scala_2.12:2.10.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.fasterxml.woodstox:woodstox-core:5.0.3:jar" level="project" />
     <orderEntry type="library" name="sbt: com.github.fommil.netlib:core:1.1.2:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.github.jai-imageio:jai-imageio-core:1.3.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.github.luben:zstd-jni:1.4.8-1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.github.oshi:oshi-core:3.4.2:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.github.oshi:oshi-json:3.4.2:jar" level="project" />
     <orderEntry type="library" name="sbt: com.github.shin285:KOMORAN:3.3.4:jar" level="project" />
     <orderEntry type="library" name="sbt: com.github.shineware:aho-corasick:1.0.9:jar" level="project" />
     <orderEntry type="library" name="sbt: com.github.shineware:commons:1.0.1:jar" level="project" />
     <orderEntry type="library" name="sbt: com.github.spotbugs:spotbugs-annotations:3.1.9:jar" level="project" />
     <orderEntry type="library" name="sbt: com.github.stephenc.jcip:jcip-annotations:1.0-1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.github.vinhkhuc:jfasttext:0.4:jar" level="project" />
     <orderEntry type="library" name="sbt: com.github.wendykierp:JTransforms:3.1:jar" level="project" />
     <orderEntry type="library" name="sbt: com.google.code.findbugs:jsr305:3.0.2:jar" level="project" />
     <orderEntry type="library" name="sbt: com.google.code.gson:gson:2.9.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.google.flatbuffers:flatbuffers-java:1.10.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.google.flatbuffers:flatbuffers-java:1.9.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.google.guava:guava:16.0.1:jar" level="project" />
     <orderEntry type="library" name="sbt: com.google.inject:guice:4.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.google.protobuf:protobuf-java:2.5.0:jar" level="project" />
@@ -50,7 +46,6 @@
     <orderEntry type="library" name="sbt: com.influxdb:influxdb-client-java:6.4.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.influxdb:influxdb-client-scala_2.12:6.4.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.influxdb:influxdb-client-utils:6.4.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.jakewharton.byteunits:byteunits:0.9.1:jar" level="project" />
     <orderEntry type="library" name="sbt: com.mchange:c3p0:0.9.5.2:jar" level="project" />
     <orderEntry type="library" name="sbt: com.mchange:mchange-commons-java:0.2.11:jar" level="project" />
     <orderEntry type="library" name="sbt: com.nimbusds:nimbus-jose-jwt:4.41.1:jar" level="project" />
@@ -64,18 +59,9 @@
     <orderEntry type="library" name="sbt: com.squareup.retrofit2:converter-gson:2.9.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.squareup.retrofit2:converter-scalars:2.9.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.squareup.retrofit2:retrofit:2.9.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.sun.activation:jakarta.activation:1.2.1:jar" level="project" />
     <orderEntry type="library" name="sbt: com.sun.istack:istack-commons-runtime:3.0.8:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.tdunning:t-digest:3.2:jar" level="project" />
     <orderEntry type="library" name="sbt: com.thoughtworks.paranamer:paranamer:2.8:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.twelvemonkeys.common:common-image:3.1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.twelvemonkeys.common:common-io:3.1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.twelvemonkeys.common:common-lang:3.1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.twelvemonkeys.imageio:imageio-bmp:3.1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.twelvemonkeys.imageio:imageio-core:3.1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.twelvemonkeys.imageio:imageio-jpeg:3.1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.twelvemonkeys.imageio:imageio-metadata:3.1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.twelvemonkeys.imageio:imageio-psd:3.1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.twelvemonkeys.imageio:imageio-tiff:3.1.1:jar" level="project" />
     <orderEntry type="library" name="sbt: com.twitter:chill-java:0.9.5:jar" level="project" />
     <orderEntry type="library" name="sbt: com.twitter:chill_2.12:0.9.5:jar" level="project" />
     <orderEntry type="library" name="sbt: com.typesafe.akka:akka-actor_2.12:2.6.19:jar" level="project" />
@@ -104,7 +90,7 @@
     <orderEntry type="library" name="sbt: io.netty:netty-all:4.1.51.Final:jar" level="project" />
     <orderEntry type="library" name="sbt: io.netty:netty:3.10.6.Final:jar" level="project" />
     <orderEntry type="library" name="sbt: io.reactivex.rxjava3:rxjava:3.1.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: it.unimi.dsi:fastutil:8.1.1:jar" level="project" />
+    <orderEntry type="library" name="sbt: jakarta.activation:jakarta.activation-api:1.2.1:jar" level="project" />
     <orderEntry type="library" name="sbt: jakarta.annotation:jakarta.annotation-api:1.3.5:jar" level="project" />
     <orderEntry type="library" name="sbt: jakarta.servlet:jakarta.servlet-api:4.0.3:jar" level="project" />
     <orderEntry type="library" name="sbt: jakarta.validation:jakarta.validation-api:2.0.2:jar" level="project" />
@@ -115,12 +101,8 @@
     <orderEntry type="library" name="sbt: javax.servlet.jsp:jsp-api:2.1:jar" level="project" />
     <orderEntry type="library" name="sbt: javax.xml.bind:jaxb-api:2.2.11:jar" level="project" />
     <orderEntry type="library" name="sbt: jline:jline:0.9.94:jar" level="project" />
-    <orderEntry type="library" name="sbt: joda-time:joda-time:2.2:jar" level="project" />
     <orderEntry type="library" name="sbt: log4j:log4j:1.2.17:jar" level="project" />
     <orderEntry type="library" name="sbt: mysql:mysql-connector-java:5.1.44:jar" level="project" />
-    <orderEntry type="library" name="sbt: net.ericaro:neoitertools:1.0.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: net.java.dev.jna:jna-platform:4.3.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: net.java.dev.jna:jna:4.3.0:jar" level="project" />
     <orderEntry type="library" name="sbt: net.minidev:accessors-smart:1.2:jar" level="project" />
     <orderEntry type="library" name="sbt: net.minidev:json-smart:2.3:jar" level="project" />
     <orderEntry type="library" name="sbt: net.razorvine:pyrolite:4.30:jar" level="project" />
@@ -135,13 +117,12 @@
     <orderEntry type="library" name="sbt: org.apache.avro:avro-ipc:1.8.2:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.avro:avro-mapred:1.8.2:hadoop2:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.avro:avro:1.8.2:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.apache.commons:commons-collections4:4.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.apache.commons:commons-compress:1.18:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.apache.commons:commons-compress:1.8.1:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.commons:commons-configuration2:2.1.1:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.commons:commons-crypto:1.1.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.commons:commons-csv:1.9.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.commons:commons-lang3:3.10:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.apache.commons:commons-math3:3.5:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.apache.commons:commons-math3:3.4.1:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.commons:commons-text:1.6:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.curator:curator-client:2.13.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.curator:curator-framework:2.13.0:jar" level="project" />
@@ -203,131 +184,14 @@
     <orderEntry type="library" name="sbt: org.apache.xbean:xbean-asm7-shaded:4.15:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.yetus:audience-annotations:0.5.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.zookeeper:zookeeper:3.4.14:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:artoolkitplus:2.3.1-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg-platform:4.3.2-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:android-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:android-arm:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:android-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:android-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:linux-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:linux-armhf:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:linux-ppc64le:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:linux-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:linux-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:macosx-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:windows-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:ffmpeg:4.3.2-1.5.5:windows-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:flandmark:1.07-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:flycapture:2.13.3.31-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:hdf5-platform:1.12.0-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:hdf5:1.12.0-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:hdf5:1.12.0-1.5.5:linux-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:hdf5:1.12.0-1.5.5:linux-armhf:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:hdf5:1.12.0-1.5.5:linux-ppc64le:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:hdf5:1.12.0-1.5.5:linux-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:hdf5:1.12.0-1.5.5:linux-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:hdf5:1.12.0-1.5.5:macosx-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:hdf5:1.12.0-1.5.5:windows-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:hdf5:1.12.0-1.5.5:windows-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp-platform:1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:android-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:android-arm:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:android-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:android-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:ios-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:ios-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:linux-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:linux-armhf:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:linux-ppc64le:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:linux-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:linux-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:macosx-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:macosx-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:windows-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacpp:1.5.5:windows-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:javacv:1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica-platform:1.80.0-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:android-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:android-arm:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:android-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:android-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:linux-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:linux-armhf:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:linux-ppc64le:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:linux-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:linux-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:macosx-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:windows-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:leptonica:1.80.0-1.5.5:windows-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:libdc1394:2.2.6-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:libfreenect2:0.2.0-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:libfreenect:0.5.7-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:librealsense2:2.40.0-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:librealsense:1.12.4-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:mkl-platform:2021.1-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:mkl:2021.1-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:mkl:2021.1-1.5.5:linux-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:mkl:2021.1-1.5.5:linux-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:mkl:2021.1-1.5.5:macosx-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:mkl:2021.1-1.5.5:windows-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:mkl:2021.1-1.5.5:windows-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas-platform:0.3.13-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:android-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:android-arm:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:android-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:android-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:ios-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:ios-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:linux-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:linux-armhf:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:linux-ppc64le:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:linux-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:linux-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:macosx-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:windows-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:openblas:0.3.13-1.5.5:windows-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv-platform:4.5.1-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:android-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:android-arm:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:android-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:android-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:ios-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:ios-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:linux-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:linux-armhf:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:linux-ppc64le:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:linux-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:linux-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:macosx-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:windows-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:opencv:4.5.1-1.5.5:windows-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:tesseract:4.1.1-1.5.5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.bytedeco:videoinput:0.200-1.5.5:jar" level="project" />
     <orderEntry type="library" name="sbt: org.codehaus.jackson:jackson-core-asl:1.9.13:jar" level="project" />
     <orderEntry type="library" name="sbt: org.codehaus.jackson:jackson-mapper-asl:1.9.13:jar" level="project" />
     <orderEntry type="library" name="sbt: org.codehaus.janino:commons-compiler:3.0.16:jar" level="project" />
     <orderEntry type="library" name="sbt: org.codehaus.janino:janino:3.0.16:jar" level="project" />
     <orderEntry type="library" name="sbt: org.codehaus.woodstox:stax2-api:3.1.4:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.datavec:datavec-api:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.datavec:datavec-data-image:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.deeplearning4j:deeplearning4j-common:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.deeplearning4j:deeplearning4j-core:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.deeplearning4j:deeplearning4j-datasets:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.deeplearning4j:deeplearning4j-datavec-iterators:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.deeplearning4j:deeplearning4j-modelimport:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.deeplearning4j:deeplearning4j-nlp:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.deeplearning4j:deeplearning4j-nn:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.deeplearning4j:deeplearning4j-ui-components:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.deeplearning4j:deeplearning4j-utility-iterators:1.0.0-M1.1:jar" level="project" />
     <orderEntry type="library" name="sbt: org.eclipse.jetty:jetty-security:9.3.24.v20180605:jar" level="project" />
     <orderEntry type="library" name="sbt: org.eclipse.jetty:jetty-servlet:9.3.24.v20180605:jar" level="project" />
     <orderEntry type="library" name="sbt: org.eclipse.jetty:jetty-util:9.3.24.v20180605:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.freemarker:freemarker:2.3.23:jar" level="project" />
     <orderEntry type="library" name="sbt: org.fusesource.leveldbjni:leveldbjni-all:1.8:jar" level="project" />
     <orderEntry type="library" name="sbt: org.glassfish.hk2.external:aopalliance-repackaged:2.6.1:jar" level="project" />
     <orderEntry type="library" name="sbt: org.glassfish.hk2.external:jakarta.inject:2.6.1:jar" level="project" />
@@ -343,7 +207,6 @@
     <orderEntry type="library" name="sbt: org.glassfish.jersey.core:jersey-server:2.30:jar" level="project" />
     <orderEntry type="library" name="sbt: org.glassfish.jersey.inject:jersey-hk2:2.30:jar" level="project" />
     <orderEntry type="library" name="sbt: org.glassfish.jersey.media:jersey-media-jaxb:2.30:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.glassfish:javax.json:1.0.4:jar" level="project" />
     <orderEntry type="library" name="sbt: org.javassist:javassist:3.25.0-GA:jar" level="project" />
     <orderEntry type="library" name="sbt: org.jblas:jblas:1.2.5:jar" level="project" />
     <orderEntry type="library" name="sbt: org.jetbrains.kotlin:kotlin-stdlib-common:1.6.20:jar" level="project" />
@@ -355,26 +218,7 @@
     <orderEntry type="library" name="sbt: org.json4s:json4s-core_2.12:3.7.0-M5:jar" level="project" />
     <orderEntry type="library" name="sbt: org.json4s:json4s-jackson_2.12:3.7.0-M5:jar" level="project" />
     <orderEntry type="library" name="sbt: org.json4s:json4s-scalap_2.12:3.7.0-M5:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.lucee:oswego-concurrent:1.3.4:jar" level="project" />
     <orderEntry type="library" name="sbt: org.lz4:lz4-java:1.7.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:guava:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:jackson:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-api:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-common:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native-api:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native-platform:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native-preset:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native-preset:1.0.0-M1.1:macosx-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native:1.0.0-M1.1:android-arm64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native:1.0.0-M1.1:android-arm:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native:1.0.0-M1.1:android-x86:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native:1.0.0-M1.1:android-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native:1.0.0-M1.1:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native:1.0.0-M1.1:linux-armhf:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native:1.0.0-M1.1:linux-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native:1.0.0-M1.1:macosx-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:nd4j-native:1.0.0-M1.1:windows-x86_64:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.nd4j:protobuf:1.0.0-M1.1:jar" level="project" />
     <orderEntry type="library" name="sbt: org.objenesis:objenesis:2.5.1:jar" level="project" />
     <orderEntry type="library" name="sbt: org.reactivestreams:reactive-streams:1.0.4:jar" level="project" />
     <orderEntry type="library" name="sbt: org.roaringbitmap:RoaringBitmap:0.9.0:jar" level="project" />
@@ -393,9 +237,7 @@
     <orderEntry type="library" name="sbt: org.slf4j:slf4j-log4j12:1.7.30:jar" level="project" />
     <orderEntry type="library" name="sbt: org.slf4j:slf4j-nop:1.6.4:jar" level="project" />
     <orderEntry type="library" name="sbt: org.spark-project.spark:unused:1.0.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.threadly:threadly:4.10.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.threeten:threeten-extra:1.5.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.threeten:threetenbp:1.3.3:jar" level="project" />
     <orderEntry type="library" name="sbt: org.tukaani:xz:1.5:jar" level="project" />
     <orderEntry type="library" name="sbt: org.typelevel:algebra_2.12:2.0.0-M2:jar" level="project" />
     <orderEntry type="library" name="sbt: org.typelevel:cats-kernel_2.12:2.0.0-M4:jar" level="project" />

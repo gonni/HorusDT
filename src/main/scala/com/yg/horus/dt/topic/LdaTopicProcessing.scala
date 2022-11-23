@@ -122,14 +122,16 @@ class LdaTopicProcessing(val spark: SparkSession) extends Serializable {
 
 object LdaTopicProcessing {
   private var komoranOpt: Option[Komoran] = None
-  val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
+  val komoran = new Komoran(DEFAULT_MODEL.FULL)
   komoran.setUserDic(RuntimeConfig("komoran.dic"))
 
   def getHangleAnaylzer(): Komoran = {
     komoranOpt.getOrElse{
-      val komoran = new Komoran(DEFAULT_MODEL.LIGHT)
-      println("Komoran.setUserDic completed .. ")
+      val komoran = new Komoran(DEFAULT_MODEL.FULL)
+      println("----------------------- Komoran.setUserDic completed .. " + RuntimeConfig("komoran.dic"))
       komoran.setUserDic(RuntimeConfig("komoran.dic"))
+//      komoran.setUserDic("/opt/spark-apps/myDic.txt")
+
       komoranOpt = Some(komoran)
       komoran
     }
