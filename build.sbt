@@ -25,9 +25,9 @@ lazy val root = (project in file("."))
       "com.typesafe" % "config" % "1.4.2",
       "org.jblas" % "jblas" % "1.2.5",
 //      "org.bitbucket.eunjeon" % "seunjeon" % "1.3.0",
-//      "org.deeplearning4j" % "deeplearning4j-core" % "1.0.0-M1.1",
-//      "org.nd4j" % "nd4j-native-platform" % "1.0.0-M1.1",
-//      "org.deeplearning4j" % "deeplearning4j-nlp" % "1.0.0-M1.1",
+      "org.deeplearning4j" % "deeplearning4j-core" % "1.0.0-M1.1",
+      "org.nd4j" % "nd4j-native-platform" % "1.0.0-M1.1",
+      "org.deeplearning4j" % "deeplearning4j-nlp" % "1.0.0-M1.1",
 
     )
   )
