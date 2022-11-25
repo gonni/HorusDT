@@ -57,10 +57,10 @@ object Doc2vecSample extends DbCrawledData {
     val test = new Doc2vecSample
 //    test.getData(100).foreach(println)
 
-    val docs = test.getData(300).map(item => {
+    val docs = test.getData(500).map(item => {
       val doc = new LabelledDocument
       doc.setContent(item.pageText.get)
-      doc.setLabel("DOC_" + item.crawlNo)
+      doc.setLabel("DOC_" + item.crawlNo + "_" + item.anchorText)
       doc
     }).asJava
 
@@ -83,16 +83,10 @@ object Doc2vecSample extends DbCrawledData {
     vec.fit()
 
     println("--------------------<B>-------------------")
-    vec.wordsNearest("월드컵", 10).forEach(println)
+    vec.wordsNearest("윤석열", 10).forEach(println)
 
     println("--------------------<A>-------------------")
-    vec.nearestLabels("월드컵", 10).forEach(println)
+    vec.nearestLabels("윤석열", 10).forEach(println)
 
-
-//    val test = tkFac.create("순이익금을 유보하는 미처분 이익잉여금 철저하게 관리해야 하는 " +
-//      "이익잉여금대전에서 제조업을 하는 J기업의 문 대표는 경리담당 직원을 통해 주기적으로 통장 잔고를 확인하고 있었습니다.")
-//    while(test.hasMoreTokens) {
-//      println("->" + test.nextToken())
-//    }
   }
 }
