@@ -24,6 +24,14 @@ trait DbCrawledData {
   def getData(limit: Int) = {
     Await.result(db.run(CrawlRepo.findCrawled(1, limit).result), 10.seconds)
   }
+
+  def allData(minSeedNo: Int) = {
+    Await.result(db.run(CrawlRepo.findCrawledData(minSeedNo).result), 100.seconds)
+  }
+
+  def countAllData(minSeedNo: Int) = {
+    Await.result(db.run(CrawlRepo.countCrawledData(minSeedNo).result), 10.seconds)
+  }
 }
 
 class DbLabelAwareIterator(val seedNo: Int, val limit: Int) extends LabelAwareSentenceIterator {

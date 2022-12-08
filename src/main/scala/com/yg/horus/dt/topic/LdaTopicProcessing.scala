@@ -6,11 +6,13 @@ import kr.co.shineware.nlp.komoran.core.Komoran
 import org.apache.spark.SparkConf
 import org.apache.spark.ml.clustering.LDA
 import org.apache.spark.ml.feature.CountVectorizer
-import org.apache.spark.sql.{DataFrame, Dataset, SaveMode, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, SaveMode, SparkSession, functions}
 import org.apache.spark.sql.expressions.UserDefinedFunction
-import org.apache.spark.sql.functions.{col, desc, monotonically_increasing_id, row_number, typedLit, udf}
+import org.apache.spark.sql.functions.{col, desc, lit, monotonically_increasing_id, row_number, typedLit, udf}
 import org.apache.spark.sql.types.{DoubleType, IntegerType, StringType, StructType}
 
+import java.sql.Timestamp
+import java.time.LocalDateTime
 import java.util.Properties
 import scala.collection.mutable
 import scala.jdk.CollectionConverters.asScalaBufferConverter
@@ -91,9 +93,8 @@ class LdaTopicProcessing(val spark: SparkSession) extends Serializable {
   }
 
   def loadSource(seedNo: Long, fromTime: java.sql.Timestamp) = {
-    val getTokenListUdf2: UserDefinedFunction = udf[Seq[String], String] { sentence =>
+    val getTokenListUdf: UserDefinedFunction = udf[Seq[String], String] { sentence =>
       try {
-//        val analyzer = LdaTopicProcessing.komoran
         val analyzer = LdaTopicProcessing.getHangleAnaylzer()
         analyzer.analyze(sentence).getNouns.asScala
 
@@ -105,6 +106,32 @@ class LdaTopicProcessing(val spark: SparkSession) extends Serializable {
       }
     }
 
+//    val getTokenListUdf2: UserDefinedFunction = udf[Seq[String], (String, String)] { sentence =>
+//      try {
+//        val analyzer = LdaTopicProcessing.getHangleAnaylzer()
+//        analyzer.analyze(sentence._1 + " " + sentence._2).getNouns.asScala
+//
+//      } catch {
+//        case e: Exception => {
+//          println("Detected Null Pointer .. " + e.getMessage)
+//          Seq()
+//        }
+//      }
+//    }
+
+    val getTokenListUdf3 = udf((anchorText: String, pageText: String) => {
+      try {
+        val analyzer = LdaTopicProcessing.getHangleAnaylzer()
+        analyzer.analyze(anchorText + " -> " + pageText).getNouns.asScala
+
+      } catch {
+        case e: Exception => {
+          println("Detected Null Pointer .. " + e.getMessage)
+          Seq()
+        }
+      }
+    })
+
     val prop = new Properties()
     prop.put("user", RuntimeConfig().getString("mysql.user"))
     prop.put("password", RuntimeConfig().getString("mysql.password"))
@@ -115,7 +142,9 @@ class LdaTopicProcessing(val spark: SparkSession) extends Serializable {
       .orderBy(desc("CRAWL_NO"))
       .select($"ANCHOR_TEXT", $"PAGE_TEXT", $"CRAWL_NO")
       .withColumnRenamed("CRAWL_NO", "id")
-      .withColumn("tokenized", getTokenListUdf2($"PAGE_TEXT"))
+      .withColumn("tokenized", getTokenListUdf3($"ANCHOR_TEXT", $"PAGE_TEXT"))
+//      .withColumn("MERGED_DATA", functions.concat($"ANCHOR_TEXT", lit(" -> "), $"PAGE_TEXT"))
+
   }
 }
 
@@ -137,9 +166,22 @@ object LdaTopicProcessing {
     }
   }
 
+  def testLoadSource = {
+    val conf = new SparkConf().setMaster("local[*]").setAppName("text lda")
+    val spark = SparkSession.builder().config(conf).getOrCreate()
+
+    val test = new LdaTopicProcessing(spark)
+    val fromTime = Timestamp.valueOf(LocalDateTime.now().minusMinutes(600))
+    val tableDf = test.loadSource(1L, fromTime)
+    tableDf.show(10)
+    println("==>" + tableDf.take(1).head.mkString("|"))
+  }
+
   def main(args: Array[String]): Unit = {
     println("Active System ..")
-    komoran.analyze("윤석렬 대통령은 김건희 여사에게 한방을 말했다.").getNouns.asScala.foreach(println)
+//    komoran.analyze("윤석렬 대통령은 김건희 여사에게 한방을 말했다.").getNouns.asScala.foreach(println)
+
+    testLoadSource
   }
 
   def sample() = {

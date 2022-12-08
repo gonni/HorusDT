@@ -50,4 +50,12 @@ object CrawlRepo {
     .sortBy(_.crawlNo.desc)
     .drop(0)
     .take(limit)
+
+  def findCrawledData(minSeedNo: Long) = {
+    crawlUnitsQuery.filter(_.seedNo > minSeedNo).sortBy(_.crawlNo.desc)
+  }
+
+  def countCrawledData(minSeedNo: Long) = {
+    crawlUnitsQuery.filter(_.seedNo > minSeedNo).length
+  }
 }
