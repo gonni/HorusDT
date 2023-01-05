@@ -36,22 +36,35 @@ class Word2vecModeler(val spark: SparkSession) {
   }
 
   def loadSource(seedNo: Long, fromTime: java.sql.Timestamp) = {
-    val getTokenListUdf2: UserDefinedFunction = udf[Seq[String], String] { sentence =>
+//    val getTokenListUdf2: UserDefinedFunction = udf[Seq[String], String] { sentence =>
+//      try {
+////        val analyzer = Word2vecModeler.komoran
+////        analyzer.setUserDic(RuntimeConfig("komoran.dic"))
+////        analyzer.analyze(sentence).getTokenList.asScala.map(_.getMorph)
+////        Word2vecModeler.getHangleAnalyzer().analyze(sentence).getTokenList.asScala.map(_.getMorph)
+//        val analyzer = LdaTopicProcessing.getHangleAnaylzer()
+//        analyzer.analyze(sentence).getNouns.asScala
+////        Word2vecModeler.komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
+//      } catch {
+//        case e: Exception => {
+//          println("Detected Null Pointer .. " + e.getMessage)
+//          Seq()
+//        }
+//      }
+//    }
+
+    val getTokenListUdf3 = udf((anchorText: String, pageText: String) => {
       try {
-//        val analyzer = Word2vecModeler.komoran
-//        analyzer.setUserDic(RuntimeConfig("komoran.dic"))
-//        analyzer.analyze(sentence).getTokenList.asScala.map(_.getMorph)
-//        Word2vecModeler.getHangleAnalyzer().analyze(sentence).getTokenList.asScala.map(_.getMorph)
         val analyzer = LdaTopicProcessing.getHangleAnaylzer()
-        analyzer.analyze(sentence).getNouns.asScala
-//        Word2vecModeler.komoran.analyze(sentence).getTokenList.asScala.map(_.getMorph)
+        analyzer.analyze(anchorText + " " + pageText).getNouns.asScala
+
       } catch {
         case e: Exception => {
           println("Detected Null Pointer .. " + e.getMessage)
           Seq()
         }
       }
-    }
+    })
 
     val prop = new Properties()
     prop.put("user", RuntimeConfig().getString("mysql.user"))
@@ -61,7 +74,7 @@ class Word2vecModeler(val spark: SparkSession) {
     tableDf.filter($"SEED_NO" === seedNo && $"REG_DATE" > fromTime)
       .orderBy(desc("CRAWL_NO"))
       .select($"ANCHOR_TEXT", $"PAGE_TEXT")
-      .withColumn("tokenized", getTokenListUdf2($"PAGE_TEXT"))
+      .withColumn("tokenized", getTokenListUdf3($"ANCHOR_TEXT", $"PAGE_TEXT"))
   }
 
 }

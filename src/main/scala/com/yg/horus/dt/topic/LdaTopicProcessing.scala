@@ -122,7 +122,7 @@ class LdaTopicProcessing(val spark: SparkSession) extends Serializable {
     val getTokenListUdf3 = udf((anchorText: String, pageText: String) => {
       try {
         val analyzer = LdaTopicProcessing.getHangleAnaylzer()
-        analyzer.analyze(anchorText + " -> " + pageText).getNouns.asScala
+        analyzer.analyze(anchorText + " " + pageText).getNouns.asScala
 
       } catch {
         case e: Exception => {

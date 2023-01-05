@@ -1,4 +1,4 @@
-ThisBuild / version := "0.9.7.1"
+ThisBuild / version := "0.9.9"
 
 ThisBuild / scalaVersion := "2.12.10"
 
@@ -24,10 +24,10 @@ lazy val root = (project in file("."))
       "com.mchange" % "c3p0" % "0.9.5.2",
       "com.typesafe" % "config" % "1.4.2",
       "org.jblas" % "jblas" % "1.2.5",
-//      "org.bitbucket.eunjeon" % "seunjeon" % "1.3.0",
-      "org.deeplearning4j" % "deeplearning4j-core" % "1.0.0-M1.1",
-      "org.nd4j" % "nd4j-native-platform" % "1.0.0-M1.1",
-      "org.deeplearning4j" % "deeplearning4j-nlp" % "1.0.0-M1.1",
+////      "org.bitbucket.eunjeon" % "seunjeon" % "1.3.0",
+//      "org.deeplearning4j" % "deeplearning4j-core" % "1.0.0-M2.1",
+//      "org.nd4j" % "nd4j-native-platform" % "1.0.0-M2.1",
+//      "org.deeplearning4j" % "deeplearning4j-nlp" % "1.0.0-M2.1",
 
     )
   )
