@@ -23,9 +23,9 @@ object ExSerialJobMain {
       logger.logJob("START_SC_JOB_TURN_"+i, "SUC")
 
       val jobManager = new SeiralJobManager(cntTurns = 3, checkPeriod = 5000L)
-      jobManager.addJob(new LdaTdmJoblet(sc, 21, 60, 60 k))
-      jobManager.addJob(new LdaTdmJoblet(sc, 25, 60, 120 k))
-      jobManager.addJob(new LdaTdmJoblet(sc, 23, 60, 200 k))
+      jobManager.addJob(new LdaTdmJoblet(sc, 21, 60, 300 k))
+      jobManager.addJob(new LdaTdmJoblet(sc, 25, 60, 600 k))
+      jobManager.addJob(new LdaTdmJoblet(sc, 23, 60, 1200 k))
       //      jobManager.addJob(new LdaTdmJoblet(spark, 1, 60, 120 k))
       //      jobManager.addJob(new LdaTdmJoblet(spark, 2, 60, 300 k))
 

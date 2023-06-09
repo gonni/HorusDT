@@ -15,11 +15,6 @@ import scala.concurrent.duration.Duration
 object InfluxClient extends Serializable {
   implicit val system: ActorSystem = ActorSystem("InfluxActor")
 
-//  val token = "5nWBmnhyUFbfF3q3F_yAfr4Wklis0HQT0UFKU2qf3z29bbsGMjPxYBeP34oz__byN8aSmS4hYud2zlR8tewDrA=="
-//  val org = "NA"
-//  val token = "CwgQWYIZKOcSpdlxwpfZfvDWQXpsfTlt7o2GD5hFAs4rTvHDF-7cfwmIQnmdocqL__5uoabCFGuf_GYzFQfxIA=="
-//  val org = "xwaves"
-
   val conf = RuntimeConfig.getRuntimeConfig()
   val url = conf.getString("influx.url")
   val token = conf.getString("influx.authToken")
@@ -65,35 +60,6 @@ object InfluxClient extends Serializable {
 
     fluxQuery(query)
 
-    //
-    // Use a Data Point to write data
-    //
-//    val point = Point
-//      .measurement("mem")
-//      .addTag("host", "host1")
-//      .addField("used_percent", 3.43234543)
-//      .time(Instant.now(), WritePrecision.NS)
-//
-//    val sourcePoint = Source.single(point)
-//    val sinkPoint = client.getWriteScalaApi.writePoint()
-//    val materializedPoint = sourcePoint.toMat(sinkPoint)(Keep.right)
-//    Await.result(materializedPoint.run(), Duration.Inf)
-//
-//    println("Successfully completed ..")
-//
-//    //
-//    // Use POJO and corresponding class to write data
-//    //
-//    val mem = new Mem()
-//    mem.host = "host1"
-//    mem.used_percent = 22.43234543
-//    mem.time = Instant.now
-//
-//    val sourcePOJO = Source.single(mem)
-//    val sinkPOJO = client.getWriteScalaApi.writeMeasurement()
-//    val materializedPOJO = sourcePOJO.toMat(sinkPOJO)(Keep.right)
-//    Await.result(materializedPOJO.run(), Duration.Inf)
-
     client.close()
     system.terminate()
   }
@@ -104,7 +70,7 @@ object InfluxClient extends Serializable {
   }
 
   def writeTf(seedId: Long, term: String, count: Int) : Unit = {
-//    println(s"write ${term}: ${count} to influx")
+
     val point = Point
       .measurement("term_tf")
       .addTag("seedId", seedId.toString)
@@ -116,16 +82,6 @@ object InfluxClient extends Serializable {
     val sinkPoint = client.getWriteScalaApi.writePoint()
     val materializedPoint = sourcePoint.toMat(sinkPoint)(Keep.right)
     Await.result(materializedPoint.run(), Duration.Inf)
-
-//    val termTf = new TermTf
-//    termTf.term = term
-//    termTf.tf = count
-//    termTf.time = Instant.now
-//
-//    val sourcePOJO = Source.single()
-//    val sinkPOJO = client.getWriteScalaApi.writeMeasurement()
-//    val materializedPOJO = sourcePOJO.toMat(sinkPOJO)(Keep.right)
-//    Await.result(materializedPOJO.run(), Duration.Inf)
   }
 
 }

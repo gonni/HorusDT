@@ -79,17 +79,6 @@ object SeiralJobManager {
       }
     })
 
-//    test.addJob(new SerialJoblet(30 * 1000) {
-//      override def run(): Unit = {
-//        val s = Math.random() * 20000
-//        println("RUN Joblet:30sec .. sleep: " + s)
-//        Thread.sleep(20000)
-//      }
-//    })
-
-
-//    test.jobs.foreach(job => println("delta ->" + job.deltaRun(1000)))
-
     println("=====================")
     test.start()
   }

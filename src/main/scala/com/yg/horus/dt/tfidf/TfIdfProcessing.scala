@@ -66,7 +66,7 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
   def write2db(tfidf: DataFrame, seedNo: Long, minAgo: Int, grpTs: Long) = {
     val prop = new Properties()
     prop.put("user", "root")
-    prop.put("password", "18651865")
+    prop.put("password", "root")
 
     val exTfidf = tfidf
       .withColumn("START_MIN_AGO", typedLit(minAgo))
@@ -92,7 +92,7 @@ class TfIdfProcessing(val spark: SparkSession) extends Serializable {
 
     val prop = new Properties()
     prop.put("user", "root")
-    prop.put("password", "18651865")
+    prop.put("password", "root")
 
     tableData.write.mode(SaveMode.Append).jdbc(RuntimeConfig("mysql.url"), "DT_TERM_SCORE", prop)
   }

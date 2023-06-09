@@ -20,9 +20,9 @@ object DocTfIDFJobMain {
       case 4 => TfidfParam(v(0), v(1), v(2).toLong, v(3).toInt)
       case _ =>
         if(RuntimeConfig.getActiveProfile().contains("home"))
-          TfidfParam(seedId = 999L, limit = 2315)
+          TfidfParam(seedId = 21L, limit = 2000)
         else
-          TfidfParam(seedId = 999L, limit = 2315) //TODO
+          TfidfParam(seedId = 21L, limit = 2000) //TODO
     }
     println("--------------------------------------")
     println(s"TF-IDF Job Args : ${runParams}")
