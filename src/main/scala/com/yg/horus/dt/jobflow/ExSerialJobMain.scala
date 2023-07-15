@@ -13,7 +13,10 @@ object ExSerialJobMain {
 
   def main(args: Array[String]): Unit = {
     println("Active System ..")
-
+    println("------------------------------------------------")
+    println("Active Profile : " + RuntimeConfig("profile.name"))
+    println("------------------------------------------------")
+    println("RuntimeConfig Details : " + RuntimeConfig())
 
     for(i <- 1 to 20000) {
       println("Craete New Spark Session .. turn#" + i)

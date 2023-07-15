@@ -1,4 +1,4 @@
-ThisBuild / version := "0.9.13"
+ThisBuild / version := "0.9.27"
 
 ThisBuild / scalaVersion := "2.12.10"
 
@@ -15,7 +15,8 @@ lazy val root = (project in file("."))
       "org.apache.spark" %% "spark-core" % sparkVersion,
       "org.apache.spark" %% "spark-sql" % sparkVersion,
       "org.apache.spark" %% "spark-mllib" % sparkVersion,
-      "mysql" % "mysql-connector-java" % "5.1.44",
+//      "mysql" % "mysql-connector-java" % "5.1.44",
+      "mysql" % "mysql-connector-java" % "8.0.27",
       "com.github.shin285" % "KOMORAN" % "3.3.4",
       "com.influxdb" % "influxdb-client-scala_2.12" % "6.4.0",
       "com.typesafe.slick" %% "slick" % "3.3.2",
@@ -33,6 +34,7 @@ lazy val root = (project in file("."))
   )
 
 assemblyMergeStrategy in assembly := {
+  case PathList("META-INF","services",xs @ _*) => MergeStrategy.filterDistinctLines // Added this
   case PathList("META-INF", xs @ _*) => MergeStrategy.discard
   case PathList("reference.conf") => MergeStrategy.concat
   case PathList("application.conf") => MergeStrategy.concat

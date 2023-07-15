@@ -39,7 +39,7 @@
     <orderEntry type="library" name="sbt: com.google.flatbuffers:flatbuffers-java:1.9.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.google.guava:guava:16.0.1:jar" level="project" />
     <orderEntry type="library" name="sbt: com.google.inject:guice:4.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: com.google.protobuf:protobuf-java:2.5.0:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.google.protobuf:protobuf-java:3.11.4:jar" level="project" />
     <orderEntry type="library" name="sbt: com.google.re2j:re2j:1.1:jar" level="project" />
     <orderEntry type="library" name="sbt: com.influxdb:influxdb-client-core:6.4.0:jar" level="project" />
     <orderEntry type="library" name="sbt: com.influxdb:influxdb-client-java:6.4.0:jar" level="project" />
@@ -101,7 +101,7 @@
     <orderEntry type="library" name="sbt: javax.xml.bind:jaxb-api:2.2.11:jar" level="project" />
     <orderEntry type="library" name="sbt: jline:jline:0.9.94:jar" level="project" />
     <orderEntry type="library" name="sbt: log4j:log4j:1.2.17:jar" level="project" />
-    <orderEntry type="library" name="sbt: mysql:mysql-connector-java:5.1.44:jar" level="project" />
+    <orderEntry type="library" name="sbt: mysql:mysql-connector-java:8.0.27:jar" level="project" />
     <orderEntry type="library" name="sbt: net.minidev:accessors-smart:1.2:jar" level="project" />
     <orderEntry type="library" name="sbt: net.minidev:json-smart:2.3:jar" level="project" />
     <orderEntry type="library" name="sbt: net.razorvine:pyrolite:4.30:jar" level="project" />

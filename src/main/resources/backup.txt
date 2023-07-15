@@ -1,0 +1,33 @@
+office_local {
+  profile {
+    name = "office_local_dev"
+    desc = "only local pc"
+  }
+  influx {
+    url = "http://localhost:8086"
+    authToken = "CwgQWYIZKOcSpdlxwpfZfvDWQXpsfTlt7o2GD5hFAs4rTvHDF-7cfwmIQnmdocqL__5uoabCFGuf_GYzFQfxIA=="
+    org = "xwaves"
+  }
+  spark {
+    master = "local[*]"
+    jobs {
+      word2vec {
+        modelFile = "data/"
+      }
+      tdm {
+        writeDB = "jdbc:mysql://deskserv:3306/horus?useUnicode=true&characterEncoding=utf8&useSSL=false"
+      }
+      lda {
+        writeDB = "jdbc:mysql://deskserv:3306/horus?useUnicode=true&characterEncoding=utf8&useSSL=false"
+      }
+    }
+  }
+  mysql {
+    url = "jdbc:mysql://deskserv:3306/horus?useUnicode=true&characterEncoding=utf8&useSSL=false"
+    user = "root"
+    password = "18651865"
+  }
+  komoran {
+    dic = "./myDic.txt"
+  }
+}

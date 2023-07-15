@@ -29,6 +29,7 @@ class DtLogger(spark: SparkSession) {
   val prop = new Properties()
   prop.put("user", RuntimeConfig().getString("mysql.user"))
   prop.put("password", RuntimeConfig().getString("mysql.password"))
+  prop.put("driver", "com.mysql.cj.jdbc.Driver")
 
   def logJob(jobName: String, status: String) = {
     val dataDf = Seq((jobName, status)).toDF("JOB_NAME", "STATUS")

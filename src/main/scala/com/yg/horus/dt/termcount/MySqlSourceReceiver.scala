@@ -21,7 +21,7 @@ object DbUtil {
     url = conf.getString("mysql.url"),
     user = conf.getString("mysql.user"),
     password = conf.getString("mysql.password"),
-    driver = "com.mysql.jdbc.Driver")
+    driver = "com.mysql.cj.jdbc.Driver")
 
   val getLatestAnchorWithLimit = (seedNo: Long, startCrawlNo: Long, limit : Int) =>
     Await.result(db.run(CrawledRepo.findLatestAnchor(seedNo, startCrawlNo, limit).result), 10.seconds)
