@@ -34,8 +34,8 @@ object TdmJobMain {
     val data = test.loadSourceFromMinsAgo(rparam.seedNo, rparam.minAgo)
     val model = test.createModel(data)
 
-//    model.findSynonyms("김", 30).show(100)
-//    println("Create TDM ..")
+    model.findSynonyms("김", 30).show(100)
+    println("Create TDM ..")
 
 //    val tdm = new TdmMaker(spark, model)
 ////    val rs = tdm.highTermDistances("김")

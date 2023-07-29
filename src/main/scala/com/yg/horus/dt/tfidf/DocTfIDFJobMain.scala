@@ -19,10 +19,10 @@ object DocTfIDFJobMain {
     val runParams = v.length match {
       case 4 => TfidfParam(v(0), v(1), v(2).toLong, v(3).toInt)
       case _ =>
-        if(RuntimeConfig.getActiveProfile().contains("home"))
-          TfidfParam(seedId = 21L, limit = 2000)
+        if(RuntimeConfig.getActiveProfile().contains("dev"))
+          TfidfParam(seedId = 21L, limit = 20000)
         else
-          TfidfParam(seedId = 21L, limit = 2000) //TODO
+          TfidfParam(seedId = 21L, limit = 20000) //TODO
     }
     println("--------------------------------------")
     println(s"TF-IDF Job Args : ${runParams}")

@@ -17,7 +17,7 @@ object MultiMain {
         HangleTokenizer().arrayNouns(an._2)
       }).map(word => (word, 1)).reduceByKey(_ + _)
       println(s"------------- seedId# ${seedId} ---------------")
-      wordCounts.print()
+      wordCounts.print(30)
 
       wordCounts.foreachRDD( wc => {
         wc.foreach(tf => {
