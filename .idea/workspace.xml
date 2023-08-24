@@ -5,13 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe25bf36-b6d2-45e4-8d98-940e696db9bd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/jobflow/RunOnceMain.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/tfidf/MlTfidfMain.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.bsp/sbt.json" beforeDir="false" afterPath="$PROJECT_DIR$/.bsp/sbt.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__org_scala_lang_scala_library_2_12_10_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/sbt__org_scala_lang_scala_library_2_12_10_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/HorusDT.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/HorusDT.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/dbinit.sql" beforeDir="false" afterPath="$PROJECT_DIR$/conf/dbinit.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/tdm/TdmJobMain.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/tdm/TdmJobMain.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/termcount/MultiMain.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/termcount/MultiMain.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/tdm/TdmMaker.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/tdm/TdmMaker.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/tfidf/DocTfIDFJobMain.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/tfidf/DocTfIDFJobMain.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/tfidf/TfIdfProcessing.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/yg/horus/dt/tfidf/TfIdfProcessing.scala" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +58,10 @@
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2HKrQHHCvtiABsR1I0OTRSRnsAz" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -187,7 +197,12 @@
       <workItem from="1689599934814" duration="8741000" />
       <workItem from="1689847235169" duration="8328000" />
       <workItem from="1690027607348" duration="646000" />
-      <workItem from="1690087929099" duration="10277000" />
+      <workItem from="1690087929099" duration="29225000" />
+      <workItem from="1691744631083" duration="28462000" />
+      <workItem from="1692188126109" duration="2131000" />
+      <workItem from="1692272189484" duration="2078000" />
+      <workItem from="1692624583600" duration="1237000" />
+      <workItem from="1692714975241" duration="4056000" />
     </task>
     <servers />
   </component>

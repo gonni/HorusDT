@@ -54,6 +54,17 @@ class TdmMaker(val spark: SparkSession) {
       "TERM_DIST", prop)
   }
 
+  def saveToTable(df: DataFrame, seedNo: Long, tRangeMinAgo: Int, ts: Long, tableName: String = "dt_common_term_dist"): Unit = {
+    println("Write Data to DB.Table ------------------------")
+
+    val dfWithTs = df.withColumn("T_RANGE_MIN_AGO", typedLit(tRangeMinAgo))
+      .withColumn("SEED_NO", typedLit(seedNo))
+      .withColumn("GRP_TS", typedLit(ts))
+
+    dfWithTs.write.mode(SaveMode.Append).jdbc(RuntimeConfig("spark.jobs.tdm.writeDB"),
+      tableName, prop)
+  }
+
   //DF.schema = "BASE_TERM", "NEAR_TERM", "TOPIC_SCORE", "SEED_NO", "GRP_TS"
   def saveMergedTopicTdm(df: DataFrame) = {
     println("Write Data to DB.Table ------------------------")

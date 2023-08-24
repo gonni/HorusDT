@@ -65,3 +65,18 @@ create table DT_TEST_TEMP (
                               TLOG_NO INT not null AUTO_INCREMENT PRIMARY KEY,
                               RES mediumtext
 ) ;
+
+CREATE TABLE `dt_common_term_dist` (
+                                       `TERM_NO` int NOT NULL AUTO_INCREMENT,
+                                       `BASE_TERM` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                                       `COMP_TERM` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                                       `DIST_VAL` double DEFAULT NULL,
+                                       `T_RANGE_MIN_AGO` int DEFAULT NULL,
+                                       `SEED_NO` int DEFAULT NULL,
+                                       `GRP_TS` bigint DEFAULT NULL,
+                                       PRIMARY KEY (`TERM_NO`),
+                                       KEY `idx_base_comp_idx` (`BASE_TERM`,`COMP_TERM`,`SEED_NO`,`TERM_NO`),
+                                       KEY `idx_grpts` (`SEED_NO`,`GRP_TS`),
+                                       KEY `idx_baseterm` (`BASE_TERM`,`GRP_TS`),
+                                       KEY `idx_grpts_only` (`GRP_TS`)
+) ENGINE=InnoDB AUTO_INCREMENT=3765865 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
